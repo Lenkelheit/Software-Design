@@ -7,7 +7,17 @@ namespace DataAccess.Context
 {
     public class DataBaseContext : DbContext
     {
+        // FIELDS
+
+        // CONSTRUCTORS
+        static DataBaseContext()
+        {
+            Instance = new DataBaseContext();
+        }
+
         // PROPERTIES
+        public static DataBaseContext Instance { get; }
+
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Notification> Notifications { get; set; }
