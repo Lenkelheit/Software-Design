@@ -11,23 +11,22 @@ namespace DataAccess.Context
     public class UnitOfWork : IUnitOfWork
     {
         // FIELDS
-        readonly Microsoft.EntityFrameworkCore.DbContext dataBaseContext;
-        readonly IDictionary<System.Type, object> repositoriesFactory;
+        private readonly DataBaseContext dataBaseContext;
+        private readonly IDictionary<System.Type, object> repositoriesFactory;
 
         // CONSTRUCTORS
-
         /// <summary>
         /// Initializes a new instance of <see cref="UnitOfWork"/>
         /// </summary>
         public UnitOfWork()
-            : this(new DataBaseContext()) { }
+            : this(DataBaseContext.Instance) { }
         /// <summary>
         /// Initializes a new instance of <see cref="UnitOfWork"/> with current Data Base Context
         /// </summary>
         /// <param name="dbContext">
-        /// An instance of <see cref="Microsoft.EntityFrameworkCore.DbContext"/>
+        /// An instance of <see cref="DataBaseContext"/>
         /// </param>
-        public UnitOfWork(Microsoft.EntityFrameworkCore.DbContext dbContext)
+        public UnitOfWork(DataBaseContext dbContext)
         {
             this.dataBaseContext = dbContext;
             this.repositoriesFactory = new Dictionary<System.Type, object>();

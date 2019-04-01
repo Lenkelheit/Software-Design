@@ -15,7 +15,7 @@ namespace DataAccess.Tests.ContextTest
         public void CreateRepoTest()
         {
             // Arrange
-            Moq.Mock<DbContext> mockContext = new Moq.Mock<DbContext>();
+            Moq.Mock<Context.DataBaseContext> mockContext = new Moq.Mock<Context.DataBaseContext>();
 
             Context.UnitOfWork unitOfWork = new Context.UnitOfWork(mockContext.Object);
 

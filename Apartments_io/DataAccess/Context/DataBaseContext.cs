@@ -7,8 +7,6 @@ namespace DataAccess.Context
 {
     public class DataBaseContext : DbContext
     {
-        // FIELDS
-
         // CONSTRUCTORS
         static DataBaseContext()
         {

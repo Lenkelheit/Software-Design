@@ -31,7 +31,7 @@
         /// Asynchronously saves all changes made in context 
         /// </summary>
         /// <returns>
-        /// The number of state entries written
+        /// The number of written state entries 
         /// </returns>
         System.Threading.Tasks.Task<int> SaveAsync();
     }
