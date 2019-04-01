@@ -1,9 +1,21 @@
 ﻿namespace DataAccess.Enums
 {
+    /// <summary>
+    /// Determines possible user's role
+    /// </summary>
     public enum Role
     {
-        Renter,
+        /// <summary>
+        /// A resident role
+        /// </summary>
+        Resident,
+        /// <summary>
+        /// A manager role
+        /// </summary>
         Manager,
+        /// <summary>
+        /// An administrator role
+        /// </summary>
         Administrator
     }
 }

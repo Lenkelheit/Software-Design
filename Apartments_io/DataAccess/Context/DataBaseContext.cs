@@ -7,6 +7,17 @@ namespace DataAccess.Context
 {
     public class DataBaseContext : DbContext
     {
+        // CONSTRUCTORS
+        public DataBaseContext()
+        {
+            Database.EnsureCreated();
+        }
+        public DataBaseContext(DbContextOptions<DataBaseContext> options)
+            : base(options)
+        {
+            Database.EnsureCreated();
+        }
+
         // PROPERTIES
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Bill> Bills { get; set; }
@@ -24,6 +35,11 @@ namespace DataAccess.Context
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new RequestConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            #warning temporary solution, should be removed later on with migration
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Apartment_io_TempDB;Trusted_Connection=True;");
         }
     }
 }
