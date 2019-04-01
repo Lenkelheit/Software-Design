@@ -11,6 +11,8 @@ namespace DataAccess.Repositories
         private Microsoft.EntityFrameworkCore.DbSet<TEntity> dbSet;
 
         // CONSTRUCTORS
+        public GenericRepository()
+            : this(Context.DataBaseContext.Instance) { }
         public GenericRepository(Context.DataBaseContext dbContext)
         {
             this.dbContext = dbContext;

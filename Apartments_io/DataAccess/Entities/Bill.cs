@@ -2,7 +2,7 @@
 
 namespace DataAccess.Entities
 {
-    public class Bill
+    public class Bill : EntityBase
     {
         public Enums.PaymentStatus PaymentStatus { get; set; }
         public virtual User Renter { get; set; }
