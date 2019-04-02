@@ -3,6 +3,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using static Core.Configuration.DbEntityConfiguration;
+
 namespace DataAccess.Configuration
 {
     internal class ApartmentConfiguration : IEntityTypeConfiguration<Apartment>
@@ -16,10 +18,18 @@ namespace DataAccess.Configuration
         public void Configure(EntityTypeBuilder<Apartment> builder)
         {
             // name
-            builder.Property(a => a.Name).IsRequired();
+            builder.Property(a => a.Name)
+                   .IsRequired()
+                   .HasMaxLength(APARTMENT_NAME_MAX_LENGTH);
 
             // description
-            builder.Property(a => a.Description).IsRequired();
+            builder.Property(a => a.Description)
+                   .IsRequired()
+                   .HasMaxLength(APARTMENT_DESCRIPTION_MAX_LENGTH);
+
+            // main photo
+            builder.Property(a => a.MainPhoto)
+                   .HasMaxLength(APARTMENT_PHOTO_PATH_MAX_LENGTH);
 
             // renter
             builder.HasOne(a => a.Renter).WithMany(r => r.Apartments);
