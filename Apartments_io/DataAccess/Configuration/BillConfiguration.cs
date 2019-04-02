@@ -7,9 +7,19 @@ namespace DataAccess.Configuration
 {
     internal class BillConfiguration : IEntityTypeConfiguration<Bill>
     {
+        /// <summary>
+        /// Configure Bill table's restrictions
+        /// </summary>
+        /// <param name="builder">
+        /// Provides an API to configure <see cref="Bill"/> entity
+        /// </param>
         public void Configure(EntityTypeBuilder<Bill> builder)
         {
-            throw new System.NotImplementedException();
+            // renter
+            builder.HasOne(b => b.Renter).WithMany(r => r.Bills);
+
+            // apartment
+            builder.HasOne(b => b.Apartment).WithMany(a => a.Bills);
         }
     }
 }

@@ -1,11 +1,21 @@
-﻿using System.Collections.Generic;
-
-namespace DataAccess.Entities
+﻿namespace DataAccess.Entities
 {
+    /// <summary>
+    /// Maps to Bill table
+    /// </summary>
     public class Bill : EntityBase
     {
+        /// <summary>
+        /// A payment status of a bill
+        /// </summary>
         public Enums.PaymentStatus PaymentStatus { get; set; }
+        /// <summary>
+        /// A resident, that paid for apartment
+        /// </summary>
         public virtual User Renter { get; set; }
+        /// <summary>
+        /// An apartment for which resident paid
+        /// </summary>
         public virtual Apartment Apartment { get; set; }
     }
 }
