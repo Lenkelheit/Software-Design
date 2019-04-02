@@ -1,3 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+
+<table>
+
+    @foreach (var u in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
+    {
+    <tr>
+        <td>@u.FirstName</td>
+        <td>@u.LastName</td>
+        <td>@u.Email</td>
+        <td>@u.Password</td>
+        <td>@u.Role.ToString()</td>
+    </tr>
+    }
+</table>

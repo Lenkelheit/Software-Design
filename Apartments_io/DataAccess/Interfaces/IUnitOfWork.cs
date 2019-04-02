@@ -19,7 +19,7 @@
         /// </returns>
         TRepository GetRepository<TEntity, TRepository>()
             where TEntity : Entities.EntityBase, new()
-            where TRepository : IRepository<TEntity>, new();
+            where TRepository : IRepository<TEntity>, IDbContextSettable<IRepository<TEntity>>, new();
         /// <summary>
         /// Saves all changes made in context 
         /// </summary>

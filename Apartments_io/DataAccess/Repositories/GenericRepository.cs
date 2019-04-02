@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Linq.Expressions;
 
+using DataAccess.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
@@ -12,7 +14,7 @@ namespace DataAccess.Repositories
     /// <typeparam name="TEntity">
     /// Type of entity
     /// </typeparam>
-    public class GenericRepository<TEntity> : Interfaces.IRepository<TEntity> where TEntity: Entities.EntityBase, new()
+    public class GenericRepository<TEntity> : IDbContextSettable<GenericRepository<TEntity>>, IRepository<TEntity> where TEntity: Entities.EntityBase, new()
     {
         // FIELDS
         private Context.DataBaseContext dbContext;
@@ -23,7 +25,10 @@ namespace DataAccess.Repositories
         /// Initializes new instance of <see cref="GenericRepository{TEntity}"/>
         /// </summary>
         public GenericRepository()
-            : this(Context.DataBaseContext.Instance) { }
+        {
+            this.dbContext = null;
+            this.dbSet = null;
+        }
         /// <summary>
         /// Initializes new instance of <see cref="GenericRepository{TEntity}"/> with passed DataBase context
         /// </summary>
@@ -35,7 +40,24 @@ namespace DataAccess.Repositories
             this.dbContext = dbContext;
             this.dbSet = dbContext.Set<TEntity>();
         }
-
+        /// <summary>
+        /// Sets context for this repository
+        /// </summary>
+        /// <param name="dbContext">
+        /// An context to set
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="GenericRepository{TEntity}"/>
+        /// </returns>
+        public virtual GenericRepository<TEntity> SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies dbContext)
+        {
+            if (dbContext is Context.DataBaseContext dataBaseContext)
+            {
+                this.dbContext = dataBaseContext;
+                this.dbSet = dataBaseContext.Set<TEntity>();
+            }
+            return this;
+        }
         // METHODS
         /// <summary>
         /// Counts records in data set
@@ -43,8 +65,14 @@ namespace DataAccess.Repositories
         /// <returns>
         /// Count of entities
         /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual int Count()
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+
             return dbSet.Count();
         }
         /// <summary>
@@ -59,8 +87,14 @@ namespace DataAccess.Repositories
         /// <exception cref="ArgumentNullException">
         /// Throws when passed <paramref name="predicate"/> is null
         /// </exception>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual int Count(Func<TEntity, bool> predicate)
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+
             return dbSet.Count(predicate);
         }
         /// <summary>
@@ -75,8 +109,14 @@ namespace DataAccess.Repositories
         /// <exception cref="InvalidOperationException">
         /// Throws when there is no records with such id
         /// </exception>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual void Delete(object id)
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+
             // find
             if (id == null) throw new ArgumentNullException(nameof(id));
             TEntity entityToDelete = dbSet.Find(id);
@@ -94,8 +134,13 @@ namespace DataAccess.Repositories
         /// <exception cref="ArgumentNullException">
         /// Throws when passed <paramref name="entityToDelete"/> is null
         /// </exception>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual void Delete(TEntity entityToDelete)
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
             if (entityToDelete == null) throw new ArgumentNullException(nameof(entityToDelete));
 
             if (dbContext.Entry(entityToDelete).State == EntityState.Detached)
@@ -119,10 +164,16 @@ namespace DataAccess.Repositories
         /// <returns>
         /// Queried entities collection
         /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
                                                 Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
                                                 string includeProperties = "")
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+
             // filter
             IQueryable<TEntity> query = dbSet;
             if (filter != null)
@@ -150,8 +201,13 @@ namespace DataAccess.Repositories
         /// <returns>
         /// Finded entity or null
         /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual TEntity Get(object id)
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
             return dbSet.Find(id);
         }
         /// <summary>
@@ -162,6 +218,7 @@ namespace DataAccess.Repositories
         /// </param>
         public virtual void Insert(TEntity entity)
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
             dbSet.Add(entity);
         }
         /// <summary>
@@ -170,8 +227,13 @@ namespace DataAccess.Repositories
         /// <param name="entityToUpdate">
         /// Entity to update
         /// </param>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not setted<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual void Update(TEntity entityToUpdate)
         {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
             dbSet.Attach(entityToUpdate);
             dbContext.Entry(entityToUpdate).State = EntityState.Modified;
         }

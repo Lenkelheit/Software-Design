@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DataAccess.Entities;
+﻿using DataAccess.Entities;
 using DataAccess.Interfaces;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Context
 {
@@ -11,22 +14,17 @@ namespace DataAccess.Context
     public class UnitOfWork : IUnitOfWork
     {
         // FIELDS
-        private readonly DataBaseContext dataBaseContext;
+        private readonly DbContext dataBaseContext;
         private readonly IDictionary<System.Type, object> repositoriesFactory;
 
         // CONSTRUCTORS
         /// <summary>
-        /// Initializes a new instance of <see cref="UnitOfWork"/>
-        /// </summary>
-        public UnitOfWork()
-            : this(DataBaseContext.Instance) { }
-        /// <summary>
         /// Initializes a new instance of <see cref="UnitOfWork"/> with current Data Base Context
         /// </summary>
         /// <param name="dbContext">
-        /// An instance of <see cref="DataBaseContext"/>
+        /// An instance of class that derivative from <see cref="DbContext"/>
         /// </param>
-        public UnitOfWork(DataBaseContext dbContext)
+        public UnitOfWork(DbContext dbContext)
         {
             this.dataBaseContext = dbContext;
             this.repositoriesFactory = new Dictionary<System.Type, object>();
@@ -54,14 +52,14 @@ namespace DataAccess.Context
         /// </returns>
         public TRepository GetRepository<TEntity, TRepository>()
             where TEntity : EntityBase, new()
-            where TRepository : IRepository<TEntity>, new ()
+            where TRepository : IRepository<TEntity>, IDbContextSettable<IRepository<TEntity>>, new ()
         {
             System.Type key = typeof(TEntity);
 
             // add repo, lazy loading
             if (!repositoriesFactory.ContainsKey(key))
             {
-                repositoriesFactory.Add(key, new TRepository());
+                repositoriesFactory.Add(key, new TRepository().SetDbContext(dataBaseContext));
             }
 
             // return repository
@@ -92,10 +90,10 @@ namespace DataAccess.Context
         /// A task that represents the asynchronous save operation. <para/>
         /// The task result contains the number of state entries written to the database.
         /// </returns>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException">
+        /// <exception cref="DbUpdateException">
         /// An error is encountered while saving to the database.
         /// </exception>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException">
+        /// <exception cref="DbUpdateConcurrencyException">
         /// A concurrency violation is encountered while saving to the database. <para/>
         /// A concurrency violation occurs when an unexpected number of rows are affected during save. <para/>
         /// This is usually because the data in the database has been modified since it was loaded into memory. <para/>

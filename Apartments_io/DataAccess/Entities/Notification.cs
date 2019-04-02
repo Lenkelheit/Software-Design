@@ -13,5 +13,9 @@
         /// An resident, who got the notification 
         /// </summary>
         public virtual User Resident { get; set; }
+        /// <summary>
+        /// Notification's emergency level
+        /// </summary>
+        public Enums.EmergencyLevel EmergencyLevel { get; set; }
     }
 }

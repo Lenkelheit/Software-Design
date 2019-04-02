@@ -5,47 +5,84 @@ using DataAccess.Configuration;
 
 namespace DataAccess.Context
 {
+    /// <summary>
+    /// Contains DbSets
+    /// </summary>
     public class DataBaseContext : DbContext
     {
         // CONSTRUCTORS
-        public DataBaseContext()
-        {
-            Database.EnsureCreated();
-        }
+        /// <summary>
+        /// Initializes a new instance of <see cref="DataBaseContext"/> with given options
+        /// </summary>
+        /// <param name="options">
+        /// The option to be used by <see cref="DataBaseContext"/>
+        /// </param>
         public DataBaseContext(DbContextOptions<DataBaseContext> options)
             : base(options)
         {
             Database.EnsureCreated();
         }
-        static DataBaseContext()
-        {
-            Instance = new DataBaseContext();
-        }
 
         // PROPERTIES
-        public static DataBaseContext Instance { get; }
-
+        /// <summary>
+        /// Gets an apartment set
+        /// </summary>
         public DbSet<Apartment> Apartments { get; set; }
+        /// <summary>
+        /// Gets a bills set
+        /// </summary>
         public DbSet<Bill> Bills { get; set; }
+        /// <summary>
+        /// Gets a notification set
+        /// </summary>
         public DbSet<Notification> Notifications { get; set; }
+        /// <summary>
+        /// Gets a request set
+        /// </summary>
         public DbSet<Request> Requests { get; set; }
+        /// <summary>
+        /// Gets a user set
+        /// </summary>
         public DbSet<User> Users { get; set; }
 
         // METHODS
+        /// <summary>
+        /// Configures the entities
+        /// </summary>
+        /// <param name="modelBuilder">
+        /// The builder being used to construct the model for this context.
+        /// </param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // configure entities
             modelBuilder.ApplyConfiguration(new ApartmentConfiguration());
             modelBuilder.ApplyConfiguration(new BillConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new RequestConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+            // adds data
+            modelBuilder.Entity<User>().HasData(new User()
+            {
+                Id = 1,
+                FirstName = "Admin",
+                LastName = "Admin",
+                Email = "admin@gmail.com",
+                Password = "1111",
+                Role = Enums.Role.Administrator
+            });
         }
+        /// <summary>
+        /// Configure the database to be used for this context.
+        /// </summary>
+        /// <param name="optionsBuilder">
+        /// Creates or modify options for context
+        /// </param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            #warning temporary solution, should be removed later on with migration
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Apartment_io_TempDB;Trusted_Connection=True;");
+            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }

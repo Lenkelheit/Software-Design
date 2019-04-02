@@ -3,6 +3,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using static Core.Configuration.DbEntityConfiguration;
+
 namespace DataAccess.Configuration
 {
     internal class NotificationConfiguration : IEntityTypeConfiguration<Notification>
@@ -16,7 +18,9 @@ namespace DataAccess.Configuration
         public void Configure(EntityTypeBuilder<Notification> builder)
         {
             // description
-            builder.Property(n => n.Description).IsRequired();
+            builder.Property(n => n.Description)
+                   .IsRequired()
+                   .HasMaxLength(NOTIFICATION_DESCRIPTION_MAX_LENGTH);
 
             // resident
             builder.HasOne(n => n.Resident).WithMany(r => r.Notifications);
