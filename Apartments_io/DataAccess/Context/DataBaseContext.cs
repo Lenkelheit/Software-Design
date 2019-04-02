@@ -12,13 +12,6 @@ namespace DataAccess.Context
     {
         // CONSTRUCTORS
         /// <summary>
-        /// Initializes a new instance of <see cref="DataBaseContext"/>
-        /// </summary>
-        public DataBaseContext()
-        {
-            Database.EnsureCreated();
-        }
-        /// <summary>
         /// Initializes a new instance of <see cref="DataBaseContext"/> with given options
         /// </summary>
         /// <param name="options">
@@ -29,17 +22,8 @@ namespace DataAccess.Context
         {
             Database.EnsureCreated();
         }
-        static DataBaseContext()
-        {
-            Instance = new DataBaseContext();
-        }
 
         // PROPERTIES
-        /// <summary>
-        /// Gets <see cref="DataBaseContext"/> instance
-        /// </summary>
-        public static DataBaseContext Instance { get; }
-
         /// <summary>
         /// Gets an apartment set
         /// </summary>
