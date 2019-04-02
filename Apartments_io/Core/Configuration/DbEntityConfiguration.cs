@@ -5,6 +5,7 @@
     /// </summary>
     public static class DbEntityConfiguration
     {
+        // USER
         #region USER
         /// <summary>
         /// Max length of user's first name
@@ -24,13 +25,15 @@
         public static readonly int USER_PASSWORD_MAX_LENGTH = 20;
         #endregion
 
-        #region DESCRIPTION
+        // NOTIFICATION
+        #region NOTIFICATION
         /// <summary>
         /// Max length of notification's description
         /// </summary>
         public static readonly int NOTIFICATION_DESCRIPTION_MAX_LENGTH = 256;
         #endregion
 
+        // APARTMENT
         #region APARTMENT
         /// <summary>
         /// Max length of apartment's name
