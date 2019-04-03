@@ -41,7 +41,7 @@ namespace Apartments_io.Areas.Administrator.Controllers
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                ViewData["Exception"] = "All fields are required";
+                ViewData["Exception"] = "All fields are required. Maybe another exception has been occured";
             }
 
             ViewData["Users"] = userRepository.Get();

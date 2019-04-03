@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!--LINK-->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/css/Administrator/index.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+    <div class="container">
+        <!--HEADER-->
+        <div class="header">
+            Administrator Panel
+        </div>
+
+        <!--CONTENT-->
+        <div class="content">
+            @RenderBody()
+        </div>
+
+        <!--FOOTER-->
+        <div class="footer">
+            ©Copyright The Architects
+        </div>
+    </div>
+
+</body>
+</html>
