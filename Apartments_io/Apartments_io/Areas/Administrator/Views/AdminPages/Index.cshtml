@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model DataAccess.Entities.User
+<h1>Admin</h1>
+
+
+<p>@ViewData["Exception"]</p>
+
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Role</th>
+        <th>Manager</th>
+        <th>Create</th>
+    </tr>
+    <form method="post" asp-action="Create">
+        <tr>
+            <td><input asp-for="FirstName" /></td>
+            <td><input asp-for="LastName" /></td>
+            <td><input asp-for="Email" /></td>
+            <td><input asp-for="Password" /></td>
+            <td>
+                <select asp-for="Role">
+                    <option value="Resident">Resident</option>
+                    <option value="Manager">Manager</option>
+                </select>
+
+            </td>
+            <td>
+                <select asp-for="Manager">
+                    <option value="">Select a manager</option>
+                    @foreach (var user in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
+                    {
+                        <option value="@user">@user.FirstName + @user.LastName</option>
+                    }
+
+                </select>
+            </td>
+            <td>
+                <button type="submit">Create</button>
+            </td>
+        </tr>
+    </form>
+
+
+</table>
+
+
+<h2>List</h2>
+<table>
+
+    <tr>
+        <th>id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Delete</th>
+    </tr>
+    @foreach (var user in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
+    {
+            <tr>
+                <td>
+                    <input disabled value="@user.Id" name="Id" />
+                </td>
+                <td><input asp-for="FirstName" value="@user.FirstName" /></td>
+                <td><input asp-for="LastName" value="@user.LastName" /></td>
+                <td><input asp-for="Email" value="@user.Email" /></td>
+                <td><input asp-for="Password" value="@user.Password" /></td>
+
+                <td>
+                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                </td>
+            </tr>
+    }
+
+</table>
