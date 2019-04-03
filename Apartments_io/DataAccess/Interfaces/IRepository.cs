@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace DataAccess.Interfaces
 {
     /// <summary>
-    /// Reprents interface for classes which will proxy behind data access and buisness logic
+    /// Represents interface for classes which will proxy behind data access and business logic
     /// </summary>
     /// <typeparam name="TEntity">
     /// Entity type

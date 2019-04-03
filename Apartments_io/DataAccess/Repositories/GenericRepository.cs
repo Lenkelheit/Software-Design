@@ -66,7 +66,7 @@ namespace DataAccess.Repositories
         /// Count of entities
         /// </returns>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual int Count()
@@ -88,7 +88,7 @@ namespace DataAccess.Repositories
         /// Throws when passed <paramref name="predicate"/> is null
         /// </exception>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual int Count(Func<TEntity, bool> predicate)
@@ -110,7 +110,7 @@ namespace DataAccess.Repositories
         /// Throws when there is no records with such id
         /// </exception>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual void Delete(object id)
@@ -135,7 +135,7 @@ namespace DataAccess.Repositories
         /// Throws when passed <paramref name="entityToDelete"/> is null
         /// </exception>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual void Delete(TEntity entityToDelete)
@@ -165,7 +165,7 @@ namespace DataAccess.Repositories
         /// Queried entities collection
         /// </returns>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
@@ -202,7 +202,7 @@ namespace DataAccess.Repositories
         /// Finded entity or null
         /// </returns>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual TEntity Get(object id)
@@ -228,7 +228,7 @@ namespace DataAccess.Repositories
         /// Entity to update
         /// </param>
         /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not setted<para/>
+        /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
         public virtual void Update(TEntity entityToUpdate)

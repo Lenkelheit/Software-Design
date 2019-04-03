@@ -6,12 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 namespace DataAccess.Infrastructure
 {
     /// <summary>
-    /// Provides mechanist to configure data access project on ASP project
+    /// Provides mechanism to configure data access project on ASP project
     /// </summary>
     public static class AspInfrastructure
     {
         /// <summary>
-        /// Register services to conteiner
+        /// Register services to container
         /// </summary>
         /// <param name="services">
         /// A set of key/value application' services

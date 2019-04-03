@@ -4,7 +4,7 @@
     /// Provides a way to set data base's context
     /// </summary>
     /// <typeparam name="TClass">
-    /// A deriivative class type
+    /// A derivative class type
     /// </typeparam>
     public interface IDbContextSettable<out TClass>
     {
