@@ -24,7 +24,7 @@ body {
     display: grid;
     grid-gap: 5px;
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: auto auto;
 }
 
 .footer {
@@ -33,4 +33,8 @@ body {
     font-size: 100%;
     text-align: center;
     border-top: 3px solid black;
+}
+
+.mg-10 {
+    margin: 10px;
 }
