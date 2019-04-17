@@ -18,130 +18,145 @@
 
 
         <div class="content">
-            <form method="post" id="create_user_form"></form>
+            <div>
+                <div class="text-right m-2">
+                    <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
+                        Create new
+                    </button>
+                </div>
+
+                <div class="collapse" id="collapse">
+
+                    <form method="post" id="create_user_form"></form>
+
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Manager</th>
+                                <th scope="col">Create</th>
+                                <th scope="col">Cancel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
 
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Manager</th>
-                        <th scope="col">Create</th>
-                        <th scope="col">Cancel</th>
-                    </tr>
-                </thead>
-                <tbody>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="number" name="Id" form="create_user_form" readonly required>
+                                </td>
+                                <td>
+                                    <input class="form-control" type="text" name="FirstName" form="create_user_form" required />
+                                </td>
+                                <td>
+                                    <input class="form-control" type="text" name="LastName" form="create_user_form" required />
+                                </td>
+                                <td>
+                                    <input class="form-control" type="email" name="Email" form="create_user_form" required />
+                                </td>
+                                <td>
+                                    <input class="form-control" type="password" name="Password" form="create_user_form" required />
+                                </td>
+                                <td>
+                                    <select class="form-control" name="Role" form="create_user_form" required />
+                                    <option>Resident</option>
+                                    <option>Manager</option>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="Manager" form="create_user_form" />
+                                    <option>Nazar</option>
+                                    <option>Taras</option>
+                                </td>
+                                <td>
+                                    <input value="Submit" class="form-control" type="submit" name="Submit" form="create_user_form" />
+                                </td>
+                                <td>
+                                    <input value="Reset" class="form-control" type="reset" name="Reset" form="create_user_form" />
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div>
+                <form method="post" id="change_user_form"></form>
 
 
-                    <tr>
-                        <td>
-                            <input class="form-control" type="number" name="Id" form="create_user_form" readonly required>
-                        </td>
-                        <td>
-                            <input class="form-control" type="text" name="FirstName" form="create_user_form" required />
-                        </td>
-                        <td>
-                            <input class="form-control" type="text" name="LastName" form="create_user_form" required />
-                        </td>
-                        <td>
-                            <input class="form-control" type="email" name="Email" form="create_user_form" required />
-                        </td>
-                        <td>
-                            <input class="form-control" type="password" name="Password" form="create_user_form" required />
-                        </td>
-                        <td>
-                            <select class="form-control" name="Role" form="create_user_form" required />
-                            <option>Resident</option>
-                            <option>Manager</option>
-                        </td>
-                        <td>
-                            <select class="form-control" name="Manager" form="create_user_form" />
-                            <option>Nazar</option>
-                            <option>Taras</option>
-                        </td>
-                        <td>
-                            <input value="Submit" class="form-control" type="submit" name="Submit" form="create_user_form" />
-                        </td>
-                        <td>
-                            <input value="Reset" class="form-control" type="reset" name="Reset" form="create_user_form" />
-                        </td>
-                    </tr>
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Password</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Manager</th>
+                            <th scope="col">Update</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
-
-
-            <form method="post" id="change_user_form"></form>
-
-
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Password</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Manager</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-                        <td>
-                            <input value="1" class="form-control" type="number" name="Id" form="change_user_form" readonly required>
-                        </td>
-                        <td>
-                            <input value="Nazariy" class="form-control" type="text" name="FirstName" form="change_user_form" required />
-                        </td>
-                        <td>
-                            <input value="Tymtsiv" class="form-control" type="text" name="LastName" form="change_user_form" required />
-                        </td>
-                        <td>
-                            <input value="nazar@gmail.com" class="form-control" type="email" name="Email" form="change_user_form" required />
-                        </td>
-                        <td>
-                            <input value="1111" class="form-control" type="password" name="Password" form="change_user_form" required />
-                        </td>
-                        <td>
-                            <select class="form-control" name="Role" form="change_user_form" required />
-                            <option selected>Resident</option>
-                            <option>Manager</option>
-                        </td>
-                        <td>
-                            <select class="form-control" name="Manager" form="change_user_form" />
-                            <option>Nazar</option>
-                            <option>Taras</option>
-                            <option selected>Ivan</option>
-                        </td>
-                        <td>
-                            <input value="Submit" class="form-control" type="submit" name="Update" form="change_user_form" />
-                        </td>
-                        <td>
-                            <input value="Delete" class="form-control" type="submit" name="Delete" form="change_user_form" />
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <input value="1" class="form-control" type="number" name="Id" form="change_user_form" readonly required>
+                            </td>
+                            <td>
+                                <input value="Nazariy" class="form-control" type="text" name="FirstName" form="change_user_form" required />
+                            </td>
+                            <td>
+                                <input value="Tymtsiv" class="form-control" type="text" name="LastName" form="change_user_form" required />
+                            </td>
+                            <td>
+                                <input value="nazar@gmail.com" class="form-control" type="email" name="Email" form="change_user_form" required />
+                            </td>
+                            <td>
+                                <input value="1111" class="form-control" type="password" name="Password" form="change_user_form" required />
+                            </td>
+                            <td>
+                                <select class="form-control" name="Role" form="change_user_form" required />
+                                <option selected>Resident</option>
+                                <option>Manager</option>
+                            </td>
+                            <td>
+                                <select class="form-control" name="Manager" form="change_user_form" />
+                                <option>Nazar</option>
+                                <option>Taras</option>
+                                <option selected>Ivan</option>
+                            </td>
+                            <td>
+                                <input value="Submit" class="form-control" type="submit" name="Update" form="change_user_form" />
+                            </td>
+                            <td>
+                                <input value="Delete" class="form-control" type="submit" name="Delete" form="change_user_form" />
+                            </td>
+                        </tr>
 
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+
+            </div>
 
         </div>
-
 
         <div class="footer">
             ©Copyright The Architects
         </div>
     </div>
 </body>
+
+<script src="../../js/lib/jquery-3.3.1.min.js"></script>
+
+<script src="../../lib/bootstrap/js/bootstrap.min.js"></script>
 
 </html>

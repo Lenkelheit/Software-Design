@@ -8,114 +8,123 @@
 <p>@ViewData["exception"]</p>
 
 <!--Create-->
-<h3>Create</h3>
-<form method="post" id="create_user_form" asp-action="Create"></form>
+<div>
+    <div class="text-right m-2">
+        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
+            Create new
+        </button>
+    </div>
+
+    <div class="collapse" id="collapse">
+        <form method="post" id="create_user_form" asp-action="Create"></form>
+
+        <table class="table table-hover">
+            <thead class="thead-dark">
+
+                <tr>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Manager</th>
+                    <th scope="col">Create</th>
+                </tr>
+            </thead>
+            <tbody>
 
 
-<table class="table table-hover">
-    <thead class="thead-dark">
+                <tr>
+                    <td>
+                        <input class="form-control" type="text" name="FirstName" form="create_user_form" required asp-for="FirstName" />
+                    </td>
+                    <td>
+                        <input class="form-control" type="text" name="LastName" form="create_user_form" required asp-for="LastName" />
+                    </td>
+                    <td>
+                        <input class="form-control" type="email" name="Email" form="create_user_form" required asp-for="Email" />
+                    </td>
+                    <td>
+                        <input class="form-control" type="password" name="Password" form="create_user_form" required asp-for="Password" />
+                    </td>
+                    <td>
+                        <select asp-for="Role" class="form-control" name="Role" form="create_user_form" required>
+                            <option value="Resident">Resident</option>
+                            <option value="Manager">Manager</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" name="Manager" form="create_user_form" asp-for="Manager">
 
-        <tr>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Password</th>
-            <th scope="col">Role</th>
-            <th scope="col">Manager</th>
-            <th scope="col">Create</th>
-        </tr>
-    </thead>
-    <tbody>
+                            <option value="">Select a manager</option>
+                            @foreach (var user in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
+                            {
+                                <option value="@user">@user.FirstName + @user.LastName</option>
+                            }
 
+                        </select>
+                    </td>
+                    <td>
+                        <input value="Submit" class="form-control" type="submit" name="Submit" form="create_user_form" />
+                    </td>
+                </tr>
 
-        <tr>
-            <td>
-                <input class="form-control" type="text" name="FirstName" form="create_user_form" required asp-for="FirstName"/>
-            </td>
-            <td>
-                <input class="form-control" type="text" name="LastName" form="create_user_form" required  asp-for="LastName"/>
-            </td>
-            <td>
-                <input class="form-control" type="email" name="Email" form="create_user_form" required asp-for="Email"/>
-            </td>
-            <td>
-                <input class="form-control" type="password" name="Password" form="create_user_form" required asp-for="Password"/>
-            </td>
-            <td>
-                <select asp-for="Role" class="form-control" name="Role" form="create_user_form" required>
-                    <option value="Resident">Resident</option>
-                    <option value="Manager">Manager</option>
-                </select>
-            </td>
-            <td>
-                <select class="form-control" name="Manager" form="create_user_form"  asp-for="Manager">
-
-                <option value="">Select a manager</option>
-                @foreach (var user in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
-                {
-                    <option value="@user">@user.FirstName + @user.LastName</option>
-                }
-
-                </select>
-            </td>
-            <td>
-                <input value="Submit" class="form-control" type="submit" name="Submit" form="create_user_form" />
-            </td>
-        </tr>
-
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <!--List-->
-<h3>List</h3>
-<form method="post" id="change_user_form"></form>
+<div>
+        <h3>List</h3>
+        <form method="post" id="change_user_form"></form>
 
 
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Password</th>
-            <th scope="col">Role</th>
-            <th scope="col">Manager</th>
-            <th scope="col">Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
-        {
-            <tr>
-                <td>
-                    <input value="@user.Id" class="form-control" type="number" name="Id" form="change_user_form" readonly required>
-                </td>
-                <td>
-                    <input value="@user.FirstName" class="form-control" type="text" name="FirstName" form="change_user_form" required />
-                </td>
-                <td>
-                    <input value="@user.LastName" class="form-control" type="text" name="LastName" form="change_user_form" required />
-                </td>
-                <td>
-                    <input value="@user.Email" class="form-control" type="email" name="Email" form="change_user_form" required />
-                </td>
-                <td>
-                    <input value="@user.Password" class="form-control" type="password" name="Password" form="change_user_form" required />
-                </td>
-                <td>
-                    @user.Role
-                </td>
-                <td>
-                    @user.Manager?.LastName
-                </td>
-                <td>
-                    <a class="btn btn-light" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                </td>
-            </tr>
-        }
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Manager</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in (IEnumerable<DataAccess.Entities.User>)ViewData["Users"])
+                {
+                    <tr>
+                        <td>
+                            <input value="@user.Id" class="form-control" type="number" name="Id" form="change_user_form" readonly required>
+                        </td>
+                        <td>
+                            <input value="@user.FirstName" class="form-control" type="text" name="FirstName" form="change_user_form" required />
+                        </td>
+                        <td>
+                            <input value="@user.LastName" class="form-control" type="text" name="LastName" form="change_user_form" required />
+                        </td>
+                        <td>
+                            <input value="@user.Email" class="form-control" type="email" name="Email" form="change_user_form" required />
+                        </td>
+                        <td>
+                            <input value="@user.Password" class="form-control" type="password" name="Password" form="change_user_form" required />
+                        </td>
+                        <td>
+                            @user.Role
+                        </td>
+                        <td>
+                            @user.Manager?.LastName
+                        </td>
+                        <td>
+                            <a class="btn btn-light" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
 
 
-    </tbody>
-</table>
-
+            </tbody>
+        </table>
+</div>
