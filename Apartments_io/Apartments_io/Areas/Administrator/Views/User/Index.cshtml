@@ -1,11 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
-}
-@model Apartments_io.Areas.Administrator.ViewModels.IndexViewModel
+﻿@model Apartments_io.Areas.Administrator.ViewModels.IndexViewModel
 
-
-<p>@ViewData["exception"]</p>
 
 <!--Create-->
 <div>
@@ -29,9 +23,9 @@
                     <th scope="col">Manager</th>
                     <th scope="col">Create</th>
                 </tr>
+
             </thead>
             <tbody>
-
 
                 <tr>
                     <td>
@@ -69,6 +63,7 @@
 
     <table class="table table-hover">
         <thead class="thead-dark">
+
             <tr>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
@@ -79,8 +74,10 @@
                 <th scope="col">Update</th>
                 <th scope="col">Delete</th>
             </tr>
+
         </thead>
         <tbody>
+
             @foreach (User user in Model.Users)
             {
                 <tr data-user-id="@user.Id">
@@ -114,7 +111,6 @@
                     </td>
                 </tr>
             }
-
 
         </tbody>
     </table>

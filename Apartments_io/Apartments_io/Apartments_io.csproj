@@ -19,14 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Manager\Controllers\" />
     <Folder Include="Areas\Manager\Models\" />
     <Folder Include="Areas\Manager\Views\" />
     <Folder Include="Areas\Renter\Controllers\" />
     <Folder Include="Areas\Renter\Models\" />
     <Folder Include="Areas\Renter\Views\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
@@ -38,6 +36,9 @@
 
   <ItemGroup>
     <Content Update="Areas\Administrator\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Administrator\Views\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

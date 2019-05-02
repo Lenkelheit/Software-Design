@@ -3,9 +3,15 @@ using static System.Math;
 
 namespace Pagination
 {
+    /// <summary>
+    /// A model class for pagination
+    /// </summary>
     public partial class Pagination
     {
         // INNER CLASSES
+        /// <summary>
+        /// Builds <see cref="Pagination"/>
+        /// </summary>
         public partial class PaginationFluentBuilder { };
 
         // FIELDS
@@ -16,7 +22,7 @@ namespace Pagination
         private int totalPageAmount;
 
         // CONSTRUCTORS
-        public Pagination()
+        private Pagination()
         {
             this.linksAmountOnPage = 7;
             this.totalRecordsAmount = -1;
@@ -26,22 +32,58 @@ namespace Pagination
             this.BuildStrategy = new BuildStrategy.DefaultBuildStrategy();
             this.UrlInfo = null;
         }
+        /// <summary>
+        /// Gets <see cref="PaginationFluentBuilder"/>
+        /// </summary>
         public static PaginationFluentBuilder GetBuilder => new PaginationFluentBuilder();
 
         // PROPERTIES
+        /// <summary>
+        /// Determines if there is previous page
+        /// </summary>
         public bool HasPreviousPage => currentPage > 1;
+        /// <summary>
+        /// Determines if there is next page
+        /// </summary>
         public bool HasNextPage => currentPage < totalPageAmount;
+        /// <summary>
+        /// Gets current page number
+        /// </summary>
         public int CurrentPage => currentPage;
+        /// <summary>
+        /// Gets pagination builder
+        /// </summary>
         public Interfaces.IPaginationBuilder PaginationBuilder { get; set; }
+        /// <summary>
+        /// Gets building strategy
+        /// </summary>
         public Interfaces.IBuildStrategy BuildStrategy { get; set; }
+        /// <summary>
+        /// Gets data to build url
+        /// </summary>
         public DataTransferObject.UrlInfo UrlInfo { get; set; }
 
         // METHODS
+        /// <summary>
+        /// Build pagination
+        /// </summary>
+        /// <param name="urlInfo">
+        /// An instance of class with data for URL
+        /// </param>
+        /// <returns>
+        /// The class that can create HTML
+        /// </returns>
         public TagBuilder Build(DataTransferObject.UrlInfo urlInfo)
         {
             UrlInfo = urlInfo;
             return BuildStrategy.Build(this);
         }
+        /// <summary>
+        /// Calculate first and last pagination pages
+        /// </summary>
+        /// <returns>
+        /// An instance of <see cref="PaginationLimit"/> that determines first and last pagination pages
+        /// </returns>
         public PaginationLimit CalcPagintaionLimits()
         {
             // вираховуємо посилання зліва, щоб активне посиланння було посередині
