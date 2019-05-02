@@ -9,9 +9,12 @@
     <!--LINK-->
     <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="~/css/Administrator/index.css" rel="stylesheet" type="text/css">
+    <link href="~/js/libs/ohsnap/index.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+    <!--NOTIFICATION-->
+    <div id="ohsnap"></div>
 
     <div class="container">
         <!--HEADER-->
@@ -24,15 +27,152 @@
             @RenderBody()
         </div>
 
+
         <!--FOOTER-->
         <div class="footer">
             ©Copyright The Architects
         </div>
     </div>
 
-    <script src="~/js/jquery-3.3.1.min.js"></script>
-
+    <script src="~/js/libs/jquery-3.3.1.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/libs/ohsnap/ohsnap.min.js"></script>
+    <script src="~/js/libs/bootbox/bootbox.min.js"></script>
+
+    <script src="~/js/areas/index.js"></script>
+
+
+    <script>
+
+        // CREATE
+        $("#create-user").click(function ()
+        {
+            // get user
+            var user = new Object();
+            user.FirstName = $("#new_user_first_name").val().trim();
+            user.LastName = $("#new_user_last_name").val().trim();
+            user.Email = $("#new_user_email").val().trim();
+            user.Password = $("#new_user_password").val().trim();
+            user.Role = $("#new_user_role").children("option:selected").val();
+
+            // validate
+            var validdation_result = validate_user(user);
+            if (!validdation_result.isValid)
+            {
+                ohSnap(validdation_result.message, { color: 'red' });
+                return;
+            }
+
+            // send to server
+            $.post('@Url.Action("Create", "User")',
+            {
+                user: user,
+                managerId: $("#new_user_manager").children("option:selected").val()
+            })
+            .done(function ()
+            {
+                location.reload();
+            })
+            .fail(function ()
+            {
+                 ohSnap('Something went wrong', { color: 'red' });
+            });
+        });
+        
+        $("#users-list table tr").each(function ()
+        {
+            var row = this;
+
+            // UPDATE
+            $(row).find(".btn-update").click(function ()
+            {
+                // get user
+                var user = new Object();
+                user.Id = $(row).data('user-id');
+                user.FirstName = $(row).find('[name="FirstName"]').val().trim();
+                user.LastName = $(row).find('[name="LastName"]').val().trim();
+                user.Email = $(row).find('[name="Email"]').val().trim();
+                user.Password = $(row).find('[name="Password"]').val().trim();
+                user.Role = $(row).find('[name="Role"]').children("option:selected").val();
+
+                // validate
+                var validdation_result = validate_user(user);
+                if (!validdation_result.isValid)
+                {
+                    ohSnap(validdation_result.message, { color: 'red' });
+                    return;
+                }
+
+                // send to server
+                $.post('@Url.Action("Update", "User")',
+                {
+                    user: user,
+                    managerId: $(row).find('[name="UserManager"]').children("option:selected").val()
+                })
+                .done(function ()
+                {
+                    location.reload();
+                })
+                .fail(function ()
+                {
+                     ohSnap('Something went wrong', { color: 'red' });
+                });
+            });
+
+            // DELETE
+            $(row).find(".btn-delete").click(function ()
+            {
+                bootbox.confirm(
+                {
+                    message: "Do you realy want to delete this record?",
+                    buttons:
+                    {
+                        confirm:
+                        {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel:
+                        {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result)
+                    {
+                        if (result)
+                        {
+                            // send to server
+                            $.ajax(
+                            {
+                                url: '@Url.Action("Delete", "User")',
+                                type: "Post",
+                                data:
+                                {
+                                    id: $(row).data('user-id')
+                                },
+                                statusCode:
+                                {
+                                    400: function (response)
+                                    {
+                                        ohSnap(response.responseText, { color: 'red' });
+                                    }
+                                },
+                                fail: function ()
+                                {
+                                    ohSnap('Something went wrong', { color: 'red' });
+                                },
+                                success: function ()
+                                {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>

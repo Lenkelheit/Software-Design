@@ -44,9 +44,22 @@ namespace DataAccess.Interfaces
         /// <returns>
         /// Queried entities collection
         /// </returns>
-        IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
-                                 Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                                 string includeProperties = "");
+        System.Collections.Generic.IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+                                                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                                             string includeProperties = "");
+        /// <summary>
+        /// Gets data with offset
+        /// </summary>
+        /// <param name="amount">
+        /// Records amount to select
+        /// </param>
+        /// <param name="page">
+        /// Records offset
+        /// </param>
+        /// <returns>
+        /// Queried entities collection
+        /// </returns>
+        System.Collections.Generic.IEnumerable<TEntity> Get(int page, int amount);
         /// <summary>
         /// Returns entity by id
         /// </summary>
@@ -58,12 +71,29 @@ namespace DataAccess.Interfaces
         /// </returns>
         TEntity Get(object id);
         /// <summary>
+        /// Returns entity by id
+        /// </summary>
+        /// <param name="id">
+        /// Entity's id
+        /// </param>
+        /// <returns>
+        /// Finded entity
+        /// </returns>
+        System.Threading.Tasks.Task<TEntity> GetAsync(object id);
+        /// <summary>
         /// Inserts data in collection
         /// </summary>
         /// <param name="entity">
         /// Inserted entity
         /// </param>
-        void Insert(TEntity entity);
+        void Insert(TEntity entity);   
+        /// <summary>
+        /// Inserts data in data base
+        /// </summary>
+        /// <param name="entity">
+        /// Inserted entity
+        /// </param>
+        void InsertAsync(TEntity entity);
         /// <summary>
         /// Deletes object by id
         /// </summary>
@@ -78,12 +108,5 @@ namespace DataAccess.Interfaces
         /// Entity to delete
         /// </param>
         void Delete(TEntity entityToDelete);
-        /// <summary>
-        /// Updates entity in collection
-        /// </summary>
-        /// <param name="entityToUpdate">
-        /// Entity to update
-        /// </param>
-        void Update(TEntity entityToUpdate);
     }
 }

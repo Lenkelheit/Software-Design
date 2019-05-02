@@ -20,6 +20,17 @@
         TRepository GetRepository<TEntity, TRepository>()
             where TEntity : Entities.EntityBase, new()
             where TRepository : IRepository<TEntity>, IDbContextSettable<IRepository<TEntity>>, new();
+
+        /// <summary>
+        /// Updates entity in collection
+        /// </summary>
+        /// <param name="entityToUpdate">
+        /// Entity to update
+        /// </param>       
+        /// <typeparam name="TEntity">
+        /// An entity type to update
+        /// </typeparam>
+        void Update<TEntity>(TEntity entityToUpdate) where TEntity : Entities.EntityBase;
         /// <summary>
         /// Saves all changes made in context 
         /// </summary>

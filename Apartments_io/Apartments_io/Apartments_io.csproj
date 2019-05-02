@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\Apartments_io.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
 
@@ -26,12 +26,14 @@
     <Folder Include="Areas\Renter\Controllers\" />
     <Folder Include="Areas\Renter\Models\" />
     <Folder Include="Areas\Renter\Views\" />
+    <Folder Include="Interfaces\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\Pagination\Pagination.csproj" />
   </ItemGroup>
 
   <ItemGroup>

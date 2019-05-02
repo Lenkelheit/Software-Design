@@ -17,8 +17,14 @@ namespace DataAccess.Repositories
     public class GenericRepository<TEntity> : IDbContextSettable<GenericRepository<TEntity>>, IRepository<TEntity> where TEntity: Entities.EntityBase, new()
     {
         // FIELDS
-        private Context.DataBaseContext dbContext;
-        private DbSet<TEntity> dbSet;
+        /// <summary>
+        /// Database context
+        /// </summary>
+        protected Context.DataBaseContext dbContext;
+        /// <summary>
+        /// Used to query data from data base
+        /// </summary>
+        protected DbSet<TEntity> dbSet;
 
         // CONSTRUCTORS
         /// <summary>
@@ -58,6 +64,7 @@ namespace DataAccess.Repositories
             }
             return this;
         }
+
         // METHODS
         /// <summary>
         /// Counts records in data set
@@ -168,9 +175,9 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
-                                                Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                                                string includeProperties = "")
+        public virtual System.Collections.Generic.IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+                                                                            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                                                            string includeProperties = "")
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
 
@@ -191,7 +198,29 @@ namespace DataAccess.Repositories
             if (orderBy != null) return orderBy(query);
             return query;
         }
+        /// <summary>
+        /// Gets data with offset
+        /// </summary>
+        /// <param name="amount">
+        /// Records amount to select
+        /// </param>
+        /// <param name="page">
+        /// Records offset
+        /// </param>
+        /// <returns>
+        /// Queried entities collection
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public virtual System.Collections.Generic.IEnumerable<TEntity> Get(int page, int amount)
+        {
 
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+
+            return dbSet.Skip((page - 1) * amount).Take(amount);
+        }
         /// <summary>
         /// Gets entity by id
         /// </summary>
@@ -210,32 +239,54 @@ namespace DataAccess.Repositories
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
             return dbSet.Find(id);
         }
+
+        /// <summary>
+        /// Gets entity by id
+        /// </summary>
+        /// <param name="id">
+        /// Entity's id
+        /// </param>
+        /// <returns>
+        /// Finded entity or null
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public virtual System.Threading.Tasks.Task<TEntity> GetAsync(object id)
+        {
+            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            return dbSet.FindAsync(id);
+        }
         /// <summary>
         /// Inserts data in data base
         /// </summary>
         /// <param name="entity">
         /// Inserted entity
         /// </param>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual void Insert(TEntity entity)
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
             dbSet.Add(entity);
         }
         /// <summary>
-        /// Updates database
+        /// Inserts data in data base
         /// </summary>
-        /// <param name="entityToUpdate">
-        /// Entity to update
-        /// </param>
+        /// <param name="entity">
+        /// Inserted entity
+        /// </param>    
         /// <exception cref="NullReferenceException">
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual void Update(TEntity entityToUpdate)
+        public virtual async void InsertAsync(TEntity entity)
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
-            dbSet.Attach(entityToUpdate);
-            dbContext.Entry(entityToUpdate).State = EntityState.Modified;
+            await dbSet.AddAsync(entity);
         }
     }
 }
