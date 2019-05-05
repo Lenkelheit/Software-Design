@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--LINK-->
+    <!--LIBS-->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <!--CUSTOM-->
+</head>
+
+<body>
+
+    <div class="container">
+        <!--HEADER-->
+        <div class="header">
+            <ol>
+                <li><a asp-controller="Apartments" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Apartments" asp-action="List">Apartments</a></li>
+                <li><a>My rent</a></li>
+                <li><a>Requests</a></li>
+                <li><a>Bills</a></li>
+                <li><a>Notification</a></li>
+            </ol>
+        </div>
+        <hr />
+
+        <!--CONTENT-->
+        <div class="content">
+            @RenderBody()
+        </div>
+
+
+        <!--FOOTER-->
+        <hr />
+        <div class="footer">
+            <h2>Footer</h2>
+            <div>
+                <h3>About us</h3>
+
+                <p>Lorem ipsum</p>
+
+                <a asp-controller="Site" asp-action="About">About</a>
+
+            </div>
+
+            <div>
+                <h3>Info</h3>
+
+                <a asp-controller="Site" asp-action="Privacy">Privacy</a>
+                <a asp-controller="Site" asp-action="Support">Support</a>
+
+            </div>
+
+            <div>
+                <h3>Contact</h3>
+
+                <a asp-controller="Site" asp-action="Contact">Contact us</a>
+
+            </div>
+        </div>
+    </div>
+
+    <!--SCRIPTS-->
+    <!--LIBS-->
+    <script src="~/js/libs/jquery-3.3.1.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--CUSTOM-->
+
+</body>
+</html>

@@ -3,7 +3,8 @@
 namespace Pagination.Interfaces
 {
     /// <summary>
-    /// Determines steps to build pagination
+    /// Determines steps to build pagination <para/>
+    /// Implements this if you want to change pagination's view
     /// </summary>
     public interface IPaginationBuilder
     {

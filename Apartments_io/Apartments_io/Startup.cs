@@ -51,8 +51,8 @@ namespace Apartments_io
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "administrator",
-                    template: "{area:exists}/{controller=AdminPages}/{action=Index}");
+                    name: "areas",
+                    template: "{area:exists}/{controller}/{action}");
 
                 routes.MapRoute(
                     name: "default",

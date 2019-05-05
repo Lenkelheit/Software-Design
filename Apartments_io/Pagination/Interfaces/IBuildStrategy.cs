@@ -1,7 +1,8 @@
 ﻿namespace Pagination.Interfaces
 {
     /// <summary>
-    /// Determines in which way pagination should be build
+    /// Determines in which way pagination should be build <para/>
+    /// Implement this if you want to change pagination's structure
     /// </summary>
     public interface IBuildStrategy
     {

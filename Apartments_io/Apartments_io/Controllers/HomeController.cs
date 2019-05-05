@@ -1,6 +1,8 @@
-﻿using DataAccess.Entities;
-using DataAccess.Repositories;
+﻿using Apartments_io.Models;
+
 using Microsoft.AspNetCore.Mvc;
+
+using System.Diagnostics;
 
 namespace Apartments_io.Controllers
 {
@@ -9,6 +11,12 @@ namespace Apartments_io.Controllers
         public IActionResult Index()
         { 
             return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

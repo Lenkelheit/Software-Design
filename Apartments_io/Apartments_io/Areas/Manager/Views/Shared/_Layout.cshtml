@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--LINK-->
+    <!--LIBS-->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <!--CUSTOM-->
+
+</head>
+
+<body>
+
+    <div class="container">
+        <!--HEADER-->
+        <div class="header">
+            Manager Panel
+        </div>
+
+        <!--NAVIGATION-->
+        <nav>
+            <a href="/Manager/Apartments/Index/">Apartments</a>
+            <a href="/Manager/Requests/Index/">Requests</a>
+            <a href="/Manager/Bills/Index/">Bills</a>
+        </nav>
+
+
+        <!--CONTENT-->
+        <div class="content">
+            @RenderBody()
+        </div>
+
+
+        <!--FOOTER-->
+        <div class="footer">
+            ©Copyright The Architects
+        </div>
+    </div>
+
+    <!--SCRIPTS-->
+    <!--LIBS-->
+    <script src="~/js/libs/jquery-3.3.1.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--CUSTOM-->
+
+</body>
+</html>

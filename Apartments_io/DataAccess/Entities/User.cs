@@ -52,5 +52,17 @@ namespace DataAccess.Entities
         /// A list of user's bills
         /// </summary>
         public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
+
+
+        /// <summary>
+        /// Returns a string that represents the current object
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Join(' ', FirstName, LastName);
+        }
     }
 }

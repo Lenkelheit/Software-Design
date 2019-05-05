@@ -1,0 +1,96 @@
+﻿@model Apartments_io.Areas.Manager.ViewModels.Requests.IndexViewModel
+
+<h2>Request</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Resident Name
+            </th>
+            <th>
+                Resident Surname
+            </th>
+            <th>
+                Resident Bill Status
+            </th>
+            <th>
+                Apartment Img
+            </th>
+            <th>
+                Apartment Name
+            </th>
+            <th>
+                Rent End Date
+            </th>
+            <th>
+                Accept
+            </th>
+            <th>
+                Dismiss
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Request request in Model.Requests)
+        {
+            <tr>
+                <td>
+                    @request.Resident.FirstName
+                </td>
+                <td>
+                    @request.Resident.LastName
+                </td>
+                <td>
+                    bill status
+                </td>
+                <td>
+                    <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+                </td>
+                <td>
+                    @request.Apartment.Name
+                </td>
+                <td>
+                    @request.Apartment.RentEndDate
+                </td>
+                <td>
+                    <button class="btn-accept" data-request-id="@request.Id">Accept</button>
+                </td>
+                <td>
+                    <button class="btn-dismiss" data-request-id="@request.Id">Dismiss</button>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/libs/jquery-3.3.1.min.js"></script>
+<script>
+    $(".btn-accept").click(function ()
+    {
+        $.post("/manager/Requests/AcceptRequest",
+            {
+                requestId: $(this).data("request-id")
+            }).done(function () {
+                location.reload();
+            }).fail(function () {
+                alert("fail");
+            });
+    });
+
+    $(".btn-dismiss").click(function () {
+        $.post("/manager/Requests/DismissRequest",
+            {
+                requestId: $(this).data("request-id")
+            }).done(function () {
+                location.reload();
+            }).fail(function () {
+                alert("fail");
+            });
+    });
+</script>
+
+<!--PAGINATION-->
+ <pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="Index"></pagination-link>
+

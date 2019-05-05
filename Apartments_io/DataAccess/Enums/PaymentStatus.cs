@@ -20,6 +20,6 @@
         /// <summary>
         /// Paid, but with delay
         /// </summary>
-        PaidWithhDelay
+        PaidWithDelay
     }
 }

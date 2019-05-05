@@ -1,0 +1,53 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.ListViewModel
+
+@foreach (Apartment apartment in Model.Apartments)
+{
+    <div>
+        <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">
+            <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+            <p>@apartment.Name</p>
+            <p>@apartment.Price</p>
+
+            <button data-id="@apartment.Id" class="btn-request">Send request</button>
+        </a>
+    </div>
+}
+
+<script src="~/js/libs/jquery-3.3.1.min.js"></script>
+<script>
+    $(".btn-request").click(function () {
+
+        var btn = this;
+
+        var user_id = 18041; // TODO: change this
+        var apartment_id = $(this).data("id");
+
+
+
+        if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
+        else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
+    });
+
+    function create_request(user_id, apartment_id) {
+       return $.post('/Resident/Requests/CreateRequest',
+            {
+                userId: user_id,
+                apartmentId: apartment_id
+            }
+        );
+
+    }
+    function delete_request(user_id, apartment_id) {
+        return $.post('/Resident/Requests/DeleteRequest',
+            {
+                userId: user_id,
+                apartmentId: apartment_id
+            }
+        );
+    }
+    
+</script>
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="List"></pagination-link>
+
