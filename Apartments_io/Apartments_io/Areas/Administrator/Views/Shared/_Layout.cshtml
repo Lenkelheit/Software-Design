@@ -5,13 +5,18 @@
     <title>@ViewData["Title"]</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+
     <!--LINK-->
+    <!--LIBS-->
     <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/js/libs/ohsnap/index.css" rel="stylesheet" type="text/css">
+    <!--CUSTOM-->
     <link href="~/css/Administrator/index.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+    <!--NOTIFICATION-->
+    <div id="ohsnap"></div>
 
     <div class="container">
         <!--HEADER-->
@@ -24,15 +29,23 @@
             @RenderBody()
         </div>
 
+
         <!--FOOTER-->
         <div class="footer">
             ©Copyright The Architects
         </div>
     </div>
 
-    <script src="~/js/jquery-3.3.1.min.js"></script>
-
+    <!--SCRIPTS-->
+    <!--LIBS-->
+    <script src="~/js/libs/jquery-3.3.1.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/libs/ohsnap/ohsnap.min.js"></script>
+    <script src="~/js/libs/bootbox/bootbox.min.js"></script>
+
+    <!--CUSTOM-->
+    <script src="~/js/areas/index.js"></script>
+    <script src="~/js/areas/administrator/index.js"></script>
 
 </body>
 </html>

@@ -65,16 +65,31 @@ namespace DataAccess.Context
             // return repository
             return (TRepository)repositoriesFactory[key];
         }
+
+        /// <summary>
+        /// Updates database
+        /// </summary>
+        /// <param name="entityToUpdate">
+        /// Entity to update
+        /// </param>
+        /// <typeparam name="TEntity">
+        /// An entity type to update
+        /// </typeparam>
+        public virtual void Update<TEntity>(TEntity entityToUpdate) where TEntity : EntityBase
+        {
+            dataBaseContext.Set<TEntity>().Attach(entityToUpdate);
+            dataBaseContext.Entry(entityToUpdate).State = EntityState.Modified;
+        }
         /// <summary>
         /// Saves all changes made in this context to the database.
         /// </summary>
         /// <returns>
         /// The number of state entries written to the database.
         /// </returns>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException">
+        /// <exception cref="DbUpdateException">
         /// An error is encountered while saving to the database.
         /// </exception>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException">
+        /// <exception cref="DbUpdateConcurrencyException">
         /// A concurrency violation is encountered while saving to the database. <para/>
         /// A concurrency violation occurs when an unexpected number of rows are affected during save. <para/>
         /// This is usually because the data in the database has been modified since it was loaded into memory. <para/>
