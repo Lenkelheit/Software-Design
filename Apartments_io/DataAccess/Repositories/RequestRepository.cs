@@ -23,7 +23,7 @@ namespace DataAccess.Repositories
         /// Apartment's id
         /// </param>
         /// <returns>
-        /// An instance of <see cref="DataAccess.Entities.Request"/>
+        /// An instance of <see cref="Request"/>
         /// </returns>
         /// <exception cref="System.NullReferenceException">
         /// Throws when context for this repository is not set<para/>

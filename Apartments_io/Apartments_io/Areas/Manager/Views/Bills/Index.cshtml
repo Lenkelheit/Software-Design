@@ -90,57 +90,60 @@
 <!--PAGINATION-->
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Bills" action-name="Index"></pagination-link>
 
-<script src="~/js/libs/jquery-3.3.1.min.js"></script>
-<script>
-    $(document).ready()
-    {
-        load_apartments("#apartments", $("#residents option:selected").val());
-    }
-    $("#residents").change(function () {
-        load_apartments("#apartments", $(this).children("option:selected").val());
-    });
-
-    function load_apartments(combobox__selector, user_id) {
-        $.post('/Manager/Apartments/GetApartmentsList/',
-            {
-                userId: user_id,
-            },
-            function (data) {
-
-                const combobox = $(combobox__selector);
-                combobox.empty();
-                for (var i = 0; i < data.length; ++i) {
-                    combobox.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
-                }
-            });
-    }
-
-    // CREATE
-    $("#create-new-bill").click(function () {
-
-        $.post("/Manager/Bills/CreateNewBill/",
-            {
-                residentId: $("#residents option:selected").val(),
-                apartmentId: $("#apartments").children("option:selected").val(),
-            })
-            .done(function () { location.reload(); })
-            .fail(function () { alert("fail"); });
-    });
-
-    // UPDATE
-    $("#bills-list tr").each(function () {
-        const row = this;
-
-        $(row).find(".btn-update").click(function () {
-            $.post("/Manager/Bills/UpdateBill/",
-                {
-                    billId: $(row).data("id"),
-                    paymentStatus: $(row).find('.bill-status option:selected').val()
-
-                })
-                .done(function () { alert("updated") })
-                .fail(function () { alert("fail") });
+@section Scripts
+{
+    <script>
+        $(document).ready()
+        {
+            load_apartments("#apartments", $("#residents option:selected").val());
+        }
+        $("#residents").change(function () {
+            load_apartments("#apartments", $(this).children("option:selected").val());
         });
-    });
 
-</script>
+        function load_apartments(combobox__selector, user_id) {
+            $.post('/Manager/Apartments/GetApartmentsList/',
+                {
+                    userId: user_id,
+                },
+                function (data) {
+
+                    const combobox = $(combobox__selector);
+                    combobox.empty();
+                    for (var i = 0; i < data.length; ++i) {
+                        combobox.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
+                    }
+                });
+        }
+
+        // CREATE
+        $("#create-new-bill").click(function () {
+
+            $.post("/Manager/Bills/CreateNewBill/",
+                {
+                    residentId: $("#residents option:selected").val(),
+                    apartmentId: $("#apartments").children("option:selected").val(),
+                })
+                .done(function () { location.reload(); })
+                .fail(function () { alert("fail"); });
+        });
+
+        // UPDATE
+        $("#bills-list tr").each(function () {
+            const row = this;
+
+            $(row).find(".btn-update").click(function () {
+                $.post("/Manager/Bills/UpdateBill/",
+                    {
+                        billId: $(row).data("id"),
+                        paymentStatus: $(row).find('.bill-status option:selected').val()
+
+                    })
+                    .done(function () { alert("updated") })
+                    .fail(function () { alert("fail") });
+            });
+        });
+
+    </script>
+
+}

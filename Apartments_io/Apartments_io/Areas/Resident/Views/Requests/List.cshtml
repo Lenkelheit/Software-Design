@@ -1,0 +1,32 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Requests.ListViewModel
+
+@foreach (Request request in Model.Requests)
+{
+    <div>
+        <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+        <p>@request.Apartment.Name</p>
+        <p>@request.Apartment.Price</p>
+        <!--TODO: write here user id-->
+        <button class="btn-request" data-user-id="1" data-apartment-id="@request.Apartment.Id">Cancel</button>
+    </div>
+}
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="List"></pagination-link>
+
+@section Scripts
+{
+    <script>
+        $(".btn-request").click(function () {
+
+            const btn = this;
+
+            var user_id = $(this).data("user-id");
+            var apartment_id = $(this).data("apartment-id");
+
+
+            if ($(btn).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
+            else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
+        });
+    </script>
+}

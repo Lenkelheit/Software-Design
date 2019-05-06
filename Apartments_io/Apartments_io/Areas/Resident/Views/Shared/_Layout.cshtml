@@ -20,10 +20,10 @@
             <ol>
                 <li><a asp-controller="Apartments" asp-action="Index">Home</a></li>
                 <li><a asp-controller="Apartments" asp-action="List">Apartments</a></li>
-                <li><a>My rent</a></li>
-                <li><a>Requests</a></li>
-                <li><a>Bills</a></li>
-                <li><a>Notification</a></li>
+                <li><a asp-controller="Apartments" asp-action="MyRent">My rent</a></li>
+                <li><a asp-controller="Requests" asp-action="List">Requests</a></li>
+                <li><a asp-controller="Bills" asp-action="List">Bills</a></li>
+                <li><a asp-controller="Notifications" asp-action="List">Notifications</a></li>
             </ol>
         </div>
         <hr />
@@ -70,6 +70,8 @@
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
 
     <!--CUSTOM-->
+    <script src="~/js/areas/resident/index.js"></script>
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

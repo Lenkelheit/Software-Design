@@ -65,32 +65,33 @@
     </tbody>
 </table>
 
-<script src="~/js/libs/jquery-3.3.1.min.js"></script>
-<script>
-    $(".btn-accept").click(function ()
-    {
-        $.post("/manager/Requests/AcceptRequest",
-            {
-                requestId: $(this).data("request-id")
-            }).done(function () {
-                location.reload();
-            }).fail(function () {
-                alert("fail");
-            });
-    });
-
-    $(".btn-dismiss").click(function () {
-        $.post("/manager/Requests/DismissRequest",
-            {
-                requestId: $(this).data("request-id")
-            }).done(function () {
-                location.reload();
-            }).fail(function () {
-                alert("fail");
-            });
-    });
-</script>
-
 <!--PAGINATION-->
- <pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="Index"></pagination-link>
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="Index"></pagination-link>
+
+@section Scripts
+{
+    <script>
+        $(".btn-accept").click(function () {
+            $.post("/manager/Requests/AcceptRequest",
+                {
+                    requestId: $(this).data("request-id")
+                }).done(function () {
+                    location.reload();
+                }).fail(function () {
+                    alert("fail");
+                });
+        });
+
+        $(".btn-dismiss").click(function () {
+            $.post("/manager/Requests/DismissRequest",
+                {
+                    requestId: $(this).data("request-id")
+                }).done(function () {
+                    location.reload();
+                }).fail(function () {
+                    alert("fail");
+                });
+        });
+    </script>
+}
 

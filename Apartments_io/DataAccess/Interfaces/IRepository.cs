@@ -60,20 +60,26 @@ namespace DataAccess.Interfaces
         /// <param name="id">
         /// Entity's id
         /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
+        /// </param>
         /// <returns>
         /// Finded entity
         /// </returns>
-        TEntity Get(object id);
+        TEntity Get(int id, string includeProperties = "");
         /// <summary>
         /// Returns entity by id
         /// </summary>
         /// <param name="id">
         /// Entity's id
         /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
+        /// </param>
         /// <returns>
         /// Finded entity
         /// </returns>
-        System.Threading.Tasks.Task<TEntity> GetAsync(object id);
+        System.Threading.Tasks.Task<TEntity> GetAsync(int id, string includeProperties = "");
         /// <summary>
         /// Inserts data in collection
         /// </summary>

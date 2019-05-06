@@ -6,11 +6,16 @@ using DataAccess.Repositories;
 
 using System.Threading.Tasks;
 
+using Apartments_io.Areas.Resident.ViewModels.Requests;
+
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
     public class RequestsController : Controller
     {
+        // CONST
+        static readonly int ITEM_PER_PAGE_SIZE = 6;
+
         // FIELDS
         readonly IUnitOfWork unitOfWork;
 
@@ -49,9 +54,22 @@ namespace Apartments_io.Areas.Resident.Controllers
         }
 
         // ACTIONS
-        public IActionResult Index()
+        public IActionResult List(int page = 1)
         {
-            return View();
+            ListViewModel listViewModel = new ListViewModel()
+            {
+                Requests = requestRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE,
+                                                includeProperties: nameof(Apartment),
+                                                filter: r => r.Resident.Id == 1), // TODO: change this to real id
+
+                PaginationModel = Pagination.Pagination.GetBuilder
+                                                .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
+                                                .SetCurrentPage(page)
+                                                .SetTotalRecordsAmount(requestRepository.Count(r => r.Resident?.Id == 1)) // TODO: change this to real id
+
+            };
+                        
+            return View(listViewModel);
         }
 
         // ajax

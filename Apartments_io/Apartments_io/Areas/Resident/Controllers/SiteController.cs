@@ -25,15 +25,19 @@ namespace Apartments_io.Areas.Resident.Controllers
                 Text = "Lorem ipsum"
             });
         }
-        public IActionResult Contact()
-        {
-            return View();
-        }
         public IActionResult Support()
         {
             return View("Template", new TemplateViewModel()
             {
                 Header = "Support",
+                Text = "Lorem ipsum"
+            });
+        }
+        public IActionResult Contact()
+        {
+            return View("Template", new TemplateViewModel()
+            {
+                Header = "Contact",
                 Text = "Lorem ipsum"
             });
         }

@@ -10,8 +10,10 @@
 {
 
     <div>
-        <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
-        <p>@apartment.Description</p>
+        <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">
+            <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+            <p>@apartment.Description</p>
+        </a>
     </div>
 }
 

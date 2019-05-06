@@ -17,7 +17,7 @@ namespace DataAccess.Interfaces
         /// Apartment's id
         /// </param>
         /// <returns>
-        /// An instance of <see cref="DataAccess.Entities.Request"/>
+        /// An instance of <see cref="Request"/>
         /// </returns>
         Request GetByValues(int userId, int apartmentId);
         /// <summary>

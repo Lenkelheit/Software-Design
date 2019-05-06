@@ -215,24 +215,8 @@ namespace DataAccess.Repositories
         /// <param name="id">
         /// Entity's id
         /// </param>
-        /// <returns>
-        /// Finded entity or null
-        /// </returns>
-        /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not set<para/>
-        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
-        /// </exception>
-        public virtual TEntity Get(object id)
-        {
-            ContextCheck();
-            return dbSet.Find(id);
-        }
-
-        /// <summary>
-        /// Gets entity by id
-        /// </summary>
-        /// <param name="id">
-        /// Entity's id
+        /// <param name="includeProperties">
+        /// Included properties
         /// </param>
         /// <returns>
         /// Finded entity or null
@@ -241,10 +225,49 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual System.Threading.Tasks.Task<TEntity> GetAsync(object id)
+        public virtual TEntity Get(int id, string includeProperties = "")
         {
             ContextCheck();
-            return dbSet.FindAsync(id);
+            IQueryable<TEntity> query = dbSet;
+
+            // include properties
+            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return query.First(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// Gets entity by id
+        /// </summary>
+        /// <param name="id">
+        /// Entity's id
+        /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
+        /// </param>
+        /// <returns>
+        /// Finded entity or null
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public virtual System.Threading.Tasks.Task<TEntity> GetAsync(int id, string includeProperties = "")
+        {
+            ContextCheck();
+
+            IQueryable<TEntity> query = dbSet;
+
+            // include properties
+            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return query.FirstAsync(e => e.Id == id);
         }
         /// <summary>
         /// Inserts data in data base

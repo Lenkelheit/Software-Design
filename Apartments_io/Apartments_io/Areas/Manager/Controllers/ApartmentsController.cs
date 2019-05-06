@@ -50,7 +50,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         {
             if (id == null) return NotFound();
 
-            Apartment apartment = await apartmentsRepository.GetAsync(id);
+            Apartment apartment = await apartmentsRepository.GetAsync(id.Value);
 
             if (apartment == null) return NotFound();
 
@@ -82,7 +82,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         {
             if (id == null) return NotFound();
 
-            Apartment apartment = await apartmentsRepository.GetAsync(id);
+            Apartment apartment = await apartmentsRepository.GetAsync(id.Value);
             if (apartment == null) return NotFound();
 
             return View(apartment);
@@ -97,7 +97,9 @@ namespace Apartments_io.Areas.Manager.Controllers
 
             if (ModelState.IsValid)
             {
+                // update apartment
                 unitOfWork.Update(apartment);
+                
                 await unitOfWork.SaveAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -110,7 +112,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         {
             if (id == null) return NotFound();
 
-            Apartment apartment = await apartmentsRepository.GetAsync(id);
+            Apartment apartment = await apartmentsRepository.GetAsync(id.Value);
             if (apartment == null) return NotFound();
 
             return View(apartment);

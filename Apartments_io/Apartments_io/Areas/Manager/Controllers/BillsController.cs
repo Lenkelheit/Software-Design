@@ -52,13 +52,25 @@ namespace Apartments_io.Areas.Manager.Controllers
         [HttpPost]
         public async System.Threading.Tasks.Task<IActionResult> CreateNewBill(int residentId, int apartmentId)
         {
+            // get renter
+            User renter = await unitOfWork.GetRepository<User, UserRepository>().GetAsync(residentId);
+
             // create bill
             Bill bill = new Bill
             {
                 Apartment = await unitOfWork.GetRepository<Apartment, ApartmentRepository>().GetAsync(apartmentId),
-                Renter = await unitOfWork.GetRepository<User, UserRepository>().GetAsync(residentId),
+                Renter = renter,
                 PaymentStatus = DataAccess.Enums.PaymentStatus.WaitingForPayment
             };
+
+            // create notifications
+            Notification notification = new Notification()
+            {
+                Resident = renter,
+                EmergencyLevel = DataAccess.Enums.EmergencyLevel.Info,
+                Description = "You has new bill"
+            };
+            await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(notification);
 
             // save bill
             await billsRepositories.InsertAsync(bill);
@@ -72,12 +84,21 @@ namespace Apartments_io.Areas.Manager.Controllers
         public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, DataAccess.Enums.PaymentStatus paymentStatus)
         {
             // get bill
-            Bill bill = await billsRepositories.GetAsync(billId);
+            Bill bill = await billsRepositories.GetAsync(billId, nameof(Bill.Renter));
             if (bill == null) return BadRequest();
 
             // update bill
             bill.PaymentStatus = paymentStatus;
             unitOfWork.Update(bill);
+
+            // create notification
+            Notification notification = new Notification()
+            {
+                Resident = bill.Renter,
+                EmergencyLevel = DataAccess.Enums.EmergencyLevel.Warning,
+                Description = "Your bill has new status " + bill.PaymentStatus
+            };
+            await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(notification);
 
             // save
             await unitOfWork.SaveAsync();

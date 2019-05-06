@@ -1,0 +1,30 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Notifications.ListViewModel
+
+<h2>Notifications</h2>
+
+@foreach (Notification notification in Model.Notifications)
+{
+    <div class="notification-container" data-id="@notification.Id">
+        <p>@notification.EmergencyLevel</p>
+        <p>@notification.Description</p>
+    </div>
+}
+
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Notifications" action-name="List"></pagination-link>
+
+@section Scripts
+{
+    <script>
+        $(".notification-container").click(function () {
+            var container = this;
+            $.post("/Resident/Notifications/ConfirmNotification",
+                {
+                    notificationId: $(container).data("id")
+                }).done(function () {
+                $(container).css("background-color", "gray");
+            });
+        });
+    </script>
+}

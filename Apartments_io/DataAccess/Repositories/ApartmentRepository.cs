@@ -27,13 +27,17 @@ namespace DataAccess.Repositories
         public IEnumerable<Apartment> GetBest(int amount)
         {
             ContextCheck();
-
-            return (from apartment in dbSet
-                    join bill in dbContext.Set<Bill>() on apartment.Id equals bill.Apartment.Id
-                    group apartment by apartment into apartmentGroup
-                    select apartmentGroup.Key)
+            return dbSet
                     .Take(amount)
                     .AsEnumerable();
+
+            /*return (from apartment in dbSet
+                    join bill in dbContext.Set<Bill>() on apartment.Id equals bill.Apartment.Id into apartmentsBills
+                    from apartmentBills in apartmentsBills.DefaultIfEmpty()
+                    group apartmentBills by apartmentBills.Apartment into apartmentGroup
+                    select apartmentGroup.Key)
+                    .Take(amount)
+                    .AsEnumerable();*/
         }
     }
 }
