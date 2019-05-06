@@ -2,7 +2,7 @@
 
 using DataAccess.Entities;
 
-namespace Apartments_io.Areas.Administrator.ViewModels
+namespace Apartments_io.Areas.Administrator.ViewModels.Users
 {
     public class IndexViewModel
     {

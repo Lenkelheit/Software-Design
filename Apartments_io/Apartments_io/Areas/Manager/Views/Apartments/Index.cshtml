@@ -1,0 +1,54 @@
+﻿@model Apartments_io.Areas.Manager.ViewModels.Apartments.IndexViewModel
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Photo
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Rent end date
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Apartment apartment in Model.Apartments)
+        {
+            <tr>
+                <td>
+                    <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+                </td>
+                <td>
+                    @apartment.Name
+                </td>
+                <td>
+                    @apartment.RentEndDate
+                </td>
+                <td>
+                    @apartment.Price
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@apartment.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@apartment.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@apartment.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="Index"></pagination-link>

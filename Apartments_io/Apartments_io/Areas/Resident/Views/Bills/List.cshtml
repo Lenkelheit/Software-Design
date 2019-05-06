@@ -1,0 +1,49 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Bills.ListViewModel
+
+<h2>List</h2>
+
+<h3>Present</h3>
+
+@foreach (Bill bill in Model.PresentBills)
+{
+    <div class="present-bill">
+        <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+        <p>@bill.Apartment.Name</p>
+        <p>@bill.Apartment.RentEndDate</p>
+        <button data-id="@bill.Id">pay</button>
+    </div>
+}
+
+<h3>Past</h3>
+@foreach (Bill bill in Model.PastBills)
+{
+<div class="past-bill">
+    <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+    <p>@bill.Apartment.Name</p>
+    <p>@bill.Apartment.RentEndDate</p>
+    <button data-id="@bill.Id">pay</button>
+</div>
+}
+
+@section Scripts
+    {
+        <script>
+
+            $(".present-bill, .past-bill").each(function () {
+
+                var bill_container = this;
+
+                $(bill_container).find("button").click(function () {
+                    $.post("/Resident/Bills/PayBill/",
+                        {
+                            billId: $(this).data("id")
+                        })
+                        .done(function () {
+                            $(bill_container).fadeOut(300, function () { $(this).remove(); });
+                        })
+                        .fail(function () { alert("failed"); });
+                });
+            });
+        </script>
+
+}

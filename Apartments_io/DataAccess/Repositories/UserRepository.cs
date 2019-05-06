@@ -7,7 +7,7 @@ using DataAccess.Entities;
 namespace DataAccess.Repositories
 {
     /// <summary>
-    /// Prozy data access and business logic for user table
+    /// Proxy data access and business logic for user table
     /// </summary>
     public class UserRepository : GenericRepository<User>, Interfaces.IUserRepository
     {
@@ -20,8 +20,14 @@ namespace DataAccess.Repositories
         /// <returns>
         /// A collection of user of certain role
         /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual IEnumerable<User> GetUserByRole(Role role)
         {
+            ContextCheck();
+
             return dbSet.Where(user => user.Role == role);
         }
 
@@ -37,8 +43,14 @@ namespace DataAccess.Repositories
         /// <exception cref="System.ArgumentNullException">
         /// Throws when <paramref name="manager"/> is null
         /// </exception>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
         public virtual bool DoesManagerHasAnyResident(User manager)
         {
+            ContextCheck();
+
             if (manager == null) throw new System.ArgumentNullException(nameof(manager));
 
             if (manager.Role != Role.Manager) return false;

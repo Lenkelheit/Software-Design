@@ -4,14 +4,14 @@ using DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Apartments_io.Areas.Administrator.ViewModels;
+using Apartments_io.Areas.Administrator.ViewModels.Users;
 
 using System.Threading.Tasks;
 
 namespace Apartments_io.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
-    public class UserController : Controller
+    public class UsersController : Controller
     {
         // CONST
         readonly int ITEM_PER_PAGE_SIZE = 10;
@@ -21,7 +21,7 @@ namespace Apartments_io.Areas.Administrator.Controllers
         readonly IUserRepository userRepository;
 
         // CONSTRUCTORS
-        public UserController(IUnitOfWork unitOfWork)
+        public UsersController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
             this.userRepository = unitOfWork.GetRepository<User, UserRepository>();
@@ -32,14 +32,15 @@ namespace Apartments_io.Areas.Administrator.Controllers
         {
             ViewData["Title"] = "Administrator";
 
-            IndexViewModel indexViewModel = new IndexViewModel();
-            
-            indexViewModel.Users = userRepository.Get(page, ITEM_PER_PAGE_SIZE);
-            indexViewModel.Managers = userRepository.GetUserByRole(DataAccess.Enums.Role.Manager);
-            indexViewModel.PaginationModel = Pagination.Pagination.GetBuilder
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                Users = userRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE),
+                Managers = userRepository.GetUserByRole(DataAccess.Enums.Role.Manager),
+                PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(userRepository.Count());
+                                                .SetTotalRecordsAmount(userRepository.Count())
+            };
 
             return View(indexViewModel);
         }
@@ -50,7 +51,7 @@ namespace Apartments_io.Areas.Administrator.Controllers
         {
             user.Manager = await userRepository.GetAsync(managerId);
 
-            userRepository.InsertAsync(user);
+            await userRepository.InsertAsync(user);
             await unitOfWork.SaveAsync();
 
             return Ok();

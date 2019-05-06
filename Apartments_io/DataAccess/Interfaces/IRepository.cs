@@ -41,15 +41,6 @@ namespace DataAccess.Interfaces
         /// <param name="includeProperties">
         /// Included properties
         /// </param>
-        /// <returns>
-        /// Queried entities collection
-        /// </returns>
-        System.Collections.Generic.IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
-                                                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                                                             string includeProperties = "");
-        /// <summary>
-        /// Gets data with offset
-        /// </summary>
         /// <param name="amount">
         /// Records amount to select
         /// </param>
@@ -59,41 +50,53 @@ namespace DataAccess.Interfaces
         /// <returns>
         /// Queried entities collection
         /// </returns>
-        System.Collections.Generic.IEnumerable<TEntity> Get(int page, int amount);
+        System.Collections.Generic.IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+                                                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+                                                             string includeProperties = "",
+                                                             int? page = null, int? amount = null);
         /// <summary>
         /// Returns entity by id
         /// </summary>
         /// <param name="id">
         /// Entity's id
         /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
+        /// </param>
         /// <returns>
         /// Finded entity
         /// </returns>
-        TEntity Get(object id);
+        TEntity Get(int id, string includeProperties = "");
         /// <summary>
         /// Returns entity by id
         /// </summary>
         /// <param name="id">
         /// Entity's id
         /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
+        /// </param>
         /// <returns>
         /// Finded entity
         /// </returns>
-        System.Threading.Tasks.Task<TEntity> GetAsync(object id);
+        System.Threading.Tasks.Task<TEntity> GetAsync(int id, string includeProperties = "");
         /// <summary>
         /// Inserts data in collection
         /// </summary>
         /// <param name="entity">
         /// Inserted entity
         /// </param>
-        void Insert(TEntity entity);   
+        void Insert(TEntity entity);
         /// <summary>
         /// Inserts data in data base
         /// </summary>
         /// <param name="entity">
         /// Inserted entity
         /// </param>
-        void InsertAsync(TEntity entity);
+        /// <returns>
+        /// Inserted entity
+        /// </returns>
+        System.Threading.Tasks.Task<TEntity> InsertAsync(TEntity entity);
         /// <summary>
         /// Deletes object by id
         /// </summary>

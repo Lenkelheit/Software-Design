@@ -78,7 +78,7 @@ namespace DataAccess.Repositories
         /// </exception>
         public virtual int Count()
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            ContextCheck();
 
             return dbSet.Count();
         }
@@ -100,7 +100,7 @@ namespace DataAccess.Repositories
         /// </exception>
         public virtual int Count(Func<TEntity, bool> predicate)
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            ContextCheck();
 
             return dbSet.Count(predicate);
         }
@@ -122,7 +122,7 @@ namespace DataAccess.Repositories
         /// </exception>
         public virtual void Delete(object id)
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            ContextCheck();
 
             // find
             if (id == null) throw new ArgumentNullException(nameof(id));
@@ -147,7 +147,7 @@ namespace DataAccess.Repositories
         /// </exception>
         public virtual void Delete(TEntity entityToDelete)
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            ContextCheck();
             if (entityToDelete == null) throw new ArgumentNullException(nameof(entityToDelete));
 
             if (dbContext.Entry(entityToDelete).State == EntityState.Detached)
@@ -168,6 +168,12 @@ namespace DataAccess.Repositories
         /// <param name="includeProperties">
         /// Included properties
         /// </param>
+        /// <param name="amount">
+        /// Records amount to select
+        /// </param>
+        /// <param name="page">
+        /// Records offset
+        /// </param>
         /// <returns>
         /// Queried entities collection
         /// </returns>
@@ -177,9 +183,10 @@ namespace DataAccess.Repositories
         /// </exception>
         public virtual System.Collections.Generic.IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
                                                                             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                                                                            string includeProperties = "")
+                                                                            string includeProperties = "",
+                                                                            int? page = null, int? amount = null)
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            ContextCheck();
 
             // filter
             IQueryable<TEntity> query = dbSet;
@@ -195,37 +202,21 @@ namespace DataAccess.Repositories
             }
 
             // ordering
-            if (orderBy != null) return orderBy(query);
+            if (orderBy != null) query = orderBy(query);
+
+            // paging
+            if (page.HasValue && amount.HasValue) query = query.Skip((page.Value - 1) * amount.Value).Take(amount.Value);
+
             return query;
         }
         /// <summary>
-        /// Gets data with offset
-        /// </summary>
-        /// <param name="amount">
-        /// Records amount to select
-        /// </param>
-        /// <param name="page">
-        /// Records offset
-        /// </param>
-        /// <returns>
-        /// Queried entities collection
-        /// </returns>
-        /// <exception cref="NullReferenceException">
-        /// Throws when context for this repository is not set<para/>
-        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
-        /// </exception>
-        public virtual System.Collections.Generic.IEnumerable<TEntity> Get(int page, int amount)
-        {
-
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
-
-            return dbSet.Skip((page - 1) * amount).Take(amount);
-        }
-        /// <summary>
         /// Gets entity by id
         /// </summary>
         /// <param name="id">
         /// Entity's id
+        /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
         /// </param>
         /// <returns>
         /// Finded entity or null
@@ -234,10 +225,18 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual TEntity Get(object id)
+        public virtual TEntity Get(int id, string includeProperties = "")
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
-            return dbSet.Find(id);
+            ContextCheck();
+            IQueryable<TEntity> query = dbSet;
+
+            // include properties
+            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return query.First(e => e.Id == id);
         }
 
         /// <summary>
@@ -246,6 +245,9 @@ namespace DataAccess.Repositories
         /// <param name="id">
         /// Entity's id
         /// </param>
+        /// <param name="includeProperties">
+        /// Included properties
+        /// </param>
         /// <returns>
         /// Finded entity or null
         /// </returns>
@@ -253,10 +255,19 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual System.Threading.Tasks.Task<TEntity> GetAsync(object id)
+        public virtual System.Threading.Tasks.Task<TEntity> GetAsync(int id, string includeProperties = "")
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
-            return dbSet.FindAsync(id);
+            ContextCheck();
+
+            IQueryable<TEntity> query = dbSet;
+
+            // include properties
+            foreach (string includeProperty in includeProperties.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return query.FirstAsync(e => e.Id == id);
         }
         /// <summary>
         /// Inserts data in data base
@@ -270,7 +281,7 @@ namespace DataAccess.Repositories
         /// </exception>
         public virtual void Insert(TEntity entity)
         {
-            if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
+            ContextCheck();
             dbSet.Add(entity);
         }
         /// <summary>
@@ -278,15 +289,25 @@ namespace DataAccess.Repositories
         /// </summary>
         /// <param name="entity">
         /// Inserted entity
-        /// </param>    
+        /// </param>
+        /// <returns>
+        /// Inserted entity
+        /// </returns>
         /// <exception cref="NullReferenceException">
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual async void InsertAsync(TEntity entity)
+        public virtual async System.Threading.Tasks.Task<TEntity> InsertAsync(TEntity entity)
+        {
+            ContextCheck();
+
+            await dbSet.AddAsync(entity);
+            return entity;
+        }
+
+        protected void ContextCheck()
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
-            await dbSet.AddAsync(entity);
         }
     }
 }

@@ -1,0 +1,16 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.ListViewModel
+
+
+@foreach (Apartment apartment in Model.Apartments)
+{
+    <div>
+        <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+        <p>@apartment.Name</p>
+        <p>@apartment.RentEndDate</p>
+
+        <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id" >Open</a>
+    </div>
+}
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="MyRent"></pagination-link>

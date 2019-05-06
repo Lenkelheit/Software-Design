@@ -43,7 +43,7 @@ $("#create-user").click(function ()
     }
 
     // send to server
-    $.post('/Administrator/User/Create/',
+    $.post('/Administrator/Users/Create/',
     {
         user: user,
         managerId: $("#new_user_manager").children("option:selected").val()
@@ -84,7 +84,7 @@ $("#users-list table tr").each(function ()
         }
 
         // send to server
-        $.post('/Administrator/User/Update/',
+        $.post('/Administrator/Users/Update/',
         {
             user: user,
             managerId: $(row).find('[name="UserManager"]').children("option:selected").val()
@@ -126,7 +126,7 @@ $("#users-list table tr").each(function ()
                     // send to server
                     $.ajax(
                     {
-                        url: '/Administrator/User/Delete/',
+                        url: '/Administrator/Users/Delete/',
                         type: "Post",
                         data:
                         {
