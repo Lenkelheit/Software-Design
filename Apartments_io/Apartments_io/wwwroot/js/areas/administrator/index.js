@@ -52,9 +52,9 @@ $("#create-user").click(function ()
     {
         location.reload();
     })
-    .fail(function ()
+    .fail(function (respone)
     {
-            ohSnap('Something went wrong', { color: 'red' });
+        ohSnap(respone.responseText, { color: 'red' });
     });
 });
 

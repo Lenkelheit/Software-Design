@@ -98,9 +98,9 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual int Count(Func<TEntity, bool> predicate)
+        public virtual int Count(Expression<Func<TEntity, bool>> predicate)
         {
-            ContextCheck();
+            ContextCheck();            
 
             return dbSet.Count(predicate);
         }
@@ -304,7 +304,9 @@ namespace DataAccess.Repositories
             await dbSet.AddAsync(entity);
             return entity;
         }
-
+        /// <summary>
+        /// Checks if context is set and throws exception otherwise
+        /// </summary>
         protected void ContextCheck()
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");

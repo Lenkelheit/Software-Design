@@ -1,9 +1,12 @@
-﻿using DataAccess.Entities;
+﻿using Core.Extensions;
+
+using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 
+using Apartments_io.Attributes;
 using Apartments_io.Areas.Resident.ViewModels.Notifications;
 
 using System.Threading.Tasks;
@@ -11,6 +14,9 @@ using System.Threading.Tasks;
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
+    [Roles(nameof(DataAccess.Enums.Role.Resident),
+           nameof(DataAccess.Enums.Role.Manager),
+           nameof(DataAccess.Enums.Role.Administrator))]
     public class NotificationsController : Controller
     {
         // CONST
@@ -30,18 +36,16 @@ namespace Apartments_io.Areas.Resident.Controllers
         // ACTIONS
         public IActionResult List(int page = 1)
         {
-            // TODO: change this
-            int totalAmount = notificationRepository.Count();
-
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+            
             ListViewModel listViewModel = new ListViewModel()
             {
-                // TODO: change id here
-                Notifications = notificationRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: n => n.Resident.Id == 1),
+                Notifications = notificationRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: n => n.Resident.Id == loggedUserId),
 
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(totalAmount)
+                                                .SetTotalRecordsAmount(notificationRepository.Count(n => n.Resident.Id == loggedUserId))
             };
 
             return View(listViewModel);

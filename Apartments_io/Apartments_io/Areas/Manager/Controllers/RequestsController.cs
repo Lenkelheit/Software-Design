@@ -7,11 +7,14 @@ using DataAccess.Repositories;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Apartments_io.Attributes;
 using Apartments_io.Areas.Manager.ViewModels.Requests;
 
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
+    [Roles(nameof(DataAccess.Enums.Role.Manager),
+           nameof(DataAccess.Enums.Role.Administrator))]
     public class RequestsController : Controller
     {
         // CONST

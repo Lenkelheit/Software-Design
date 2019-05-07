@@ -6,8 +6,8 @@
         <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
         <p>@request.Apartment.Name</p>
         <p>@request.Apartment.Price</p>
-        <!--TODO: write here user id-->
-        <button class="btn-request" data-user-id="1" data-apartment-id="@request.Apartment.Id">Cancel</button>
+
+        <button class="btn-request" data-user-id="@Model.UserId" data-apartment-id="@request.Apartment.Id">Cancel</button>
     </div>
 }
 

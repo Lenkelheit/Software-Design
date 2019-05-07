@@ -5,13 +5,19 @@ using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
+using Apartments_io.Attributes;
 using Apartments_io.Areas.Resident.ViewModels.Bills;
 
 using System.Threading.Tasks;
 
+using Core.Extensions;
+
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
+    [Roles(nameof(Role.Resident),
+           nameof(Role.Manager),
+           nameof(Role.Administrator))]
     public class BillsController : Controller
     {
         // FIELDS
@@ -28,10 +34,12 @@ namespace Apartments_io.Areas.Resident.Controllers
         // ACTIONS
         public IActionResult List()
         {
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+
             ListViewModel listViewModel = new ListViewModel()
             {
-                PresentBills = billRepository.GetPresentBills(1), // TODO: change this to real id
-                PastBills = billRepository.GetPastBills(1)
+                PresentBills = billRepository.GetPresentBills(loggedUserId),
+                PastBills = billRepository.GetPastBills(loggedUserId)
             };
             return View(listViewModel);
         }
