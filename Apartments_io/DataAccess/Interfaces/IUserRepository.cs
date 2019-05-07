@@ -25,5 +25,28 @@
         /// True if manager has any residents, otherwise — false
         /// </returns>
         bool DoesManagerHasAnyResident(Entities.User manager);
+        /// <summary>
+        /// Checks if current email and password are valid
+        /// </summary>
+        /// <param name="email">
+        /// The email that should be checked
+        /// </param>
+        /// <param name="password">
+        /// The password that should be checked
+        /// </param>
+        /// <returns>
+        /// Returns a structure that defines if Email and Password are valid and by them returns this user 
+        /// </returns>
+        System.Tuple<bool, bool, Entities.User> IsDataValid(string email, string password);
+        /// <summary>
+        /// Checks if current email is free
+        /// </summary>
+        /// <param name="email">
+        /// Email that should be checked
+        /// </param>
+        /// <returns>
+        /// True if email is free, otherwise false
+        /// </returns>
+        bool IsEmailFree(string email);
     }
 }

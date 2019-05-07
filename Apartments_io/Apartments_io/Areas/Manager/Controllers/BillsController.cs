@@ -1,4 +1,5 @@
-﻿using Apartments_io.Areas.Manager.ViewModels.Bills;
+﻿using Apartments_io.Attributes;
+using Apartments_io.Areas.Manager.ViewModels.Bills;
 
 using DataAccess.Entities;
 using DataAccess.Interfaces;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
+    [Roles(nameof(DataAccess.Enums.Role.Manager),
+           nameof(DataAccess.Enums.Role.Administrator))]
     public class BillsController : Controller
     {
         // CONST

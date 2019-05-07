@@ -28,7 +28,7 @@ namespace DataAccess.Interfaces
         /// <returns>
         /// Returns the amount of records which satisfy the condition
         /// </returns>
-        int Count(Func<TEntity, bool> predicate);
+        int Count(Expression<Func<TEntity, bool>> predicate);
         /// <summary>
         /// Returns data
         /// </summary>

@@ -12,6 +12,28 @@ namespace DataAccess.Repositories
     public class ApartmentRepository : GenericRepository<Apartment>, IApartmentRepository
     {
         /// <summary>
+        /// Determines if user rent current apartment
+        /// </summary>
+        /// <param name="apartmentId">
+        /// Apartment's id
+        /// </param>
+        /// <param name="userId">
+        /// User's id
+        /// </param>
+        /// <returns>
+        /// True if user is renter, otherwise — false
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public bool IsRenter(int apartmentId, int userId)
+        {
+            ContextCheck();
+
+            return dbSet.Any(a => a.Id == apartmentId && a.Renter.Id == userId);
+        }
+        /// <summary>
         /// Return collection of best apartments
         /// </summary>
         /// <param name="amount">

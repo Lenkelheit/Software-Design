@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Extensions;
+
+using Microsoft.AspNetCore.Mvc;
 
 using DataAccess.Entities;
 using DataAccess.Interfaces;
@@ -6,11 +8,15 @@ using DataAccess.Repositories;
 
 using System.Threading.Tasks;
 
+using Apartments_io.Attributes;
 using Apartments_io.Areas.Resident.ViewModels.Requests;
 
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
+    [Roles(nameof(DataAccess.Enums.Role.Resident),
+           nameof(DataAccess.Enums.Role.Manager),
+           nameof(DataAccess.Enums.Role.Administrator))]
     public class RequestsController : Controller
     {
         // CONST
@@ -56,16 +62,20 @@ namespace Apartments_io.Areas.Resident.Controllers
         // ACTIONS
         public IActionResult List(int page = 1)
         {
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+
             ListViewModel listViewModel = new ListViewModel()
             {
+                UserId = loggedUserId,
+
                 Requests = requestRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE,
                                                 includeProperties: nameof(Apartment),
-                                                filter: r => r.Resident.Id == 1), // TODO: change this to real id
+                                                filter: r => r.Resident.Id == loggedUserId), 
 
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(requestRepository.Count(r => r.Resident?.Id == 1)) // TODO: change this to real id
+                                                .SetTotalRecordsAmount(requestRepository.Count(r => r.Resident.Id == loggedUserId)) 
 
             };
                         

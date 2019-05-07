@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using Apartments_io.Attributes;
 using Apartments_io.Areas.Resident.ViewModels.Apartments;
 
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
+using Core.Extensions;
+
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
+    [Roles(nameof(DataAccess.Enums.Role.Resident),
+           nameof(DataAccess.Enums.Role.Manager),
+           nameof(DataAccess.Enums.Role.Administrator))]
     public class ApartmentsController : Controller
     {
         // FIELDS
@@ -40,6 +46,8 @@ namespace Apartments_io.Areas.Resident.Controllers
 
             ListViewModel listViewModel = new ListViewModel()
             {
+                UserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id)),
+
                 // get free apartment
                 Apartments = apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: a => a.Renter == null),
 
@@ -55,18 +63,16 @@ namespace Apartments_io.Areas.Resident.Controllers
         {
             int ITEM_PER_PAGE_SIZE = 5;
 
-            // change this
-            int totalAmount = apartmentRepository.Count(a => a.Renter == null);
-
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+            
             ListViewModel listViewModel = new ListViewModel()
             {
-                // TODO: change id
-                Apartments = apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: a => a.Renter.Id == 1),
+                Apartments = apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: a => a.Renter.Id == loggedUserId),
 
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(totalAmount)
+                                                .SetTotalRecordsAmount(apartmentRepository.Count(a => a.Renter.Id == loggedUserId))
             };
             
             return View(listViewModel);
@@ -79,10 +85,14 @@ namespace Apartments_io.Areas.Resident.Controllers
             Apartment apartment = await apartmentRepository.GetAsync(apartmentId.Value);
             if (apartment == null) return NotFound();
 
+            // get current user id
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+
             SingleViewModel singleViewModel = new SingleViewModel()
             {
+                UserId = loggedUserId,
                 Apartment = apartment,
-                IsRenter = true // TODO: change this
+                IsRenter = apartmentRepository.IsRenter(apartmentId.Value, loggedUserId)
             };
 
             return View(singleViewModel);

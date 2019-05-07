@@ -1,16 +1,70 @@
-﻿using Apartments_io.Models;
+﻿using Core.Extensions;
 
+using Apartments_io.Models;
+using Apartments_io.ViewModels.Home;
+
+using DataAccess.Entities;
+using DataAccess.Interfaces;
+using DataAccess.Repositories;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Diagnostics;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Apartments_io.Controllers
 {
     public class HomeController : Controller
     {
+        // FIELDS
+        IUnitOfWork unitOfWork;
+        IUserRepository userRepository;
+
+        // CONSTRUCTORS
+        public HomeController(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+            this.userRepository = unitOfWork.GetRepository<User, UserRepository>();
+        }
+
+        // ACTIONS
         public IActionResult Index()
-        { 
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction(
+                    areaName: nameof(Areas.Resident),
+                    actionName: nameof(Areas.Resident.Controllers.ApartmentsController.Index),
+                    controllerName: nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"));
+            }
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // check data
+                System.Tuple<bool, bool, User> userData = userRepository.IsDataValid(model.Email, model.Password);
+                if (userData.Item1 == false) return BadRequest("Wrong email");
+                if (userData.Item2 == false) return BadRequest("Wrong password");
+                if (userData.Item3 ==  null) return BadRequest("Could not get user");
+
+                // Authenticate
+                await Authenticate(userData.Item3); 
+
+                return RedirectToAction(actionName: nameof(Index), controllerName: nameof(HomeController).Remove("Controller"));
+            }
+            return View(model);
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction(actionName: nameof(Index), controllerName: nameof(HomeController).Remove("Controller"));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -18,5 +72,21 @@ namespace Apartments_io.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        // METHODS
+        [NonAction]
+        private async Task Authenticate(User user)
+        {
+            Claim[] claims = new Claim[]
+            {
+                new Claim(nameof(user.Id), user.Id.ToString()),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
+            };
+
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
     }
 }

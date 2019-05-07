@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using Apartments_io.Attributes;
 using Apartments_io.Areas.Resident.ViewModels.Site;
 
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
+    [Roles(nameof(DataAccess.Enums.Role.Resident),
+           nameof(DataAccess.Enums.Role.Manager),
+           nameof(DataAccess.Enums.Role.Administrator))]
     public class SiteController : Controller
     {
         // ACTIONS

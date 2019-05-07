@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace Apartments_io.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
+    [Attributes.Roles(nameof(DataAccess.Enums.Role.Administrator))]
     public class UsersController : Controller
     {
         // CONST
@@ -49,6 +50,8 @@ namespace Apartments_io.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(User user, int managerId)
         {
+            if (!userRepository.IsEmailFree(user.Email)) return BadRequest("Email has already been taken");
+
             user.Manager = await userRepository.GetAsync(managerId);
 
             await userRepository.InsertAsync(user);

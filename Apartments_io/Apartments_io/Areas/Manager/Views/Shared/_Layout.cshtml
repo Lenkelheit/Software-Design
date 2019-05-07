@@ -26,6 +26,8 @@
             <a href="/Manager/Apartments/Index/">Apartments</a>
             <a href="/Manager/Requests/Index/">Requests</a>
             <a href="/Manager/Bills/Index/">Bills</a>
+
+            <a asp-area="Resident" asp-controller="Apartments" asp-action="Index">Resident page</a>
         </nav>
 
 
@@ -47,6 +49,7 @@
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
 
     <!--CUSTOM-->
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>
