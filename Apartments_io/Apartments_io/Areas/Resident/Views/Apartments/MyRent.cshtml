@@ -4,7 +4,7 @@
 @foreach (Apartment apartment in Model.Apartments)
 {
     <div>
-        <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+        <img src="@apartment.MainPhoto" width="150" height="100" />
         <p>@apartment.Name</p>
         <p>@apartment.RentEndDate</p>
 

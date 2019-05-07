@@ -77,7 +77,10 @@ namespace DataAccess.Context
         /// </typeparam>
         public virtual void Update<TEntity>(TEntity entityToUpdate) where TEntity : EntityBase
         {
-            dataBaseContext.Set<TEntity>().Attach(entityToUpdate);
+            if (dataBaseContext.Entry(entityToUpdate).State == EntityState.Detached)
+            {
+                dataBaseContext.Set<TEntity>().Attach(entityToUpdate);
+            }
             dataBaseContext.Entry(entityToUpdate).State = EntityState.Modified;
         }
         /// <summary>

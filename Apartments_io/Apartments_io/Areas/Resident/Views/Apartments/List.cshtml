@@ -4,7 +4,7 @@
 {
     <div>
         <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">
-            <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+            <img src="@apartment.MainPhoto" width="150" height="100" />
             <p>@apartment.Name</p>
             <p>@apartment.Price</p>
 

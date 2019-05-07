@@ -29,7 +29,7 @@
             </td>
 
             <td>
-                <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+                <img src="https://www.w3schools.com/howto/img_paris.jpg" id="apartment-image" width="150" height="100" />
             </td>
             <td>
                 <button id="create-new-bill">Create</button>
@@ -58,7 +58,7 @@
                     @bill.Renter.ToString()
                 </td>
                 <td>
-                    <img src="https://www.w3schools.com/howto/img_snow.jpg" width="150" height="100" />
+                    <img src="@bill.Apartment.MainPhoto" width="150" height="100" />
                 </td>
                 <td>
                     @bill.Apartment.Name
@@ -95,24 +95,44 @@
     <script>
         $(document).ready()
         {
-            load_apartments("#apartments", $("#residents option:selected").val());
+            load_apartments("#apartments", $("#residents option:selected").val(), function () {
+                load_apartment_image("#apartment-image", $("#apartments option:selected").val());
+            });
+
         }
         $("#residents").change(function () {
-            load_apartments("#apartments", $(this).children("option:selected").val());
+            load_apartments("#apartments", $("#residents option:selected").val(), function () {
+                load_apartment_image("#apartment-image", $("#apartments option:selected").val());
+            });
         });
+        $("#apartments").change(function () {
+            const apartment_id = $(this).children("option:selected").val();
 
-        function load_apartments(combobox__selector, user_id) {
+            load_apartment_image("#apartment-image", apartment_id);            
+        });
+        function load_apartment_image(image_selector, apartment_id){
+            $.post('/Manager/Apartments/GetApartmentImage/',
+                {
+                    apartmentId: apartment_id
+                }, function (data) {
+                    $(image_selector).attr('src', data)
+                });
+        }
+        function load_apartments(combobox_selector, user_id, callback) {
             $.post('/Manager/Apartments/GetApartmentsList/',
                 {
                     userId: user_id,
                 },
                 function (data) {
 
-                    const combobox = $(combobox__selector);
+                    const combobox = $(combobox_selector);
                     combobox.empty();
                     for (var i = 0; i < data.length; ++i) {
                         combobox.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
                     }
+
+                    // call callback function
+                    if (typeof callback === 'function') callback();
                 });
         }
 

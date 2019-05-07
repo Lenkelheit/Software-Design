@@ -6,6 +6,16 @@
     public interface IApartmentRepository : IRepository<Entities.Apartment>
     {
         /// <summary>
+        /// Gets image relative path by id
+        /// </summary>
+        /// <param name="id">
+        /// Apartment's id
+        /// </param>
+        /// <returns>
+        /// Relative image path
+        /// </returns>
+        string GetImageById(int id);
+        /// <summary>
         /// Return collection of best apartments
         /// </summary>
         /// <param name="amount">

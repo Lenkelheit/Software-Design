@@ -64,15 +64,27 @@ namespace DataAccess.Context
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             // adds data
-            modelBuilder.Entity<User>().HasData(new User()
+
+            User manager = new User()
+            {
+                Id = 2,
+                FirstName = "Manager",
+                LastName = "Manager",
+                Email = "manager@gmail.com",
+                Password = "1111",
+                Role = Enums.Role.Manager,
+            };
+            User administrator = new User()
             {
                 Id = 1,
                 FirstName = "Admin",
                 LastName = "Admin",
                 Email = "admin@gmail.com",
                 Password = "1111",
-                Role = Enums.Role.Administrator
-            });
+                Role = Enums.Role.Administrator,
+            };
+
+            modelBuilder.Entity<User>().HasData(manager, administrator);
         }
         /// <summary>
         /// Configure the database to be used for this context.
