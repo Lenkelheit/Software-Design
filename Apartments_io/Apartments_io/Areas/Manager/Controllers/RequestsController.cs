@@ -13,8 +13,7 @@ using Apartments_io.Areas.Manager.ViewModels.Requests;
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    [Roles(nameof(DataAccess.Enums.Role.Manager),
-           nameof(DataAccess.Enums.Role.Administrator))]
+    [Roles(nameof(DataAccess.Enums.Role.Manager))]
     public class RequestsController : Controller
     {
         // CONST

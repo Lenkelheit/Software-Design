@@ -14,9 +14,7 @@ using System.Threading.Tasks;
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
-    [Roles(nameof(DataAccess.Enums.Role.Resident),
-           nameof(DataAccess.Enums.Role.Manager),
-           nameof(DataAccess.Enums.Role.Administrator))]
+    [Roles(nameof(DataAccess.Enums.Role.Resident))]
     public class NotificationsController : Controller
     {
         // CONST

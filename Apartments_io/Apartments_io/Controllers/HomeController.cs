@@ -35,10 +35,28 @@ namespace Apartments_io.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return this.RedirectToAction(
-                    areaName: nameof(Areas.Resident),
-                    actionName: nameof(Areas.Resident.Controllers.ApartmentsController.Index),
-                    controllerName: nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"));
+                if (User.IsInRole(nameof(DataAccess.Enums.Role.Administrator)))
+                {
+                    return this.RedirectToAction(
+                        areaName: nameof(Areas.Administrator),
+                        actionName: nameof(Areas.Administrator.Controllers.UsersController.Index),
+                        controllerName: nameof(Areas.Administrator.Controllers.UsersController).Remove("Controller"));
+
+                }
+                else if (User.IsInRole(nameof(DataAccess.Enums.Role.Manager)))
+                {
+                    return this.RedirectToAction(
+                        areaName: nameof(Areas.Manager),
+                        actionName: nameof(Areas.Manager.Controllers.ApartmentsController.Index),
+                        controllerName: nameof(Areas.Manager.Controllers.ApartmentsController).Remove("Controller"));
+                }
+                else if (User.IsInRole(nameof(DataAccess.Enums.Role.Resident)))
+                {
+                    return this.RedirectToAction(
+                        areaName: nameof(Areas.Resident),
+                        actionName: nameof(Areas.Resident.Controllers.ApartmentsController.Index),
+                        controllerName: nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"));
+                }
             }
             return View();
         }
