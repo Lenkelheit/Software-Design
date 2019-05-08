@@ -33,6 +33,8 @@ namespace DataAccess.Infrastructure
             services.AddScoped(typeof(DbContext), typeof(Context.DataBaseContext));
 
             services.AddScoped(typeof(Interfaces.IUnitOfWork), typeof(Context.UnitOfWork));
+
+            services.AddScoped(typeof(Interfaces.IFileService), typeof(Services.FileService));
         }
 
         /// <summary>

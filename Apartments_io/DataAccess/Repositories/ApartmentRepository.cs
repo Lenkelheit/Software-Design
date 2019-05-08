@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace DataAccess.Repositories
 {
     /// <summary>
@@ -11,6 +13,25 @@ namespace DataAccess.Repositories
     /// </summary>
     public class ApartmentRepository : GenericRepository<Apartment>, IApartmentRepository
     {
+        /// <summary>
+        /// Gets image relative path by id
+        /// </summary>
+        /// <param name="id">
+        /// Apartment's id
+        /// </param>
+        /// <returns>
+        /// Relative image path
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public virtual string GetImageById(int id)
+        {
+            ContextCheck();
+
+            return dbSet.AsNoTracking().First(a => a.Id == id).MainPhoto;
+        }
         /// <summary>
         /// Determines if user rent current apartment
         /// </summary>
@@ -27,7 +48,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public bool IsRenter(int apartmentId, int userId)
+        public virtual bool IsRenter(int apartmentId, int userId)
         {
             ContextCheck();
 
@@ -46,10 +67,11 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public IEnumerable<Apartment> GetBest(int amount)
+        public virtual IEnumerable<Apartment> GetBest(int amount)
         {
             ContextCheck();
             return dbSet
+                    .Where(a => a.Renter == null)
                     .Take(amount)
                     .AsEnumerable();
 

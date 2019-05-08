@@ -67,6 +67,7 @@ namespace DataAccess.Repositories
                        Apartment = new Apartment()
                        {
                            Id = request.Apartment.Id,
+                           MainPhoto = request.Apartment.MainPhoto,
                            RentEndDate = request.Apartment.RentEndDate
                        },
                        Resident = new User()

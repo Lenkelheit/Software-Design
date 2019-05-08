@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 using DataAccess.Entities;
 using DataAccess.Interfaces;
@@ -19,15 +20,20 @@ namespace Apartments_io.Areas.Manager.Controllers
         // CONST
         readonly int ITEM_PER_PAGE_SIZE = 10;
 
+        readonly string[] IMAGE_DIRECTORIES = new string[] { "uploads", "files", "apartment" };
+        readonly string DEFAULT_IMAGE = @"/uploads/files/apartment/noimage.png";
+
         // FIELDS
         readonly IUnitOfWork unitOfWork;
-        readonly IRepository<Apartment> apartmentsRepository;
+        readonly IApartmentRepository apartmentsRepository;
+        readonly IFileService fileService;
 
         // CONSTRUCTORS
-        public ApartmentsController(IUnitOfWork unitOfWork)
+        public ApartmentsController(IUnitOfWork unitOfWork, IFileService fileService)
         {
             this.unitOfWork = unitOfWork;
             this.apartmentsRepository = unitOfWork.GetRepository<Apartment, ApartmentRepository>();
+            this.fileService = fileService;
         }
 
         // ACTIONS
@@ -54,7 +60,6 @@ namespace Apartments_io.Areas.Manager.Controllers
             if (id == null) return NotFound();
 
             Apartment apartment = await apartmentsRepository.GetAsync(id.Value);
-
             if (apartment == null) return NotFound();
 
             return View(apartment);
@@ -69,12 +74,18 @@ namespace Apartments_io.Areas.Manager.Controllers
         // POST: Manager/Apartments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MainPhoto,Name,Description,RentEndDate,Price,Id")] Apartment apartment)
+        public async Task<IActionResult> Create([Bind("Name,Description,RentEndDate,Price,Id")] Apartment apartment, IFormFile uploadFile)
         {
             if (ModelState.IsValid)
             {
-                apartmentsRepository.Insert(apartment);
+                // upload image
+                apartment.MainPhoto = await fileService.UploadFileAsync(uploadFile, serverDirectories: IMAGE_DIRECTORIES);
+                if (string.IsNullOrWhiteSpace(apartment.MainPhoto)) apartment.MainPhoto = DEFAULT_IMAGE;
+
+                // insert apartment
+                await apartmentsRepository.InsertAsync(apartment);
                 await unitOfWork.SaveAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(apartment);
@@ -94,12 +105,21 @@ namespace Apartments_io.Areas.Manager.Controllers
         // POST: Manager/Apartments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MainPhoto,Name,Description,RentEndDate,Price,Id")] Apartment apartment)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,RentEndDate,Price,Id")] Apartment apartment, IFormFile uploadFile)
         {
             if (id != apartment.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
+                apartment.MainPhoto = apartmentsRepository.GetImageById(id);
+
+                // update photo
+                if (uploadFile != null)
+                {
+                    DeleteImageIfNotDefault(apartment);
+                    apartment.MainPhoto = await fileService.UploadFileAsync(uploadFile, serverDirectories: IMAGE_DIRECTORIES);
+                }
+
                 // update apartment
                 unitOfWork.Update(apartment);
                 
@@ -126,7 +146,14 @@ namespace Apartments_io.Areas.Manager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            apartmentsRepository.Delete(id);
+            // get apartment
+            Apartment apartment = await apartmentsRepository.GetAsync(id);
+
+            // delete image
+            DeleteImageIfNotDefault(apartment);
+
+            // delete apartment
+            apartmentsRepository.Delete(apartment);
             await unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
@@ -138,6 +165,21 @@ namespace Apartments_io.Areas.Manager.Controllers
         {
             return Ok(apartmentsRepository
                         .Get(apartment => apartment.Renter.Id == userId));
+        }
+        // ajax
+        [HttpPost]
+        public IActionResult GetApartmentImage(int apartmentId)
+        {
+            return Ok(apartmentsRepository.GetImageById(apartmentId));
+        }
+
+        // METHODS
+        private void DeleteImageIfNotDefault(Apartment apartment)
+        {
+            if (apartment.MainPhoto != DEFAULT_IMAGE)
+            {
+                fileService.DeleteFile(System.IO.Path.GetFileName(apartment.MainPhoto), IMAGE_DIRECTORIES);
+            }
         }
     }
 }
