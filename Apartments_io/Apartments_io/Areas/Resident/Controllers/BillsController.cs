@@ -15,9 +15,7 @@ using Core.Extensions;
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
-    [Roles(nameof(Role.Resident),
-           nameof(Role.Manager),
-           nameof(Role.Administrator))]
+    [Roles(nameof(Role.Resident))]
     public class BillsController : Controller
     {
         // FIELDS

@@ -42,7 +42,7 @@
                     @request.Resident.LastName
                 </td>
                 <td>
-                    bill status
+                    @request.PercentagePayedProperly %
                 </td>
                 <td>
                     <img src="@request.Apartment.MainPhoto" width="150" height="100" />
@@ -51,7 +51,7 @@
                     @request.Apartment.Name
                 </td>
                 <td>
-                    @request.Apartment.RentEndDate
+                    @request.Apartment.RentEndDate?.ToShortDateString()
                 </td>
                 <td>
                     <button class="btn-accept" data-request-id="@request.Id">Accept</button>

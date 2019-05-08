@@ -32,7 +32,8 @@
             @Html.DisplayNameFor(model => model.RentEndDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.RentEndDate)
+            @{ string date = Model.RentEndDate?.ToShortDateString(); }
+            @Html.DisplayFor(model => date)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Price)

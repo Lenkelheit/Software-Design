@@ -39,6 +39,9 @@ namespace DataAccess.Configuration
 
             // bills
             builder.HasMany(a => a.Bills).WithOne(b => b.Apartment);
+
+            // rent end date
+            builder.Property(a => a.RentEndDate).HasColumnType("date");
         }
     }
 }

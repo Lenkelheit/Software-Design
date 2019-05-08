@@ -20,7 +20,7 @@
 <div class="past-bill">
     <img src="@bill.Apartment.MainPhoto" width="150" height="100" />
     <p>@bill.Apartment.Name</p>
-    <p>@bill.Apartment.RentEndDate</p>
+    <p>@bill.Apartment.RentEndDate?.ToShortDateString()</p>
     <button data-id="@bill.Id">pay</button>
 </div>
 }

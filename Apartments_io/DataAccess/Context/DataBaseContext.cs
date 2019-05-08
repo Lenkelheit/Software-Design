@@ -10,6 +10,9 @@ namespace DataAccess.Context
     /// </summary>
     public class DataBaseContext : DbContext
     {
+        // FIELDS
+        Interfaces.IDbInitializer dbInitializer;
+
         // CONSTRUCTORS
         /// <summary>
         /// Initializes a new instance of <see cref="DataBaseContext"/> with given options
@@ -20,6 +23,7 @@ namespace DataAccess.Context
         public DataBaseContext(DbContextOptions<DataBaseContext> options)
             : base(options)
         {
+            dbInitializer = new Initializers.DefaultDbInitializer();
             Database.EnsureCreated();
         }
 
@@ -64,27 +68,7 @@ namespace DataAccess.Context
             modelBuilder.ApplyConfiguration(new UserConfiguration());
 
             // adds data
-
-            User manager = new User()
-            {
-                Id = 2,
-                FirstName = "Manager",
-                LastName = "Manager",
-                Email = "manager@gmail.com",
-                Password = "1111",
-                Role = Enums.Role.Manager,
-            };
-            User administrator = new User()
-            {
-                Id = 1,
-                FirstName = "Admin",
-                LastName = "Admin",
-                Email = "admin@gmail.com",
-                Password = "1111",
-                Role = Enums.Role.Administrator,
-            };
-
-            modelBuilder.Entity<User>().HasData(manager, administrator);
+            dbInitializer.Seed(modelBuilder);
         }
         /// <summary>
         /// Configure the database to be used for this context.

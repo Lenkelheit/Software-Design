@@ -40,7 +40,12 @@ namespace Pagination.PaginationBuilder
                                             action: urlInfo.ActionName,
                                             controller: urlInfo.ControllerName,
                                             values: new { page = page });
-            }            
+            }
+            else
+            {
+                link.Attributes["href"] = "#";
+            }
+            
 
             link.InnerHtml.Append(text);
 

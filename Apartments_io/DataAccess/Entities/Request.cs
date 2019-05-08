@@ -13,5 +13,12 @@
         /// An apartment for which resident send the request
         /// </summary>
         public virtual Apartment Apartment { get; set; }
+
+        /// <summary>
+        /// A percentage of bills paid proparly. <para/>
+        /// In range from 0 to 100
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public int PercentagePayedProperly { get; set; }
     }
 }

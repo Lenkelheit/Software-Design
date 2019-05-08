@@ -25,16 +25,6 @@
                 <li><a asp-controller="Bills" asp-action="List">Bills</a></li>
                 <li><a asp-controller="Notifications" asp-action="List">Notifications</a></li>
 
-                @if (User.IsInRole(nameof(Role.Manager)) || User.IsInRole(nameof(Role.Administrator)))
-                {
-
-                    <li><a asp-controller="Apartments" asp-action="Index" asp-area="Manager">Manager</a></li>
-                }
-                @if (User.IsInRole(nameof(Role.Administrator)))
-                {
-
-                    <li><a asp-controller="Users" asp-action="Index" asp-area="Administrator">Admin</a></li>
-                }
                 <li><a asp-controller="Home" asp-action="Logout" asp-area="">Log out</a></li>
             </ol>
         </div>
