@@ -69,11 +69,11 @@
                         {
                             @if (status == bill.PaymentStatus)
                             {
-                                <option value="@(Convert.ToInt32(status))" selected>@status.ToString()</option>
+                                <option value="@(Convert.ToInt32(status))" selected>@status.GetText()</option>
                             }
                             else
                             {
-                                <option value="@(Convert.ToInt32(status))">@status.ToString()</option>
+                                <option value="@(Convert.ToInt32(status))">@status.GetText()</option>
                             }
                         }
                     </select>
