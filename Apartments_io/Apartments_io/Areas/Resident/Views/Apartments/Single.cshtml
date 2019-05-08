@@ -16,7 +16,7 @@
 @if (Model.IsRenter)
 {
     <h2>Rent expire date</h2>
-    <p>@Model.Apartment.RentEndDate</p>
+    <p>@Model.Apartment.RentEndDate?.ToShortDateString()</p>
 }
 else
 {
