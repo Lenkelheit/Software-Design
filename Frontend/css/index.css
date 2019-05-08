@@ -1,36 +1,40 @@
+    /* Remove the navbar's default margin-bottom and rounded borders */
+.navbar {
+    margin-bottom: 0;
+    border-radius: 2;
+}
+
 body {
-    margin: 3px;
-    background-color: antiquewhite;
+    font-family: "Bitstream Vera Serif Bold", serif
+    background-color: #f2f2f2;
 }
 
-.container {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    max-width: 1500px;
-}
 
-.header {
-    color: firebrick;
-    font-family: sans-serif;
+
+ .header {
+    background-color: #f2f2f2;
+    font-family: "Bitstream Vera Serif Bold", serif;
     font-size: 200%;
     text-align: center;
     border-top: 3px solid black;
     border-bottom: 3px solid black;
-}
+    width:1440px;
+ }
+
+  .footer {
+    color: black;
+    font-family: sans-serif;
+    font-size: 100%;
+    text-align: center;
+    border-top: 3px solid black;
+    width:1440px;
+  }
 
 .content {
     display: grid;
     grid-gap: 5px;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
+    width:1440px;
 }
 
-.footer {
-    color: firebrick;
-    font-family: sans-serif;
-    font-size: 100%;
-    text-align: center;
-    border-top: 3px solid black;
-}
