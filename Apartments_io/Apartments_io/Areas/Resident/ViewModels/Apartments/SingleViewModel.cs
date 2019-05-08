@@ -5,5 +5,6 @@
         public int UserId { get; set; }
         public DataAccess.Entities.Apartment Apartment { get; set; }
         public bool IsRenter { get; set; }
+        public bool HasUserRequest { get; set; }
     }
 }

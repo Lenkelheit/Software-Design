@@ -9,7 +9,15 @@
             <p>@apartment.Price</p>
 
         </a>
-        <button data-id="@apartment.Id" class="btn-request">Send request</button>
+        @if (Model.IsUsersRequest.Contains(apartment.Id))
+        {
+            <button data-id="@apartment.Id" class="btn-request">Cancel</button>
+        }
+        else
+        {
+            <button data-id="@apartment.Id" class="btn-request">Send request</button>
+        }
+
     </div>
 }
 

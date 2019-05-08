@@ -1,4 +1,5 @@
-﻿using DataAccess.Entities;
+﻿using DataAccess.Enums;
+using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace Apartments_io.Areas.Administrator.Controllers
 {
     [Area("Administrator")]
-    [Attributes.Roles(nameof(DataAccess.Enums.Role.Administrator))]
+    [Attributes.Roles(nameof(Role.Administrator))]
     public class UsersController : Controller
     {
         // CONST
@@ -36,7 +37,7 @@ namespace Apartments_io.Areas.Administrator.Controllers
             IndexViewModel indexViewModel = new IndexViewModel()
             {
                 Users = userRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE),
-                Managers = userRepository.GetUserByRole(DataAccess.Enums.Role.Manager),
+                Managers = userRepository.GetUserByRole(Role.Manager),
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
@@ -77,6 +78,7 @@ namespace Apartments_io.Areas.Administrator.Controllers
             User user = await userRepository.GetAsync(id);
 
             if (userRepository.DoesManagerHasAnyResident(user)) return BadRequest("You can not delete manager with renters");
+            if (user.Role != Role.Resident && userRepository.IsLastIn(user.Role)) return BadRequest($"You can not delete last {user.Role}");
 
             userRepository.Delete(user);
             await unitOfWork.SaveAsync();

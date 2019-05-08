@@ -83,5 +83,58 @@ namespace DataAccess.Repositories
                     .Take(amount)
                     .AsEnumerable();*/
         }
+
+
+        /// <summary>
+        /// Determines if users has sent request for current apartments
+        /// </summary>
+        /// <param name="userId">
+        /// User's id
+        /// </param>
+        /// <param name="apartmentsIds">
+        /// Apartments' ids to check
+        /// </param>
+        /// <returns>
+        /// Sets with apartments' ids for which user has sent request
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public ISet<int> HasRequests(int userId, IEnumerable<int> apartmentsIds)
+        {
+            ContextCheck();
+
+            return dbSet
+                    .Where(a => apartmentsIds.Contains(a.Id))
+                    .Where(a => a.Requests.Select(r => r.Resident.Id).Contains(userId))
+                    .Select(a => a.Id)
+                    .ToHashSet();
+
+        }
+        /// <summary>
+        /// Determines if users has sent request for current apartment
+        /// </summary>
+        /// <param name="userId">
+        /// User's id
+        /// </param>
+        /// <param name="apartmentId">
+        /// Apartments' id
+        /// </param>
+        /// <returns>
+        /// True if user has sent request for current apartment, otherwise — false
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public bool HasRequest(int userId, int apartmentId)
+        {
+            ContextCheck();
+
+            return dbContext.Set<Request>().Any(r => r.Apartment.Id == apartmentId && r.Resident.Id == userId);
+                    
+                    
+        }
     }
 }

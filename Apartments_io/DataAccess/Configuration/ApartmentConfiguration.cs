@@ -32,13 +32,19 @@ namespace DataAccess.Configuration
                    .HasMaxLength(APARTMENT_PHOTO_PATH_MAX_LENGTH);
 
             // renter
-            builder.HasOne(a => a.Renter).WithMany(r => r.Apartments);
+            builder.HasOne(a => a.Renter)
+                    .WithMany(r => r.Apartments)
+                    .OnDelete(DeleteBehavior.SetNull);
 
             // requests
-            builder.HasMany(a => a.Requests).WithOne(r => r.Apartment);
+            builder.HasMany(a => a.Requests)
+                    .WithOne(r => r.Apartment)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             // bills
-            builder.HasMany(a => a.Bills).WithOne(b => b.Apartment);
+            builder.HasMany(a => a.Bills)
+                    .WithOne(b => b.Apartment)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             // rent end date
             builder.Property(a => a.RentEndDate).HasColumnType("date");

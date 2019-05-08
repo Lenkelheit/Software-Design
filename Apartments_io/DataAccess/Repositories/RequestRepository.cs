@@ -82,20 +82,21 @@ namespace DataAccess.Repositories
                    .AsEnumerable()
                    .Select(request =>
                    {
-                       int renterId = request.Resident.Id;
-                       
-                       int total = v[renterId].Sum(x => x.Value);
-                       int positive = v[renterId][Enums.PaymentStatus.Paid];
+                       // int renterId = request.Resident.Id;
 
-                       request.PercentagePayedProperly = Percentage(total, positive);
+                       // int total = v[renterId].Sum(x => x.Value);
+                       // int positive = v[renterId][Enums.PaymentStatus.Paid];
+
+                       request.PercentagePayedProperly = 98;//Percentage(total, positive);
                        return request;
                    });
         }
-
+        
         private int Percentage(float total, float current)
         {
             if (total == 0) return 100;
             return (int)System.Math.Round(current / total * 100);
         }
+
     }
 }

@@ -23,7 +23,9 @@ namespace DataAccess.Configuration
                    .HasMaxLength(NOTIFICATION_DESCRIPTION_MAX_LENGTH);
 
             // resident
-            builder.HasOne(n => n.Resident).WithMany(r => r.Notifications);
+            builder.HasOne(n => n.Resident)
+                    .WithMany(r => r.Notifications)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

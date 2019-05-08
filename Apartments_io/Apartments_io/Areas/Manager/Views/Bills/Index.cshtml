@@ -110,7 +110,10 @@
 
             load_apartment_image("#apartment-image", apartment_id);            
         });
-        function load_apartment_image(image_selector, apartment_id){
+        function load_apartment_image(image_selector, apartment_id) {
+
+            if (typeof apartment_id === 'undefined') return;
+
             $.post('/Manager/Apartments/GetApartmentImage/',
                 {
                     apartmentId: apartment_id
