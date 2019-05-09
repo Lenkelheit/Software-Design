@@ -1,4 +1,5 @@
 ﻿using DataAccess.Entities;
+using System.Collections.Generic;
 
 namespace DataAccess.Interfaces
 {
@@ -32,6 +33,6 @@ namespace DataAccess.Interfaces
         /// <returns>
         /// Collection of requests
         /// </returns>
-        System.Collections.Generic.IEnumerable<Request> GetShortInfo(int page, int amount);
+        IEnumerable<Request> GetShortInfo(int page, int amount);
     }
 }

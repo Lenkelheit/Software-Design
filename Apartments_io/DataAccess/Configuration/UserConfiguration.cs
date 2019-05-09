@@ -35,16 +35,22 @@ namespace DataAccess.Configuration
             builder.HasOne(u => u.Manager).WithMany(u => u.Resident);
 
             // requests
-            builder.HasMany(u => u.Requests).WithOne(r => r.Resident);
+            builder.HasMany(u => u.Requests)
+                    .WithOne(r => r.Resident)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             // notifications
-            builder.HasMany(u => u.Notifications).WithOne(n => n.Resident);
+            builder.HasMany(u => u.Notifications)
+                    .WithOne(n => n.Resident)
+                    .OnDelete(DeleteBehavior.Cascade); 
 
             // apartments
-            builder.HasMany(u => u.Apartments).WithOne(a => a.Renter);
+            builder.HasMany(u => u.Apartments).WithOne(a => a.Renter).OnDelete(DeleteBehavior.SetNull);
 
             // bills
-            builder.HasMany(u => u.Bills).WithOne(b => b.Renter);
+            builder.HasMany(u => u.Bills)
+                .WithOne(b => b.Renter)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Interfaces
+﻿using System.Collections.Generic;
+
+namespace DataAccess.Interfaces
 {
     /// <summary>
     /// Represents interface for classes which will proxy behind data access and business logic for apartments
@@ -24,7 +26,7 @@
         /// <returns>
         /// Collection of best apartments
         /// </returns>
-        System.Collections.Generic.IEnumerable<Entities.Apartment> GetBest(int amount);
+        IEnumerable<Entities.Apartment> GetBest(int amount);
         /// <summary>
         /// Determines if user rent current apartment
         /// </summary>
@@ -38,5 +40,31 @@
         /// True if user is renter, otherwise — false
         /// </returns>
         bool IsRenter(int apartmentId, int userId);
+        /// <summary>
+        /// Determines if users has sent request for current apartments
+        /// </summary>
+        /// <param name="userId">
+        /// User's id
+        /// </param>
+        /// <param name="apartmentsIds">
+        /// Apartments' ids to check
+        /// </param>
+        /// <returns>
+        /// Sets with apartments' ids for which user has sent request
+        /// </returns>
+        ISet<int> HasRequests(int userId, IEnumerable<int> apartmentsIds);
+        /// <summary>
+        /// Determines if users has sent request for current apartment
+        /// </summary>
+        /// <param name="userId">
+        /// User's id
+        /// </param>
+        /// <param name="apartmentId">
+        /// Apartments' id
+        /// </param>
+        /// <returns>
+        /// True if user has sent request for current apartment, otherwise — false
+        /// </returns>
+        bool HasRequest(int userId, int apartmentId);
     }
 }

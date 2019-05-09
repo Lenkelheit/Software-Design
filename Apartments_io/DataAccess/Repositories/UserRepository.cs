@@ -120,5 +120,25 @@ namespace DataAccess.Repositories
             bool isPasswordRight = foundedAccount.Password == password;
             return System.Tuple.Create<bool, bool, User>(true, isPasswordRight, isPasswordRight ? foundedAccount : null);
         }
+
+        /// <summary>
+        /// Checks is user is last in his role
+        /// </summary>
+        /// <param name="role">
+        /// Role to be checked
+        /// </param>
+        /// <returns>
+        /// True if user is last in his role, otherwise — falses
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public bool IsLastIn(Role role)
+        {
+            ContextCheck();
+
+            return dbSet.Count(u => u.Role == role) == 1;
+        }
     }
 }

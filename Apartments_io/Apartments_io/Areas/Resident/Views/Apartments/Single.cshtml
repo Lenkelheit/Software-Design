@@ -20,8 +20,14 @@
 }
 else
 {
-
-    <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn-request">Send request</button>
+    if (Model.HasUserRequest)
+    {
+        <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn-request">Cancel</button>
+    }
+    else
+    {
+        <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn-request">Send request</button>
+    }
 
     @section Scripts
         {
@@ -31,7 +37,7 @@ else
 
                 var btn = this;
 
-                var user_id = $(this).data("user-id"); 
+                var user_id = $(this).data("user-id");
                 var apartment_id = $(this).data("apartment-id");
 
 

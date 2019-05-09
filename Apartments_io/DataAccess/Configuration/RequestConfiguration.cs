@@ -19,7 +19,9 @@ namespace DataAccess.Configuration
             builder.HasOne(r => r.Resident).WithMany(r => r.Requests);
 
             // apartment
-            builder.HasOne(r => r.Apartment).WithMany(a => a.Requests);
+            builder.HasOne(r => r.Apartment)
+                    .WithMany(a => a.Requests)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

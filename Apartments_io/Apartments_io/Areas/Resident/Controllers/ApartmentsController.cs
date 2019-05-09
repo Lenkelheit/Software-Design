@@ -8,6 +8,7 @@ using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
 using Core.Extensions;
+using System.Linq;
 
 namespace Apartments_io.Areas.Resident.Controllers
 {
@@ -39,15 +40,22 @@ namespace Apartments_io.Areas.Resident.Controllers
         {
             int ITEM_PER_PAGE_SIZE = 5;
 
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+
             // count free apartment
             int totalAmount = apartmentRepository.Count(a => a.Renter == null);
 
+            // get free apartment
+            System.Collections.Generic.IEnumerable<Apartment> apartments =
+                apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: a => a.Renter == null);
+
             ListViewModel listViewModel = new ListViewModel()
             {
-                UserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id)),
+                UserId = loggedUserId,
+                
+                Apartments = apartments,
 
-                // get free apartment
-                Apartments = apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: a => a.Renter == null),
+                IsUsersRequest = apartmentRepository.HasRequests(loggedUserId, apartments.Select(a => a.Id).ToArray()),
 
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
@@ -90,7 +98,8 @@ namespace Apartments_io.Areas.Resident.Controllers
             {
                 UserId = loggedUserId,
                 Apartment = apartment,
-                IsRenter = apartmentRepository.IsRenter(apartmentId.Value, loggedUserId)
+                IsRenter = apartmentRepository.IsRenter(apartmentId.Value, loggedUserId),
+                HasUserRequest = apartmentRepository.HasRequest(loggedUserId, apartmentId.Value),
             };
 
             return View(singleViewModel);

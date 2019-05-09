@@ -16,10 +16,14 @@ namespace DataAccess.Configuration
         public void Configure(EntityTypeBuilder<Bill> builder)
         {
             // renter
-            builder.HasOne(b => b.Renter).WithMany(r => r.Bills);
+            builder.HasOne(b => b.Renter)
+                    .WithMany(r => r.Bills)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             // apartment
-            builder.HasOne(b => b.Apartment).WithMany(a => a.Bills);
+            builder.HasOne(b => b.Apartment)
+                    .WithMany(a => a.Bills)
+                    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

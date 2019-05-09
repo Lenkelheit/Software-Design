@@ -48,5 +48,15 @@
         /// True if email is free, otherwise false
         /// </returns>
         bool IsEmailFree(string email);
+        /// <summary>
+        /// Checks is user is last in his role
+        /// </summary>
+        /// <param name="role">
+        /// Role to be checked
+        /// </param>
+        /// <returns>
+        /// True if user is last in his role, otherwise — falses
+        /// </returns>
+        bool IsLastIn(Enums.Role role);
     }
 }
