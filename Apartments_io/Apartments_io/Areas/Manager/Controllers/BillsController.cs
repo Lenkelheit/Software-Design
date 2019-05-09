@@ -1,6 +1,7 @@
 ﻿using Apartments_io.Attributes;
 using Apartments_io.Areas.Manager.ViewModels.Bills;
 
+using DataAccess.Enums;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    [Roles(nameof(DataAccess.Enums.Role.Manager))]
+    [Roles(nameof(Role.Manager))]
     public class BillsController : Controller
     {
         // CONST
@@ -30,25 +31,52 @@ namespace Apartments_io.Areas.Manager.Controllers
         }
 
         // ACTIONS
-        public IActionResult Index(int page = 1)
+        #region INDEX
+        public IActionResult Index(int? filterResidentId, PaymentStatus? filterBillStatus,  int page = 1)
         {
             ViewData["Title"] = "Bills";
+
+            // count
+            int total = billsRepositories.Count(BuildFilter(filterResidentId, filterBillStatus));
 
             IndexViewModel indexViewModel = new IndexViewModel
             {
                 Bills = billsRepositories.Get(page: page, amount: ITEM_PER_PAGE_SIZE,
-                                            includeProperties: string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment))),
+                                            includeProperties: string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment)),
+                                            filter: BuildFilter(filterResidentId, filterBillStatus)),
 
                 Renters = userRepository.Get(u => u.Apartments.Count > 0),
 
-                PaginationModel = Pagination.Pagination.GetBuilder
-                                                .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
-                                                .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(billsRepositories.Count())
+                TotalRecordsAmount = total,
+
+                PaginationModel = BuildPagination(ITEM_PER_PAGE_SIZE, page, total, filterResidentId, filterBillStatus)
             };
 
             return View(indexViewModel);
         }
+
+        private System.Linq.Expressions.Expression<System.Func<Bill, bool>> BuildFilter(int? filterResidentId, PaymentStatus? filterBillStatus)
+        {
+            if (filterBillStatus.HasValue && filterResidentId.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Id == filterResidentId;
+            else if (filterResidentId.HasValue) return b => b.Renter.Id == filterResidentId;
+            else if (filterBillStatus.HasValue) return b => b.PaymentStatus == filterBillStatus;
+            else return a => true;
+        }
+        private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? filterResidentId, PaymentStatus? filterBillStatus)
+        {
+            Pagination.Pagination.PaginationFluentBuilder paginationBuilder =
+                                            Pagination.Pagination.GetBuilder
+                                                .SetRecordsAmountPerPage(maxItems)
+                                                .SetCurrentPage(currentPage)
+                                                .SetTotalRecordsAmount(totalAmount);
+
+            // ! adds url fragments 
+            if (filterResidentId.HasValue) paginationBuilder.AddFragment(nameof(filterResidentId), filterResidentId.Value);
+            if (filterBillStatus.HasValue) paginationBuilder.AddFragment(nameof(filterBillStatus), filterBillStatus.Value);
+
+            return paginationBuilder.Build();
+        }
+        #endregion
 
         // ajax
         [HttpPost]
@@ -62,14 +90,14 @@ namespace Apartments_io.Areas.Manager.Controllers
             {
                 Apartment = await unitOfWork.GetRepository<Apartment, ApartmentRepository>().GetAsync(apartmentId),
                 Renter = renter,
-                PaymentStatus = DataAccess.Enums.PaymentStatus.WaitingForPayment
+                PaymentStatus = PaymentStatus.WaitingForPayment
             };
 
             // create notifications
             Notification notification = new Notification()
             {
                 Resident = renter,
-                EmergencyLevel = DataAccess.Enums.EmergencyLevel.Info,
+                EmergencyLevel = EmergencyLevel.Info,
                 Description = "You has new bill"
             };
             await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(notification);
@@ -83,7 +111,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         // ajax
         [HttpPost]
-        public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, DataAccess.Enums.PaymentStatus paymentStatus)
+        public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, PaymentStatus paymentStatus)
         {
             // get bill
             Bill bill = await billsRepositories.GetAsync(billId, nameof(Bill.Renter));
@@ -97,7 +125,7 @@ namespace Apartments_io.Areas.Manager.Controllers
             Notification notification = new Notification()
             {
                 Resident = bill.Renter,
-                EmergencyLevel = DataAccess.Enums.EmergencyLevel.Warning,
+                EmergencyLevel = EmergencyLevel.Warning,
                 Description = "Your bill has new status " + bill.PaymentStatus
             };
             await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(notification);

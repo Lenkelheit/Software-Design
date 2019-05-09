@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace Pagination.PaginationBuilder
 {
@@ -11,17 +12,8 @@ namespace Pagination.PaginationBuilder
         /// <summary>
         /// Build link to another page
         /// </summary>
-        /// <param name="page">
-        /// Determines to which page link is
-        /// </param>
-        /// <param name="text">
-        /// Determines text on link
-        /// </param>
-        /// <param name="isActive">
-        /// Determines is link active in current momment
-        /// </param>
-        /// <param name="isDisabled">
-        /// Determines is link disabled
+        /// <param name="linkInfo">
+        /// Determines parameters for link: text, page, isActive, isDisabled etc
         /// </param>
         /// <param name="urlInfo">
         /// Contain data to build URL
@@ -29,17 +21,20 @@ namespace Pagination.PaginationBuilder
         /// <returns>
         /// The class that can create HTML elements
         /// </returns>
-        public TagBuilder GenerateLink(int page, string text, bool isActive, bool isDisabled, DataTransferObject.UrlInfo urlInfo)
+        public TagBuilder GenerateLink(DataTransferObject.LinkInfo linkInfo, DataTransferObject.UrlInfo urlInfo)
         {
             // a
             TagBuilder link = new TagBuilder("a");
             link.AddCssClass("page-link");
-            if (!isActive)
+            if (!linkInfo.IsActive)
             {
+                Dictionary<string, object> urlFragments = new Dictionary<string, object>(linkInfo.Fragments);
+                urlFragments.Add(linkInfo.PageKey, linkInfo.Page);
+
                 link.Attributes["href"] = urlInfo.UrlHelper.Action(
                                             action: urlInfo.ActionName,
                                             controller: urlInfo.ControllerName,
-                                            values: new { page = page });
+                                            values: urlFragments);
             }
             else
             {
@@ -47,13 +42,13 @@ namespace Pagination.PaginationBuilder
             }
             
 
-            link.InnerHtml.Append(text);
+            link.InnerHtml.Append(linkInfo.Text);
 
             // li
             TagBuilder item = new TagBuilder("li");
             item.AddCssClass("page-item");
-            if (isActive) item.AddCssClass("active");
-            if (isDisabled) item.AddCssClass("disabled");
+            if (linkInfo.IsActive) item.AddCssClass("active");
+            if (linkInfo.IsDisabled) item.AddCssClass("disabled");
 
             item.InnerHtml.AppendHtml(link);
             return item;

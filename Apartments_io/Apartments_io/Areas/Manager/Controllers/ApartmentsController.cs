@@ -37,21 +37,44 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         // ACTIONS
         // GET: Manager/Apartments
-        public IActionResult Index(int page = 1)
+        #region Index
+        public IActionResult Index(int? daysToFree, int page = 1)
         {
             ViewData["Title"] = "Apartments";
+            
+            // count apartment
+            int totalAmount = apartmentsRepository.Count(BuildFilter(daysToFree));
+            
+            // save previous filter inputs value
+            ViewData[nameof(daysToFree)] = daysToFree ?? 90;
 
             IndexViewModel indexViewModel = new IndexViewModel
             {
-                Apartments = apartmentsRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE),
-
-                PaginationModel = Pagination.Pagination.GetBuilder
-                                                .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
-                                                .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(apartmentsRepository.Count())
+                Apartments = apartmentsRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: BuildFilter(daysToFree), includeProperties: nameof(Apartment.Renter)),
+                PaginationModel = BuildPagination(ITEM_PER_PAGE_SIZE, page, totalAmount,  daysToFree),
             };
             return View(indexViewModel);
         }
+
+        private System.Linq.Expressions.Expression<System.Func<Apartment, bool>> BuildFilter(int? daysToFree)
+        {
+            if (daysToFree.HasValue) return a => a.Renter != null && (a.RentEndDate.Value - System.DateTime.Now).Days <= daysToFree;
+            else return a => true;
+        }
+        private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? daysToFree)
+        {
+            Pagination.Pagination.PaginationFluentBuilder paginationBuilder =
+                                            Pagination.Pagination.GetBuilder
+                                                .SetRecordsAmountPerPage(maxItems)
+                                                .SetCurrentPage(currentPage)
+                                                .SetTotalRecordsAmount(totalAmount);
+
+            // ! adds url fragments 
+            if (daysToFree.HasValue) paginationBuilder.AddFragment(nameof(daysToFree), daysToFree.Value);
+
+            return paginationBuilder.Build();
+        }
+        #endregion
 
         // GET: Manager/Apartments/Details/5
         public async Task<IActionResult> Details(int? id)
