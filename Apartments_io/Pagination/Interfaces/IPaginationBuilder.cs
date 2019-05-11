@@ -18,17 +18,8 @@ namespace Pagination.Interfaces
         /// <summary>
         /// Build link to another page
         /// </summary>
-        /// <param name="page">
-        /// Determines to which page link is
-        /// </param>
-        /// <param name="text">
-        /// Determines text on link
-        /// </param>
-        /// <param name="isActive">
-        /// Determines is link active in current momment
-        /// </param>
-        /// <param name="isDisabled">
-        /// Determines is link disabled
+        /// <param name="linkInfo">
+        /// Determines parameters for link: text, page, isActive, isDisabled etc
         /// </param>
         /// <param name="urlInfo">
         /// Contain data to build URL
@@ -36,6 +27,6 @@ namespace Pagination.Interfaces
         /// <returns>
         /// The class that can create HTML elements
         /// </returns>
-        TagBuilder GenerateLink(int page, string text, bool isActive, bool isDisabled, DataTransferObject.UrlInfo urlInfo);
+        TagBuilder GenerateLink(DataTransferObject.LinkInfo linkInfo, DataTransferObject.UrlInfo urlInfo);
     }
 }

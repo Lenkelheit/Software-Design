@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using static System.Math;
 
 namespace Pagination
@@ -21,12 +22,17 @@ namespace Pagination
         private int recordsAmountPerPage;
         private int totalPageAmount;
 
+        private string pageKey;
+        private IDictionary<string, object> fragments;
+
         // CONSTRUCTORS
         private Pagination()
         {
             this.linksAmountOnPage = 7;
             this.totalRecordsAmount = -1;
             this.recordsAmountPerPage = 10;
+            this.pageKey = "page";
+            this.fragments = new Dictionary<string, object>();
 
             this.PaginationBuilder = new PaginationBuilder.DefaultPaginationBuilder();
             this.BuildStrategy = new BuildStrategy.DefaultBuildStrategy();
@@ -50,6 +56,14 @@ namespace Pagination
         /// Gets current page number
         /// </summary>
         public int CurrentPage => currentPage;
+        /// <summary>
+        /// Gets page key
+        /// </summary>
+        public string PageKey => pageKey;
+        /// <summary>
+        /// Gets fragments collection
+        /// </summary>
+        public IDictionary<string, object> Fragments => fragments;
         /// <summary>
         /// Gets pagination builder
         /// </summary>

@@ -75,6 +75,51 @@
                 return this;
             }
             /// <summary>
+            /// Sets page key that is used in get request
+            /// </summary>
+            /// <param name="pageKey">
+            /// Page key that is used in get request
+            /// </param>
+            /// <returns>
+            /// An instance of see <see cref="PaginationFluentBuilder"/>
+            /// </returns>
+            public PaginationFluentBuilder SetPageKey(string pageKey)
+            {
+                pagination.pageKey = pageKey;
+                return this;
+            }
+            /// <summary>
+            /// Add fragments with specific key and value
+            /// </summary>
+            /// <param name="key">
+            /// Fragment's key
+            /// </param>
+            /// <param name="value">
+            /// Fragment's value
+            /// </param>
+            /// <returns>
+            /// An instance of see <see cref="PaginationFluentBuilder"/>
+            /// </returns>
+            public PaginationFluentBuilder AddFragment(string key, object value)
+            {
+                pagination.fragments.Add(key, value);
+                return this;
+            }
+            /// <summary>
+            /// Remove framgent by specific key
+            /// </summary>
+            /// <param name="key">
+            /// Fragment's key
+            /// </param>
+            /// <returns>
+            /// An instance of see <see cref="PaginationFluentBuilder"/>
+            /// </returns>
+            public PaginationFluentBuilder RemoveFragment(string key)
+            {
+                pagination.fragments.Remove(key);
+                return this;
+            }
+            /// <summary>
             /// Sets pagination builder
             /// </summary>
             /// <param name="paginationBuilder">

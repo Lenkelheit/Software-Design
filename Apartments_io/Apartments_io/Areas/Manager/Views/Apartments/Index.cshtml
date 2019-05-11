@@ -5,6 +5,22 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+<!--FILTERING-->
+<form method="get" id="filter-form">
+    <div class="form-inline">
+        <input type="hidden" name="page" value="1" />
+
+        <p>Will be free in less than</p>
+        <input type="number" name="daysToFree" value="@ViewData["daysToFree"]" />
+        <p>days</p>
+
+        <input type="submit" value="Фільтр" />
+    </div>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -13,6 +29,9 @@
             </th>
             <th>
                 Name
+            </th>
+            <th>
+                Renter
             </th>
             <th>
                 Rent end date
@@ -32,6 +51,9 @@
                 </td>
                 <td>
                     @apartment.Name
+                </td>
+                <td>
+                    @( apartment.Renter != null ? apartment.Renter.ToString() : "free" )
                 </td>
                 <td>
                     @apartment.RentEndDate?.ToShortDateString()

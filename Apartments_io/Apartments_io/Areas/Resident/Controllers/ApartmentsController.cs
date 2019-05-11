@@ -35,36 +35,57 @@ namespace Apartments_io.Areas.Resident.Controllers
             return View(apartmentRepository
                         .GetBest(amount: BEST_APARTMENT_AMOUNT));
         }
-
-        public IActionResult List(int page = 1)
+        #region LIST
+        public IActionResult List(int? minPrice, int? maxPrice, int page = 1)
         {
             int ITEM_PER_PAGE_SIZE = 5;
 
             int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
 
             // count free apartment
-            int totalAmount = apartmentRepository.Count(a => a.Renter == null);
+            int totalAmount = apartmentRepository.Count(BuildFilter(minPrice, maxPrice));
 
             // get free apartment
             System.Collections.Generic.IEnumerable<Apartment> apartments =
-                apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: a => a.Renter == null);
+                apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: BuildFilter(minPrice, maxPrice));
+
+            // save previous filter inputs value
+            ViewData[nameof(minPrice)] = minPrice ?? 0;
+            ViewData[nameof(maxPrice)] = maxPrice ?? 0;
 
             ListViewModel listViewModel = new ListViewModel()
             {
-                UserId = loggedUserId,
-                
+                UserId = loggedUserId,                
                 Apartments = apartments,
-
                 IsUsersRequest = apartmentRepository.HasRequests(loggedUserId, apartments.Select(a => a.Id).ToArray()),
-
-                PaginationModel = Pagination.Pagination.GetBuilder
-                                                .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
-                                                .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(totalAmount)
+                PaginationModel = BuildPagination(ITEM_PER_PAGE_SIZE,page, totalAmount, minPrice, maxPrice)
             };
 
             return View(listViewModel);
         }
+        private System.Linq.Expressions.Expression<System.Func<Apartment, bool>> BuildFilter(int? minPrice, int? maxPrice)
+        {
+            if (minPrice.HasValue && maxPrice.HasValue) return a => a.Renter == null && a.Price >= minPrice && a.Price < maxPrice;
+            else if (minPrice.HasValue) return a => a.Renter == null && a.Price >= minPrice;
+            else if (maxPrice.HasValue) return a => a.Renter == null && a.Price < maxPrice;
+            else return a => a.Renter == null;
+        }
+        private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? minPrice, int? maxPrice)
+        {
+            Pagination.Pagination.PaginationFluentBuilder paginationBuilder =
+                                            Pagination.Pagination.GetBuilder
+                                                .SetRecordsAmountPerPage(maxItems)
+                                                .SetCurrentPage(currentPage)
+                                                .SetTotalRecordsAmount(totalAmount);
+
+            // ! adds url fragments 
+            if (minPrice.HasValue) paginationBuilder.AddFragment(nameof(minPrice), minPrice.Value);
+            if (maxPrice.HasValue) paginationBuilder.AddFragment(nameof(maxPrice), maxPrice.Value);
+
+            return paginationBuilder.Build();
+        }
+        #endregion
+
         public IActionResult MyRent(int page = 1)
         {
             int ITEM_PER_PAGE_SIZE = 5;

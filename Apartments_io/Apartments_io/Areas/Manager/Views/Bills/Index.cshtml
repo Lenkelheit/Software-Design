@@ -38,6 +38,36 @@
     </tbody>
 </table>
 
+<!--Filter-->
+<h2>Filter</h2>
+<p>Rows:</p>
+<p>@Model.TotalRecordsAmount</p>
+<form method="get" id="filter-form">
+    <div class="form-inline">
+        <input type="hidden" name="page" value="1" />
+
+        <p>Resident name</p>
+        <select id="filter-residents" class="form-control" name="filterResidentId">
+            <option disabled selected value="-1"> -- select user -- </option>
+            @foreach (User renter in Model.Renters)
+            {
+                <option value="@renter.Id">@renter.ToString()</option>
+            }
+        </select>
+
+        <p>Bill status</p>
+        <select id="filter-bills" class="form-control" name="filterBillStatus">
+            @foreach (DataAccess.Enums.PaymentStatus status in Enum.GetValues(typeof(DataAccess.Enums.PaymentStatus)))
+            {
+                <option value="@(Convert.ToInt32(status))">@status.GetText()</option>
+            }
+        </select>
+        <input type="button" value="Reset" id="reset-filter-btn"/>
+        <input type="submit" value="Фільтр" />
+    </div>
+</form>
+
+
 <!--List of item-->
 <h2>List</h2>
 <table id="bills-list">
@@ -91,7 +121,7 @@
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Bills" action-name="Index"></pagination-link>
 
 @section Scripts
-{
+    {
     <script>
         $(document).ready()
         {
@@ -108,7 +138,7 @@
         $("#apartments").change(function () {
             const apartment_id = $(this).children("option:selected").val();
 
-            load_apartment_image("#apartment-image", apartment_id);            
+            load_apartment_image("#apartment-image", apartment_id);
         });
         function load_apartment_image(image_selector, apartment_id) {
 
@@ -167,6 +197,11 @@
             });
         });
 
+
+        // FILTER
+        $("#reset-filter-btn").click(function () {
+            location.href = "/Manager/Bills/Index"
+        });
     </script>
 
 }
