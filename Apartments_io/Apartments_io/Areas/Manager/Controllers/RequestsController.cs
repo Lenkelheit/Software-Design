@@ -61,8 +61,8 @@ namespace Apartments_io.Areas.Manager.Controllers
             // accept request
             request.Apartment.Renter = request.Resident;
 
-            // delete request
-            requestRepository.Delete(request);
+            // delete request, and all requests for this apartment
+            requestRepository.Delete(r => r.Apartment.Id == request.Apartment.Id);
 
             // save changes
             await unitOfWork.SaveAsync();

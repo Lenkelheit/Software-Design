@@ -111,5 +111,12 @@ namespace DataAccess.Interfaces
         /// Entity to delete
         /// </param>
         void Delete(TEntity entityToDelete);
+        /// <summary>
+        /// Deletes entities by predicate
+        /// </summary>
+        /// <param name="predicate">
+        /// Predicate by which entities will be deleted
+        /// </param>
+        void Delete(Expression<Func<TEntity, bool>> predicate);
     }
 }

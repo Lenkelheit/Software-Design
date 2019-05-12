@@ -22,8 +22,8 @@
                 <li><a asp-controller="Apartments" asp-action="List">Apartments</a></li>
                 <li><a asp-controller="Apartments" asp-action="MyRent">My rent</a></li>
                 <li><a asp-controller="Requests" asp-action="List">Requests</a></li>
-                <li><a asp-controller="Bills" asp-action="List">Bills</a></li>
-                <li><a asp-controller="Notifications" asp-action="List">Notifications</a></li>
+                <li><a asp-controller="Bills" asp-action="List">Bills (@await Component.InvokeAsync("BillsCount"))</a></li>
+                <li><a asp-controller="Notifications" asp-action="List">Notifications (@await Component.InvokeAsync("NotificationsCount"))</a></li>
 
                 <li><a asp-controller="Home" asp-action="Logout" asp-area="">Log out</a></li>
             </ol>

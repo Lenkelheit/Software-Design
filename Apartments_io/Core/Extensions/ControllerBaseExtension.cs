@@ -3,7 +3,7 @@
 namespace Core.Extensions
 {
     /// <summary>
-    /// Contains extendions for <see cref="ControllerBase"/>
+    /// Contains extensions for <see cref="ControllerBase"/>
     /// </summary>
     public static class ControllerBaseExtension
     {
