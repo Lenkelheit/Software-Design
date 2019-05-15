@@ -109,7 +109,7 @@
 
                         <tr>
                             <td>
-                                <input value="Resident name and email" class="form-control" type="text" name="Resident name and email"
+                                <input class="form-control" type="text" name="Resident name and email"
                                        form="create_bill_form"/>
                             </td>
                             <td>
@@ -120,14 +120,10 @@
                                        required/>
                             </td>
                             <td>
+                                <input value="Create" class="form-control" type="submit" name="Create" form="create_bill_form" />
                             </td>
                             <td>
-                                <input value="Create" class="form-control" type="create" name="Create"
-                                       form="create_bill_form"/>
-                            </td>
-                            <td>
-                                <input value="Cancel" class="form-control" type="cancel" name="Camcel"
-                                       form="create_bill_form"/>
+                                <input value="Cancel" class="form-control" type="reset" name="Cancel" form="create_bill_form" />
                             </td>
                         </tr>
                         </tbody>
@@ -146,13 +142,11 @@
                         <label class="custom-control-label" for="defaultUnchecked">Is free</label>
                     </div>
                     <label>Will be free on days</label>
-                    <div class="form-group">
-                        <label for="exampleInputNum">Num of days</label>
-                        <input type="number" class="form-control" id="exampleInputNum" placeholder="Enter num of days">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputNumOfMonth">Num of month</label>
-                        <input type="number" class="form-control" id="exampleInputNumOfMonth" placeholder="Enter num of month">
+                    <div>
+                      <form action="...">
+                          Number of days: <input type="number" name="NumOfDays"><br>
+                          Number of month: <input type="number" name="NumOfMonth"><br>
+                      </form>
                     </div>
                     <div class="text-right m-2">
                         <button class="btn btn-info" type="button"
@@ -193,11 +187,10 @@
                             <input value="Status" class="form-control" type="text" name="Status" required>
                         </td>
                         <td>
-                            <input value="Submit" class="form-control" type="submit" name="Update"
+                            <input value="Update" class="form-control" type="submit" name="Update"
                                    form="change_bill_form"/>
                         </td>
                     </tr>
-
 
                     </tbody>
                 </table>
