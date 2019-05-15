@@ -157,8 +157,31 @@
 
       <div>
         <form method="post" id="change_apartment_form"></form>
+          <!-- Default unchecked -->
 
 
+          <form>
+              <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                  <label class="custom-control-label" for="defaultUnchecked">Is free</label>
+              </div>
+              <label>Will be free on days</label>
+              <div class="form-group">
+                  <label for="exampleInputNum">Num of days</label>
+                  <input type="number" class="form-control" id="exampleInputNum" placeholder="Enter num of days">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputNumOfMonth">Num of month</label>
+                  <input type="number" class="form-control" id="exampleInputNumOfMonth" placeholder="Enter num of month">
+              </div>
+              <div class="text-right m-2">
+                  <button class="btn btn-info" type="button"
+                          aria-expanded="false" aria-controls="collapse">
+                      Submit
+                  </button>
+              </div>
+
+          </form>
 
         <table class="table table-hover">
           <thead class="thead-dark">
@@ -232,8 +255,43 @@
     </div>
   </div>
 
-  <div class="footer">
-    ©Copyright The Architects
+      <div class="footer">
+          <div class="row">
+              <div class="col-sm-3">
+                  <p>About us</p>
+                  <hr>
+                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diem nonummy nibh
+                      euismod tincidunt ut lacreet dolore magna aliguam erat volutpat.</p>
+              </div>
+              <div class="col-sm-3">
+                  <p>Info</p>
+                  <hr>
+                  <a href="#">Privacy</a>
+                  <br>
+                  <a href="#">Support</a>
+              </div>
+              <div class="col-sm-3">
+                  <p>Contact</p>
+                  <hr>
+                  <a href="#">Website</a>
+                  <br>
+                  <a href="#">Email</a>
+                  <p>+38(093)8700878</p>
+              </div>
+              <div class="col-sm-3">
+                  <p>Connect</p>
+                  <hr>
+                  <a href="#" target="_blank" class='fa fa-facebook'></a>
+                  <a href="#" target="_blank" class='fa fa-twitter'></a>
+                  <a href="#" target="_blank" class='fa fa-google'></a>
+                  <a href="#" target="_blank" class='fa fa-linkedin'></a>
+                  <a href="#" target="_blank" class='fa fa-instagram'></a>
+              </div>
+          </div>
+          <div class="architects">
+              ©Copyright The Architects
+          </div>
+      </div>
   </div>
 </div>
 
