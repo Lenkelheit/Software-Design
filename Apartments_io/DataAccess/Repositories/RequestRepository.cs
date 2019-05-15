@@ -59,22 +59,22 @@ namespace DataAccess.Repositories
             IQueryable<Request> query = dbSet.Include(request => request.Resident)
                                              .Include(request => request.Apartment);
 
-            IDictionary<int, Dictionary<Enums.PaymentStatus, int>> v = 
-                (from bill in dbContext.Set<Bill>().Include(b => b.Renter)
+            // [resident id, [payment status, amount]]
+            IDictionary<int, Dictionary<Enums.PaymentStatus, int>> residentPaymentStatus = 
+                (from bill in dbContext.Set<Bill>()
                 group bill by bill.Renter.Id into billGroup
                 select new
                 {
                     renterId = billGroup.Key,
 
-                    status = new Dictionary<Enums.PaymentStatus, int>()
-                    /* billGroup
-                            .Where(b => b.Renter != null)
+                    status = billGroup
                             .Where(b => b.Renter.Id == billGroup.Key)
                             .GroupBy(b => b.PaymentStatus)
-                            .ToDictionary(s => s.Key, s => s.Count())*/
+                            //.ToDictionary(b => b.Key, b => b.Count())
+                            .Select(b => new { b.Key, Amount = b.Count() })
+                            .ToDictionary(b => b.Key, b => b.Amount)
                 })
                 .ToDictionary(q => q.renterId, q => q.status);
-            
 
             return query
                    .Skip((page - 1) * amount)
@@ -82,12 +82,22 @@ namespace DataAccess.Repositories
                    .AsEnumerable()
                    .Select(request =>
                    {
-                       // int renterId = request.Resident.Id;
+                       int renterId = request.Resident.Id;
 
-                       // int total = v[renterId].Sum(x => x.Value);
-                       // int positive = v[renterId][Enums.PaymentStatus.Paid];
+                       // if user has any bills..
+                       if (residentPaymentStatus.ContainsKey(renterId))
+                       {
+                           // .. count how many he paid properly
+                           int total = residentPaymentStatus[renterId].Sum(x => x.Value);
+                           int positive = residentPaymentStatus[renterId].ContainsKey(Enums.PaymentStatus.Paid) ? residentPaymentStatus[renterId][Enums.PaymentStatus.Paid] : 0;
 
-                       request.PercentagePayedProperly = 98;//Percentage(total, positive);
+                           request.PercentagePayedProperly = Percentage(total, positive);
+                       }
+                       else
+                       {
+                           // .. sets payment status to 100
+                           request.PercentagePayedProperly = 100;
+                       }
                        return request;
                    });
         }

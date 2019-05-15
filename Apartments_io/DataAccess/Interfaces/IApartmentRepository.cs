@@ -18,15 +18,15 @@ namespace DataAccess.Interfaces
         /// </returns>
         string GetImageById(int id);
         /// <summary>
-        /// Return collection of best apartments
+        /// Return collection of random free apartments
         /// </summary>
         /// <param name="amount">
         /// Amount of items to return
         /// </param>
         /// <returns>
-        /// Collection of best apartments
+        /// Collection of random apartments
         /// </returns>
-        IEnumerable<Entities.Apartment> GetBest(int amount);
+        IEnumerable<Entities.Apartment> GetRandom(int amount);
         /// <summary>
         /// Determines if user rent current apartment
         /// </summary>

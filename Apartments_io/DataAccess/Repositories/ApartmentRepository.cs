@@ -55,33 +55,36 @@ namespace DataAccess.Repositories
             return dbSet.Any(a => a.Id == apartmentId && a.Renter.Id == userId);
         }
         /// <summary>
-        /// Return collection of best apartments
+        /// Return collection of random free apartments
         /// </summary>
         /// <param name="amount">
         /// Amount of items to return
         /// </param>
         /// <returns>
-        /// Collection of best apartments
+        /// Collection of random apartments
         /// </returns>
         /// <exception cref="System.NullReferenceException">
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public virtual IEnumerable<Apartment> GetBest(int amount)
+        public virtual IEnumerable<Apartment> GetRandom(int amount)
         {
             ContextCheck();
+
+            System.Random random = new System.Random();
+
+            int[] ids = dbSet.Where(a => a.Renter == null).Select(x => x.Id).ToArray();
+            HashSet<int> randomIds = new HashSet<int>(amount);
+            while (randomIds.Count != amount && randomIds.Count != ids.Length)
+            {
+                randomIds.Add(ids[random.Next(ids.Length)]); 
+            }
+
             return dbSet
                     .Where(a => a.Renter == null)
+                    .Where(a => randomIds.Contains(a.Id))
                     .Take(amount)
                     .AsEnumerable();
-
-            /*return (from apartment in dbSet
-                    join bill in dbContext.Set<Bill>() on apartment.Id equals bill.Apartment.Id into apartmentsBills
-                    from apartmentBills in apartmentsBills.DefaultIfEmpty()
-                    group apartmentBills by apartmentBills.Apartment into apartmentGroup
-                    select apartmentGroup.Key)
-                    .Take(amount)
-                    .AsEnumerable();*/
         }
 
 

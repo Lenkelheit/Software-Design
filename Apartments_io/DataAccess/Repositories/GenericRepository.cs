@@ -157,6 +157,23 @@ namespace DataAccess.Repositories
             dbSet.Remove(entityToDelete);
         }
         /// <summary>
+        /// Deletes entities by predicate
+        /// </summary>
+        /// <param name="predicate">
+        /// Predicate by which entities will be deleted
+        /// </param>
+        /// <exception cref="NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public void Delete(Expression<Func<TEntity, bool>> predicate)
+        {
+            ContextCheck();
+
+            if (predicate != null) dbSet.RemoveRange(dbSet.Where(predicate));
+            else                   dbSet.RemoveRange(dbSet);
+        }
+        /// <summary>
         /// Gets data from data base
         /// </summary>
         /// <param name="filter">
@@ -311,5 +328,6 @@ namespace DataAccess.Repositories
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
         }
+
     }
 }

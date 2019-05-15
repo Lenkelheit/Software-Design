@@ -30,10 +30,10 @@ namespace Apartments_io.Areas.Resident.Controllers
         // ACTIONS
         public IActionResult Index()
         {
-            int BEST_APARTMENT_AMOUNT = 2;
+            int RANDOM_APARTMENT_AMOUNT = 2;
 
             return View(apartmentRepository
-                        .GetBest(amount: BEST_APARTMENT_AMOUNT));
+                        .GetRandom(amount: RANDOM_APARTMENT_AMOUNT));
         }
         #region LIST
         public IActionResult List(int? minPrice, int? maxPrice, int page = 1)
