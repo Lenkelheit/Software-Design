@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Manager page</title>
@@ -30,6 +29,7 @@
             margin-bottom: 0;
             border-radius: 0;
         }
+
         .header {
             background-color: #f2f2f2;
             font-family: sans-serif;
@@ -38,6 +38,7 @@
             border-top: 3px solid black;
             border-bottom: 3px solid black;
         }
+
         .content {
             font-family: sans-serif;
         }
@@ -50,7 +51,10 @@
             border-top: 3px solid black;
             padding: 25px;
         }
-        body { font-family: "Bitstream Vera Serif Bold", serif }
+
+        body {
+            font-family: "Bitstream Vera Serif Bold", serif
+        }
     </style>
 
 
@@ -74,3 +78,95 @@
         </li>
     </ul>
 </nav>
+
+<div class="container-fluid pl-0 pr-0">
+    <div class="header">
+        Manager Panel
+    </div>
+
+    <div class="container-fluid pl-0 pr-0">
+        <div class="content">
+            <div class="collapse" id="collapse">
+
+                <form method="post" id="create_bill_form"></form>
+
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Resident name and email</th>
+                        <th scope="col">Apartment name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Create</th>
+                        <th scope="col">Cancel</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    <tr>
+                        <td>
+                            <input class="form-control" type="text" name="Resident name and email"
+                                   form="create_bill_form"/>
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" name="Apartment name" form="create_bill_form"
+                                   required/>
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" name="Status" form="create_bill_form"
+                                   required/>
+                        </td>
+                        <td>
+                            <input value="Create" class="form-control" type="submit" name="Create"
+                                   form="create_bill_form"/>
+                        </td>
+                        <td>
+                            <input value="Cancel" class="form-control" type="reset" name="Cancel"
+                                   form="create_bill_form"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="row">
+        <div class="col-sm-3">
+            <p>About us</p>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diem nonummy nibh
+                euismod tincidunt ut lacreet dolore magna aliguam erat volutpat.</p>
+        </div>
+        <div class="col-sm-3">
+            <p>Info</p>
+            <hr>
+            <a href="#">Privacy</a>
+            <br>
+            <a href="#">Support</a>
+        </div>
+        <div class="col-sm-3">
+            <p>Contact</p>
+            <hr>
+            <a href="#">Website</a>
+            <br>
+            <a href="#">Email</a>
+            <p>+38(093)8700878</p>
+        </div>
+        <div class="col-sm-3">
+            <p>Connect</p>
+            <hr>
+            <a href="#" target="_blank" class='fa fa-facebook'></a>
+            <a href="#" target="_blank" class='fa fa-twitter'></a>
+            <a href="#" target="_blank" class='fa fa-google'></a>
+            <a href="#" target="_blank" class='fa fa-linkedin'></a>
+            <a href="#" target="_blank" class='fa fa-instagram'></a>
+        </div>
+    </div>
+    <div class="architects">
+        ©Copyright The Architects
+    </div>
+</div>
+</body>
