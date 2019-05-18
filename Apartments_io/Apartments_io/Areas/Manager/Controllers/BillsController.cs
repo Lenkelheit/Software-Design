@@ -8,6 +8,8 @@ using DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 
+using System.Linq;
+
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
@@ -43,7 +45,8 @@ namespace Apartments_io.Areas.Manager.Controllers
             {
                 Bills = billsRepositories.Get(page: page, amount: ITEM_PER_PAGE_SIZE,
                                             includeProperties: string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment)),
-                                            filter: BuildFilter(filterResidentId, filterBillStatus)),
+                                            filter: BuildFilter(filterResidentId, filterBillStatus),
+                                            orderBy: q => q.OrderByDescending(b => b.Id).ThenBy(b => b.PaymentStatus)),
 
                 Renters = userRepository.Get(u => u.Apartments.Count > 0),
 
