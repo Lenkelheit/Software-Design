@@ -52,12 +52,14 @@ namespace Apartments_io.Areas.Resident.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmNotification(int notificationId)
         {
+            Notification notification = await notificationRepository.GetAsync(notificationId);
+            if (notification == null) return BadRequest("No such notification");
+
             // delete notification
-            notificationRepository.Delete(notificationId);
+            notificationRepository.Delete(notification);
             await unitOfWork.SaveAsync();
 
-            return Ok();
-
+            return Ok();            
         }
     }
 }
