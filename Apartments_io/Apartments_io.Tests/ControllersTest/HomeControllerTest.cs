@@ -31,7 +31,7 @@ namespace Apartments_io.Tests.ControllersTest
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var userMock = new Mock<ClaimsPrincipal>();
+            Mock<ClaimsPrincipal> userMock = new Mock<ClaimsPrincipal>();
             userMock.SetupGet(p => p.Identity.IsAuthenticated).Returns(false);
 
             controller.ControllerContext = new ControllerContext
@@ -40,11 +40,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = (controller as HomeController)?.Index();
+            IActionResult result = (controller as HomeController)?.Index();
 
             // Assert
             Assert.NotNull(result);
-            var viewResult = Assert.IsType<ViewResult>(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
         }
 
@@ -55,7 +55,7 @@ namespace Apartments_io.Tests.ControllersTest
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var userMock = new Mock<ClaimsPrincipal>();
+            Mock<ClaimsPrincipal> userMock = new Mock<ClaimsPrincipal>();
             userMock.SetupGet(p => p.Identity.IsAuthenticated).Returns(true);
             userMock.Setup(p => p.IsInRole(nameof(DataAccess.Enums.Role.Administrator))).Returns(true);
 
@@ -65,11 +65,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = (controller as HomeController)?.Index();
+            IActionResult result = (controller as HomeController)?.Index();
 
             // Assert
             Assert.NotNull(result);
-            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(Areas.Administrator.Controllers.UsersController.Index), redirectToActionResult.ActionName);
             Assert.Equal(nameof(Areas.Administrator.Controllers.UsersController).Remove("Controller"), redirectToActionResult.ControllerName);
             Assert.Equal(nameof(Areas.Administrator), redirectToActionResult.RouteValues[$"{nameof(Areas).Remove("s")}"]);
@@ -82,7 +82,7 @@ namespace Apartments_io.Tests.ControllersTest
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var userMock = new Mock<ClaimsPrincipal>();
+            Mock<ClaimsPrincipal> userMock = new Mock<ClaimsPrincipal>();
             userMock.SetupGet(p => p.Identity.IsAuthenticated).Returns(true);
             userMock.Setup(p => p.IsInRole(nameof(DataAccess.Enums.Role.Manager))).Returns(true);
 
@@ -92,11 +92,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = (controller as HomeController)?.Index();
+            IActionResult result = (controller as HomeController)?.Index();
 
             // Assert
             Assert.NotNull(result);
-            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(Areas.Manager.Controllers.ApartmentsController.Index), redirectToActionResult.ActionName);
             Assert.Equal(nameof(Areas.Manager.Controllers.ApartmentsController).Remove("Controller"), redirectToActionResult.ControllerName);
             Assert.Equal(nameof(Areas.Manager), redirectToActionResult.RouteValues[$"{nameof(Areas).Remove("s")}"]);
@@ -109,7 +109,7 @@ namespace Apartments_io.Tests.ControllersTest
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var userMock = new Mock<ClaimsPrincipal>();
+            Mock<ClaimsPrincipal> userMock = new Mock<ClaimsPrincipal>();
             userMock.SetupGet(p => p.Identity.IsAuthenticated).Returns(true);
             userMock.Setup(p => p.IsInRole(nameof(DataAccess.Enums.Role.Resident))).Returns(true);
 
@@ -119,11 +119,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = (controller as HomeController)?.Index();
+            IActionResult result = (controller as HomeController)?.Index();
 
             // Assert
             Assert.NotNull(result);
-            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(Areas.Resident.Controllers.ApartmentsController.Index), redirectToActionResult.ActionName);
             Assert.Equal(nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"), redirectToActionResult.ControllerName);
             Assert.Equal(nameof(Areas.Resident), redirectToActionResult.RouteValues[$"{nameof(Areas).Remove("s")}"]);
@@ -140,11 +140,11 @@ namespace Apartments_io.Tests.ControllersTest
             LoginViewModel model = new LoginViewModel();
 
             // Act
-            var result = await controller.Login(model);
+            IActionResult result = await controller.Login(model);
 
             // Assert
             Assert.NotNull(result);
-            var viewResult = Assert.IsType<ViewResult>(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
             Assert.NotNull(viewResult.Model);
             Assert.IsType<LoginViewModel>(viewResult.Model);
             Assert.Equal(model, viewResult.Model);
@@ -156,17 +156,24 @@ namespace Apartments_io.Tests.ControllersTest
             // Arrange
             LoginViewModel model = new LoginViewModel { Email = null, Password = null };
 
+            Mock<UserRepository> mockUserRepository = new Mock<UserRepository>();
+            mockUserRepository
+                .Setup(ur => ur.IsDataValid(model.Email, model.Password))
+                .Returns(new Tuple<bool, bool, User>(false, false, null));
+
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockUnitOfWork.Setup(u => u.GetRepository<User, UserRepository>().IsDataValid(model.Email, model.Password))
-                .Returns(new System.Tuple<bool, bool, User>(false, false, null));
+            mockUnitOfWork
+                .Setup(u => u.GetRepository<User, UserRepository>())
+                .Returns(mockUserRepository.Object);
+
             HomeController controller = new HomeController(mockUnitOfWork.Object);
 
             // Act
-            var result = await controller.Login(model);
+            IActionResult result = await controller.Login(model);
 
             // Assert
             Assert.NotNull(result);
-            var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
+            BadRequestObjectResult badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal("Wrong email", badRequestObjectResult.Value.ToString());
         }
 
@@ -176,17 +183,24 @@ namespace Apartments_io.Tests.ControllersTest
             // Arrange
             LoginViewModel model = new LoginViewModel { Email = "first@gmail.com", Password = null };
 
-            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockUnitOfWork.Setup(u => u.GetRepository<User, UserRepository>().IsDataValid(model.Email, model.Password))
+            Mock<UserRepository> mockUserRepository = new Mock<UserRepository>();
+            mockUserRepository
+                .Setup(ur => ur.IsDataValid(model.Email, model.Password))
                 .Returns(new Tuple<bool, bool, User>(true, false, null));
+
+            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
+            mockUnitOfWork
+                .Setup(u => u.GetRepository<User, UserRepository>())
+                .Returns(mockUserRepository.Object);
+
             HomeController controller = new HomeController(mockUnitOfWork.Object);
 
             // Act
-            var result = await controller.Login(model);
+            IActionResult result = await controller.Login(model);
 
             // Assert
             Assert.NotNull(result);
-            var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
+            BadRequestObjectResult badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal("Wrong password", badRequestObjectResult.Value.ToString());
         }
 
@@ -196,24 +210,29 @@ namespace Apartments_io.Tests.ControllersTest
             // Arrange
             LoginViewModel model = new LoginViewModel { Email = "first@gmail.com", Password = "1111" };
 
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
-            mockUnitOfWork
-                .Setup(u => u.GetRepository<User, UserRepository>().IsDataValid(model.Email, model.Password))
+            Mock<UserRepository> mockUserRepository = new Mock<UserRepository>();
+            mockUserRepository
+                .Setup(ur => ur.IsDataValid(model.Email, model.Password))
                 .Returns(new Tuple<bool, bool, User>(true, true, new User { Email = model.Email, Password = model.Password }));
+
+            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
+            mockUnitOfWork
+                .Setup(u => u.GetRepository<User, UserRepository>())
+                .Returns(mockUserRepository.Object);
 
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var authServiceMock = new Mock<IAuthenticationService>();
+            Mock<IAuthenticationService> authServiceMock = new Mock<IAuthenticationService>();
             authServiceMock
-                .Setup(ser => ser.SignInAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<ClaimsPrincipal>(), It.IsAny<Microsoft.AspNetCore.Authentication.AuthenticationProperties>()))
+                .Setup(ser => ser.SignInAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<ClaimsPrincipal>(), It.IsAny<AuthenticationProperties>()))
                 .Returns(Task.FromResult((object)null));
 
-            var serviceProviderMock = new Mock<IServiceProvider>();
+            Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock
                 .Setup(ser => ser.GetService(typeof(IAuthenticationService)))
                 .Returns(authServiceMock.Object);
 
-            var urlHelperFactory = new Mock<IUrlHelperFactory>();
+            Mock<IUrlHelperFactory> urlHelperFactory = new Mock<IUrlHelperFactory>();
             serviceProviderMock
                 .Setup(s => s.GetService(typeof(IUrlHelperFactory)))
                 .Returns(urlHelperFactory.Object);
@@ -224,11 +243,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = await (controller as HomeController)?.Login(model);
+            IActionResult result = await (controller as HomeController)?.Login(model);
 
             // Assert
             Assert.NotNull(result);
-            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(HomeController.Index), redirectToActionResult.ActionName);
             Assert.Equal(nameof(HomeController).Remove("Controller"), redirectToActionResult.ControllerName);
         }
@@ -237,21 +256,21 @@ namespace Apartments_io.Tests.ControllersTest
         public async void Logout_RedirectToActionResult()
         {
             // Arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
+            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
 
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var authServiceMock = new Mock<IAuthenticationService>();
+            Mock<IAuthenticationService> authServiceMock = new Mock<IAuthenticationService>();
             authServiceMock
-                .Setup(ser => ser.SignOutAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<Microsoft.AspNetCore.Authentication.AuthenticationProperties>()))
+                .Setup(ser => ser.SignOutAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<AuthenticationProperties>()))
                 .Returns(Task.FromResult((object)null));
 
-            var serviceProviderMock = new Mock<IServiceProvider>();
+            Mock<IServiceProvider> serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock
                 .Setup(ser => ser.GetService(typeof(IAuthenticationService)))
                 .Returns(authServiceMock.Object);
 
-            var urlHelperFactory = new Mock<IUrlHelperFactory>();
+            Mock<IUrlHelperFactory> urlHelperFactory = new Mock<IUrlHelperFactory>();
             serviceProviderMock
                 .Setup(s => s.GetService(typeof(IUrlHelperFactory)))
                 .Returns(urlHelperFactory.Object);
@@ -262,11 +281,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = await (controller as HomeController)?.Logout();
+            IActionResult result = await (controller as HomeController)?.Logout();
 
             // Assert
             Assert.NotNull(result);
-            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(HomeController.Index), redirectToActionResult.ActionName);
             Assert.Equal(nameof(HomeController).Remove("Controller"), redirectToActionResult.ControllerName);
         }
@@ -275,10 +294,10 @@ namespace Apartments_io.Tests.ControllersTest
         public void Error_ViewResult()
         {
             // Arrange
-            var mockUnitOfWork = new Mock<IUnitOfWork>();
+            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             ControllerBase controller = new HomeController(mockUnitOfWork.Object);
 
-            var httpContextMock = new Mock<HttpContext>();
+            Mock<HttpContext> httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(httpCon => httpCon.TraceIdentifier).Returns(string.Empty);
 
             controller.ControllerContext = new ControllerContext
@@ -287,11 +306,11 @@ namespace Apartments_io.Tests.ControllersTest
             };
 
             // Act
-            var result = (controller as HomeController)?.Error();
+            IActionResult result = (controller as HomeController)?.Error();
 
             // Assert
             Assert.NotNull(result);
-            var viewResult = Assert.IsType<ViewResult>(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
             Assert.NotNull(viewResult.Model);
             Assert.IsType<ErrorViewModel>(viewResult.Model);
         }
