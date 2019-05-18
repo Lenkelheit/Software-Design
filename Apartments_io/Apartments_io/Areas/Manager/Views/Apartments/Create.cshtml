@@ -17,27 +17,26 @@
                 <img src="~/uploads/files/apartment/noimage.png" width="150" height="100" id="preview-image" />
 
                 <label for="main-photo" class="control-label"></label>
-                <input type="file" name="uploadFile" id="main-photo" />
-                <input type="submit" />
+                <input type="file" name="uploadFile" id="apartment-photo-input" accept="image/*" />
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" ></textarea>
+                <textarea asp-for="Description" class="form-control" required></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RentEndDate" class="control-label"></label>
-                <input asp-for="RentEndDate" type="date" class="form-control" />
+                <input asp-for="RentEndDate" type="date" class="form-control" required/>
                 <span asp-validation-for="RentEndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" type="number" class="form-control" />
+                <input asp-for="Price" type="number" class="form-control" required/>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -55,11 +54,21 @@
 @section Scripts
     {
     <script>
-        document.getElementById("main-photo").onchange = function () {
+        const default_img_src = $("#preview-image").attr('src');
+
+        document.getElementById("apartment-photo-input").onchange = function () {
+
+            validate_file_extension
+                ({
+                    file_input_id: 'apartment-photo-input',
+                    allowed_extension: ["jpg" , "jpeg" , "png", "gif"]
+                });
+            
             preview_image
                 ({
-                    file_input_id: 'main-photo',
+                    file_input_id: 'apartment-photo-input',
                     image_preview_id: 'preview-image',
+                    default_img_src: default_img_src
                 });
         };
 

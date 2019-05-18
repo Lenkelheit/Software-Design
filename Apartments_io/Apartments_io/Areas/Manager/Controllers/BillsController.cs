@@ -114,26 +114,66 @@ namespace Apartments_io.Areas.Manager.Controllers
         public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, PaymentStatus paymentStatus)
         {
             // get bill
-            Bill bill = await billsRepositories.GetAsync(billId, nameof(Bill.Renter));
+            Bill bill = await billsRepositories.GetAsync(billId, string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment)));
             if (bill == null) return BadRequest();
+
+            // get renter
+            User renter = bill.Renter;
 
             // update bill
             bill.PaymentStatus = paymentStatus;
             unitOfWork.Update(bill);
 
             // create notification
-            Notification notification = new Notification()
-            {
-                Resident = bill.Renter,
-                EmergencyLevel = EmergencyLevel.Warning,
-                Description = "Your bill has new status " + bill.PaymentStatus
-            };
+            Notification notification = CreateNotification(paymentStatus, bill.Renter);
             await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(notification);
+
+            // if overdue..
+            if (paymentStatus == PaymentStatus.Overdue)
+            {
+                // delete all unpaid bills for this apartment
+                billsRepositories.Delete(b => b.Apartment.Id == bill.Apartment.Id && b.Renter.Id == renter.Id && b.PaymentStatus == PaymentStatus.WaitingForPayment);
+
+                // delete apartment
+                renter.Apartments = null;
+                unitOfWork.Update(renter);
+
+                // save changes
+                await unitOfWork.SaveAsync();
+
+                // send redirect
+                return Ok(new { IsRedirect = true, Location = Url.Action(action: nameof(Index)) }); 
+            }
 
             // save
             await unitOfWork.SaveAsync();
 
             return Ok();
+        }
+        private Notification CreateNotification(PaymentStatus paymentStatus, User resident)
+        {
+            switch (paymentStatus)
+            {
+                case PaymentStatus.Paid: return new Notification()
+                {
+                    Resident = resident,
+                    EmergencyLevel = EmergencyLevel.Success,
+                    Description = "You have paid the bill properly"
+                };
+                case PaymentStatus.Overdue: return new Notification()
+                {
+                    Resident = resident,
+                    EmergencyLevel = EmergencyLevel.Danger,
+                    Description = "You have forgotten to pay. You lose an apartment"
+                };
+
+                default: return new Notification()
+                {
+                    Resident = resident,
+                    EmergencyLevel = EmergencyLevel.Warning,
+                    Description = "Your bill has new status " + paymentStatus
+                };
+            }
         }
     }
 }
