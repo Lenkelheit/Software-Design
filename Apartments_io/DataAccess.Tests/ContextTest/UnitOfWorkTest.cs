@@ -11,11 +11,11 @@ namespace DataAccess.Tests.ContextTest
 {
     public class UnitOfWorkTest
     {
-        [Fact(Skip = "Stupid mocking")]
+        [Fact]
         public void CreateRepoTest()
         {
             // Arrange
-            Moq.Mock<Context.DataBaseContext> mockContext = new Moq.Mock<Context.DataBaseContext>();
+            Moq.Mock<DbContext> mockContext = new Moq.Mock<DbContext>();
 
             Context.UnitOfWork unitOfWork = new Context.UnitOfWork(mockContext.Object);
 
@@ -30,6 +30,8 @@ namespace DataAccess.Tests.ContextTest
             Assert.NotNull(notificationRepos);
 
             Assert.Same(firstBillRepos, secondBillRepos);
+            Assert.NotSame(firstBillRepos, notificationRepos);
+
         }
     }
 }

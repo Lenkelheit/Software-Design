@@ -103,7 +103,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public System.Tuple<bool, bool, User> IsDataValid(string email, string password)
+        public virtual System.Tuple<bool, bool, User> IsDataValid(string email, string password)
         {
             // checking
             ContextCheck();
