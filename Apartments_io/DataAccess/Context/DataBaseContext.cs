@@ -20,12 +20,24 @@ namespace DataAccess.Context
         /// <param name="options">
         /// The option to be used by <see cref="DataBaseContext"/>
         /// </param>
-        public DataBaseContext(DbContextOptions<DataBaseContext> options)
+        /// <param name="dbInitializer">
+        /// Data base initializer
+        /// </param>
+        public DataBaseContext(DbContextOptions<DataBaseContext> options, Interfaces.IDbInitializer dbInitializer)
             : base(options)
         {
-            dbInitializer = new Initializers.DefaultDbInitializer();
+            this.dbInitializer = dbInitializer;
             Database.EnsureCreated();
         }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="DataBaseContext"/> with given options
+        /// </summary>
+        /// <param name="options">
+        /// The option to be used by <see cref="DataBaseContext"/>
+        /// </param>
+        public DataBaseContext(DbContextOptions<DataBaseContext> options)
+            : this(options, new Initializers.DefaultDbInitializer()) { }
 
         // PROPERTIES
         /// <summary>
@@ -78,7 +90,10 @@ namespace DataAccess.Context
         /// </param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging();
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.EnableSensitiveDataLogging();
+            }
         }
     }
 }

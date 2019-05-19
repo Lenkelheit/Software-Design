@@ -11,11 +11,13 @@ namespace DataAccess.Context
     /// <summary>
     /// Contains all the repositories
     /// </summary>
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, System.IDisposable
     {
         // FIELDS
         private readonly DbContext dataBaseContext;
         private readonly IDictionary<System.Type, object> repositoriesFactory;
+
+        private bool isDisposed; // To detect redundant calls
 
         // CONSTRUCTORS
         /// <summary>
@@ -28,13 +30,43 @@ namespace DataAccess.Context
         {
             this.dataBaseContext = dbContext;
             this.repositoriesFactory = new Dictionary<System.Type, object>();
+            this.isDisposed = false;
         }
         /// <summary>
         /// Disposes DataBase context
         /// </summary>
         ~UnitOfWork()
         {
-            dataBaseContext.Dispose();
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// Determines if managed resources should be disposed
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!isDisposed)
+            {
+                if (disposing)
+                {
+                    // dispose managed state (managed objects).
+                    dataBaseContext.Dispose();
+                }
+
+                // free unmanaged resources (unmanaged objects) and override a finalizer below
+                isDisposed = true;
+            }
+        }
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            System.GC.SuppressFinalize(this);
         }
 
         // METHODS
