@@ -25,15 +25,13 @@ namespace Apartments_io.Areas.Manager.TagHelpers
             // add option
             foreach (PaymentStatus status in Enum.GetValues(typeof(PaymentStatus)))
             {
-                bool isDisabled = CanManagerSelectOption(status);
+                bool isDisabled = IsOptionDisabledForManager(status);
                 bool isSelected = SelectedStatus == status;
                 
                 output.Content.AppendHtml($"<option value='{Convert.ToInt32(status)}' {DisabledOption(isDisabled)} {SelectedOption(isSelected)}>{status.GetText()}</option>");
             }
-
-
         }
-        private bool CanManagerSelectOption(PaymentStatus status)
+        private bool IsOptionDisabledForManager(PaymentStatus status)
         {
             // is new bill
             // manager can choose between: WaitingForPayment or Overdue

@@ -39,6 +39,9 @@ namespace DataAccess.Repositories
         /// <summary>
         /// Gets requests with some information
         /// </summary>
+        /// <param name="managerId">
+        /// Manager's id
+        /// </param>
         /// <param name="amount">
         /// Records amount to select
         /// </param>
@@ -52,11 +55,12 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public IEnumerable<Request> GetShortInfo(int page, int amount)
+        public IEnumerable<Request> GetShortInfo(int managerId, int page, int amount)
         {
             ContextCheck();
 
-            IQueryable<Request> query = dbSet.Include(request => request.Resident)
+            IQueryable<Request> query = dbSet.Where(r => r.Resident.Manager.Id == managerId)
+                                             .Include(request => request.Resident)
                                              .Include(request => request.Apartment);
 
             // [resident id, [payment status, amount]]

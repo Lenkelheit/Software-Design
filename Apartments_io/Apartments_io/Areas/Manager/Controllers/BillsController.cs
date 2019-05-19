@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using System.Linq;
 
+using Core.Extensions;
+
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
@@ -27,6 +29,8 @@ namespace Apartments_io.Areas.Manager.Controllers
         // CONSTRUCTORS
         public BillsController(IUnitOfWork unitOfWork)
         {
+            ViewData["Title"] = "Bills";
+
             this.unitOfWork = unitOfWork;
             this.billsRepositories = unitOfWork.GetRepository<Bill, GenericRepository<Bill>>();
             this.userRepository = unitOfWork.GetRepository<User, UserRepository>();
@@ -36,7 +40,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         #region INDEX
         public IActionResult Index(int? filterResidentId, PaymentStatus? filterBillStatus,  int page = 1)
         {
-            ViewData["Title"] = "Bills";
+            int managerId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
 
             // count
             int total = billsRepositories.Count(BuildFilter(filterResidentId, filterBillStatus));
@@ -48,7 +52,7 @@ namespace Apartments_io.Areas.Manager.Controllers
                                             filter: BuildFilter(filterResidentId, filterBillStatus),
                                             orderBy: q => q.OrderByDescending(b => b.Id).ThenBy(b => b.PaymentStatus)),
 
-                Renters = userRepository.Get(u => u.Apartments.Count > 0),
+                Renters = userRepository.Get(u => u.Apartments.Count > 0 && u.Manager.Id == managerId),
 
                 TotalRecordsAmount = total,
 
@@ -60,10 +64,12 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         private System.Linq.Expressions.Expression<System.Func<Bill, bool>> BuildFilter(int? filterResidentId, PaymentStatus? filterBillStatus)
         {
-            if (filterBillStatus.HasValue && filterResidentId.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Id == filterResidentId;
-            else if (filterResidentId.HasValue) return b => b.Renter.Id == filterResidentId;
-            else if (filterBillStatus.HasValue) return b => b.PaymentStatus == filterBillStatus;
-            else return a => true;
+            int managerId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+
+            if (filterBillStatus.HasValue && filterResidentId.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Id == filterResidentId && b.Renter.Manager.Id == managerId;
+            else if (filterResidentId.HasValue) return b => b.Renter.Id == filterResidentId && b.Renter.Manager.Id == managerId;
+            else if (filterBillStatus.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Manager.Id == managerId;
+            else return b => b.Renter.Manager.Id == managerId;
         }
         private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? filterResidentId, PaymentStatus? filterBillStatus)
         {
