@@ -22,8 +22,12 @@
         <!--HEADER-->
         <div class="header">
             Administrator Panel
-            <a asp-controller="Home" asp-action="Logout" asp-area="">Log out</a>
         </div>
+
+
+        <a asp-controller="Users" asp-action="Index">Index</a>
+        <a asp-controller="Users" asp-action="Managers">Manager</a>
+        <a asp-controller="Home" asp-action="Logout" asp-area="">Log out</a>
 
         <!--CONTENT-->
         <div class="content">
@@ -46,7 +50,7 @@
 
     <!--CUSTOM-->
     <script src="~/js/areas/index.js"></script>
-    <script src="~/js/areas/administrator/index.js"></script>
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

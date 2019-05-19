@@ -25,6 +25,8 @@ namespace Apartments_io.Areas.Administrator.Controllers
         // CONSTRUCTORS
         public UsersController(IUnitOfWork unitOfWork)
         {
+            ViewData["Title"] = "Administrator";
+
             this.unitOfWork = unitOfWork;
             this.userRepository = unitOfWork.GetRepository<User, UserRepository>();
         }
@@ -32,12 +34,10 @@ namespace Apartments_io.Areas.Administrator.Controllers
         // ACTIONS
         public IActionResult Index(int page = 1)
         {
-            ViewData["Title"] = "Administrator";
-
             IndexViewModel indexViewModel = new IndexViewModel()
             {
                 Users = userRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE),
-                Managers = userRepository.GetUserByRole(Role.Manager),
+
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
@@ -47,14 +47,29 @@ namespace Apartments_io.Areas.Administrator.Controllers
             return View(indexViewModel);
         }
 
+        public IActionResult Managers(int page = 1)
+        {
+            ManagersViewModel managersViewModel = new ManagersViewModel()
+            {
+                Users = userRepository.Get(filter: u => u.Role == Role.Resident, page: page, amount: ITEM_PER_PAGE_SIZE),
+
+                Managers = userRepository.GetUserByRole(Role.Manager),
+
+                PaginationModel = Pagination.Pagination.GetBuilder
+                                                .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
+                                                .SetCurrentPage(page)
+                                                .SetTotalRecordsAmount(userRepository.Count(u => u.Role == Role.Resident))
+            };
+
+            return View(managersViewModel);
+        }
+
         // ajax
         [HttpPost]
-        public async Task<IActionResult> Create(User user, int managerId)
+        public async Task<IActionResult> Create(User user)
         {
             if (!userRepository.IsEmailFree(user.Email)) return BadRequest("Email has already been taken");
-
-            user.Manager = await userRepository.GetAsync(managerId);
-
+            
             await userRepository.InsertAsync(user);
             await unitOfWork.SaveAsync();
 
@@ -62,11 +77,30 @@ namespace Apartments_io.Areas.Administrator.Controllers
         }
         // ajax
         [HttpPost]
-        public async Task<IActionResult> Update(User user, int managerId)
-        {
-            user.Manager = userRepository.Get(managerId);
-            
+        public async Task<IActionResult> Update(User user)
+        {            
             unitOfWork.Update(user);
+            await unitOfWork.SaveAsync();
+
+            return Ok();
+        }
+        // ajax
+        [HttpPost]
+        public async Task<IActionResult> UpdateManager(int userId, int managerId)
+        {
+            // get user
+            User resident = await userRepository.GetAsync(userId);
+            if (resident == null) return BadRequest("There is no user with such id");
+
+            // get manager
+            User manager = await userRepository.GetAsync(managerId);
+            if (manager == null) return BadRequest("There is no manager with such id");
+
+            // set manager
+            resident.Manager = manager;
+
+            // update
+            unitOfWork.Update(resident);
             await unitOfWork.SaveAsync();
 
             return Ok();

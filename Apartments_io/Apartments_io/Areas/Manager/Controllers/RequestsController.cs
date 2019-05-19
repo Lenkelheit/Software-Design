@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Extensions;
+
+using Microsoft.AspNetCore.Mvc;
 
 using DataAccess.Entities;
 using DataAccess.Interfaces;
@@ -26,6 +28,8 @@ namespace Apartments_io.Areas.Manager.Controllers
         // CONSTRUCTORS
         public RequestsController(IUnitOfWork unitOfWork)
         {
+            ViewData["Title"] = "Requests";
+
             this.unitOfWork = unitOfWork;
             this.requestRepository = unitOfWork.GetRepository<Request, RequestRepository>();
         }
@@ -33,16 +37,16 @@ namespace Apartments_io.Areas.Manager.Controllers
         // ACTIONS
         public IActionResult Index(int page = 1)
         {
-            ViewData["Title"] = "Requests";
+            int managerId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
 
             IndexViewModel indexViewModel = new IndexViewModel
             {
-                Requests = requestRepository.GetShortInfo(page, ITEM_PER_PAGE_SIZE),
+                Requests = requestRepository.GetShortInfo(managerId, page, ITEM_PER_PAGE_SIZE),
 
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)
                                                 .SetCurrentPage(page)
-                                                .SetTotalRecordsAmount(requestRepository.Count())
+                                                .SetTotalRecordsAmount(requestRepository.Count(r => r.Resident.Manager.Id == managerId))
             };
             return View(indexViewModel);
         }

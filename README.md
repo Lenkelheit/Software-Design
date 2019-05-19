@@ -39,5 +39,5 @@ A common repository for the "Software Design" subject
 | :---: | :---: | :---: | :---: | :---: |
 | [<img src="https://avatars3.githubusercontent.com/u/38116562?s=400&v=4" width="150px;"/>](https://github.com/Lenkelheit) | [<img src="https://avatars3.githubusercontent.com/u/24938726?s=400&v=4" width="150px;"/>](https://github.com/iamprovidence) |[<img src="https://avatars3.githubusercontent.com/u/22750664?s=400&v=4" width="150px;"/>](https://github.com/vasil98) |[<img src="https://avatars3.githubusercontent.com/u/37065318?s=400&v=4" width="150px;"/>](https://github.com/marichkaK) |[<img src="https://avatars3.githubusercontent.com/u/41824316?s=400&v=4" width="150px;"/>](https://github.com/olyapetryshyn) |
 |Nazariy Tymtsiv|Taras Kizlo|Vasyl Tanchinets|Mariia Kunyk|Olya Petryshyn|
-|📈 Diagram maker<br>🤔 Thinker<br>🌍 Editor|👀 Administrator<br>📝 Blogger <br>💬 QA Manager<br>📈 Diagram maker<br>|📈 Diagram maker<br>|📈 Diagram maker<br>🎨 Designer<br>|📈 Diagram maker<br>📖 Documenter  |
+|📈 Diagram maker<br>🤔 Thinker<br>🌍 Editor<br>⚠️ Tester|👀 Administrator<br>📝 Blogger <br>📖 Documenter<br>💬 QA Manager<br>📈 Diagram maker<br>⚠️ Tester|📈 Diagram maker<br>⚠️ Tester|📈 Diagram maker<br>🎨 Designer<br>|📈 Diagram maker<br>📖 Documenter<br>🎨 Designer  |
 
