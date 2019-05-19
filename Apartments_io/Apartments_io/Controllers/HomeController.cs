@@ -41,7 +41,6 @@ namespace Apartments_io.Controllers
                         areaName: nameof(Areas.Administrator),
                         actionName: nameof(Areas.Administrator.Controllers.UsersController.Index),
                         controllerName: nameof(Areas.Administrator.Controllers.UsersController).Remove("Controller"));
-
                 }
                 else if (User.IsInRole(nameof(DataAccess.Enums.Role.Manager)))
                 {
