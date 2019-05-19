@@ -48,7 +48,7 @@
 
         <p>Resident name</p>
         <select id="filter-residents" class="form-control" name="filterResidentId">
-            <option disabled selected value="-1"> -- select user -- </option>
+            <option disabled selected hidden value="-1">Select user here</option>
             @foreach (User renter in Model.Renters)
             {
                 <option value="@renter.Id">@renter.ToString()</option>
@@ -62,7 +62,7 @@
                 <option value="@(Convert.ToInt32(status))">@status.GetText()</option>
             }
         </select>
-        <input type="button" value="Reset" id="reset-filter-btn"/>
+        <a type="button" asp-action="Index">Reset</a>
         <input type="submit" value="Фільтр" />
     </div>
 </form>
@@ -205,12 +205,7 @@
                 }
             });
         });
-
-
-        // FILTER
-        $("#reset-filter-btn").click(function () {
-            location.href = "/Manager/Bills/Index"
-        });
+        
     </script>
 
 }

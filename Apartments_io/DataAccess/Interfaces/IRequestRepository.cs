@@ -24,6 +24,9 @@ namespace DataAccess.Interfaces
         /// <summary>
         /// Gets requests with some information
         /// </summary>
+        /// <param name="managerId">
+        /// Manager's id
+        /// </param>
         /// <param name="amount">
         /// Records amount to select
         /// </param>
@@ -33,6 +36,6 @@ namespace DataAccess.Interfaces
         /// <returns>
         /// Collection of requests
         /// </returns>
-        IEnumerable<Request> GetShortInfo(int page, int amount);
+        IEnumerable<Request> GetShortInfo(int managerId, int page, int amount);
     }
 }
