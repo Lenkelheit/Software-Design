@@ -8,6 +8,10 @@ using DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 
+using System.Linq;
+
+using Core.Extensions;
+
 namespace Apartments_io.Areas.Manager.Controllers
 {
     [Area("Manager")]
@@ -25,6 +29,8 @@ namespace Apartments_io.Areas.Manager.Controllers
         // CONSTRUCTORS
         public BillsController(IUnitOfWork unitOfWork)
         {
+            ViewData["Title"] = "Bills";
+
             this.unitOfWork = unitOfWork;
             this.billsRepositories = unitOfWork.GetRepository<Bill, GenericRepository<Bill>>();
             this.userRepository = unitOfWork.GetRepository<User, UserRepository>();
@@ -34,7 +40,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         #region INDEX
         public IActionResult Index(int? filterResidentId, PaymentStatus? filterBillStatus,  int page = 1)
         {
-            ViewData["Title"] = "Bills";
+            int managerId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
 
             // count
             int total = billsRepositories.Count(BuildFilter(filterResidentId, filterBillStatus));
@@ -43,9 +49,10 @@ namespace Apartments_io.Areas.Manager.Controllers
             {
                 Bills = billsRepositories.Get(page: page, amount: ITEM_PER_PAGE_SIZE,
                                             includeProperties: string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment)),
-                                            filter: BuildFilter(filterResidentId, filterBillStatus)),
+                                            filter: BuildFilter(filterResidentId, filterBillStatus),
+                                            orderBy: q => q.OrderByDescending(b => b.Id).ThenBy(b => b.PaymentStatus)),
 
-                Renters = userRepository.Get(u => u.Apartments.Count > 0),
+                Renters = userRepository.Get(u => u.Apartments.Count > 0 && u.Manager.Id == managerId),
 
                 TotalRecordsAmount = total,
 
@@ -57,10 +64,12 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         private System.Linq.Expressions.Expression<System.Func<Bill, bool>> BuildFilter(int? filterResidentId, PaymentStatus? filterBillStatus)
         {
-            if (filterBillStatus.HasValue && filterResidentId.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Id == filterResidentId;
-            else if (filterResidentId.HasValue) return b => b.Renter.Id == filterResidentId;
-            else if (filterBillStatus.HasValue) return b => b.PaymentStatus == filterBillStatus;
-            else return a => true;
+            int managerId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
+
+            if (filterBillStatus.HasValue && filterResidentId.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Id == filterResidentId && b.Renter.Manager.Id == managerId;
+            else if (filterResidentId.HasValue) return b => b.Renter.Id == filterResidentId && b.Renter.Manager.Id == managerId;
+            else if (filterBillStatus.HasValue) return b => b.PaymentStatus == filterBillStatus && b.Renter.Manager.Id == managerId;
+            else return b => b.Renter.Manager.Id == managerId;
         }
         private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? filterResidentId, PaymentStatus? filterBillStatus)
         {
@@ -114,26 +123,66 @@ namespace Apartments_io.Areas.Manager.Controllers
         public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, PaymentStatus paymentStatus)
         {
             // get bill
-            Bill bill = await billsRepositories.GetAsync(billId, nameof(Bill.Renter));
+            Bill bill = await billsRepositories.GetAsync(billId, string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment)));
             if (bill == null) return BadRequest();
+
+            // get renter
+            User renter = bill.Renter;
 
             // update bill
             bill.PaymentStatus = paymentStatus;
             unitOfWork.Update(bill);
 
             // create notification
-            Notification notification = new Notification()
-            {
-                Resident = bill.Renter,
-                EmergencyLevel = EmergencyLevel.Warning,
-                Description = "Your bill has new status " + bill.PaymentStatus
-            };
+            Notification notification = CreateNotification(paymentStatus, bill.Renter);
             await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(notification);
+
+            // if overdue..
+            if (paymentStatus == PaymentStatus.Overdue)
+            {
+                // delete all unpaid bills for this apartment
+                billsRepositories.Delete(b => b.Apartment.Id == bill.Apartment.Id && b.Renter.Id == renter.Id && b.PaymentStatus == PaymentStatus.WaitingForPayment);
+
+                // delete apartment
+                renter.Apartments = null;
+                unitOfWork.Update(renter);
+
+                // save changes
+                await unitOfWork.SaveAsync();
+
+                // send redirect
+                return Ok(new { IsRedirect = true, Location = Url.Action(action: nameof(Index)) }); 
+            }
 
             // save
             await unitOfWork.SaveAsync();
 
             return Ok();
+        }
+        private Notification CreateNotification(PaymentStatus paymentStatus, User resident)
+        {
+            switch (paymentStatus)
+            {
+                case PaymentStatus.Paid: return new Notification()
+                {
+                    Resident = resident,
+                    EmergencyLevel = EmergencyLevel.Success,
+                    Description = "You have paid the bill properly"
+                };
+                case PaymentStatus.Overdue: return new Notification()
+                {
+                    Resident = resident,
+                    EmergencyLevel = EmergencyLevel.Danger,
+                    Description = "You have forgotten to pay. You lose an apartment"
+                };
+
+                default: return new Notification()
+                {
+                    Resident = resident,
+                    EmergencyLevel = EmergencyLevel.Warning,
+                    Description = "Your bill has new status " + paymentStatus
+                };
+            }
         }
     }
 }

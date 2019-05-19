@@ -48,7 +48,7 @@
 
         <p>Resident name</p>
         <select id="filter-residents" class="form-control" name="filterResidentId">
-            <option disabled selected value="-1"> -- select user -- </option>
+            <option disabled selected hidden value="-1">Select user here</option>
             @foreach (User renter in Model.Renters)
             {
                 <option value="@renter.Id">@renter.ToString()</option>
@@ -62,7 +62,7 @@
                 <option value="@(Convert.ToInt32(status))">@status.GetText()</option>
             }
         </select>
-        <input type="button" value="Reset" id="reset-filter-btn"/>
+        <a type="button" asp-action="Index">Reset</a>
         <input type="submit" value="Фільтр" />
     </div>
 </form>
@@ -94,19 +94,8 @@
                     @bill.Apartment.Name
                 </td>
                 <td>
-                    <select class="bill-status form-control">
-                        @foreach (DataAccess.Enums.PaymentStatus status in Enum.GetValues(typeof(DataAccess.Enums.PaymentStatus)))
-                        {
-                            @if (status == bill.PaymentStatus)
-                            {
-                                <option value="@(Convert.ToInt32(status))" selected>@status.GetText()</option>
-                            }
-                            else
-                            {
-                                <option value="@(Convert.ToInt32(status))">@status.GetText()</option>
-                            }
-                        }
-                    </select>
+                    <payment-status-update-select class="bill-status form-control" selected-status="@bill.PaymentStatus"></payment-status-update-select>
+                    
                 </td>
                 <td>
                     <button class="btn-update">Update</button>
@@ -186,22 +175,37 @@
             const row = this;
 
             $(row).find(".btn-update").click(function () {
-                $.post("/Manager/Bills/UpdateBill/",
-                    {
-                        billId: $(row).data("id"),
-                        paymentStatus: $(row).find('.bill-status option:selected').val()
 
-                    })
-                    .done(function () { alert("updated") })
-                    .fail(function () { alert("fail") });
+                // get select value
+                const select_payment_status_value = $(row).find('.bill-status option:selected').val();
+
+                // confirm updating
+                var do_update_bill = true;
+                if (select_payment_status_value == "2")// overdue
+                {
+                    do_update_bill = confirm("In this case, the renter will lose an apartment. Are you sure?");
+                }
+
+                // send update request to the server
+                if (do_update_bill) {
+
+                    $.post("/Manager/Bills/UpdateBill/",
+                        {
+                            billId: $(row).data("id"),
+                            paymentStatus: select_payment_status_value
+
+                        },
+                        function (data) {
+                            
+                            if (data.isRedirect) window.location.href = data.location;
+                        })
+                        
+                        .done(function () { alert("updated") })
+                        .fail(function () { alert("fail") });
+                }
             });
         });
-
-
-        // FILTER
-        $("#reset-filter-btn").click(function () {
-            location.href = "/Manager/Bills/Index"
-        });
+        
     </script>
 
 }

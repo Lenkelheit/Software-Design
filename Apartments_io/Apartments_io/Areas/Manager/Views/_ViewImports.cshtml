@@ -2,9 +2,11 @@
 @using Apartments_io.Models
 @using Apartments_io.Areas.Manager.Models
 
+@using DataAccess.Enums
 @using DataAccess.Entities
 
 @using Pagination
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper "*, Pagination"
+@addTagHelper *, Pagination
+@addTagHelper Apartments_io.Areas.Manager.TagHelpers.PaymentStatusUpdateSelectTagHelper, Apartments_io

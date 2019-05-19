@@ -284,7 +284,7 @@ namespace DataAccess.Repositories
                 query = query.Include(includeProperty);
             }
 
-            return query.FirstAsync(e => e.Id == id);
+            return query.FirstOrDefaultAsync(e => e.Id == id);
         }
         /// <summary>
         /// Inserts data in data base
