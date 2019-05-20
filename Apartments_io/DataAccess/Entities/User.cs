@@ -28,6 +28,10 @@ namespace DataAccess.Entities
         /// </summary>
         public Enums.Role Role { get; set; }
         /// <summary>
+        /// Manager's id
+        /// </summary>
+        public int? ManagerId { get; set; }
+        /// <summary>
         /// Resident's manager
         /// </summary>
         public virtual User Manager { get; set; }
