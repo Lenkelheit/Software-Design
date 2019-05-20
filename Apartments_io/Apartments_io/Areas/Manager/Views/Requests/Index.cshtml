@@ -3,7 +3,7 @@
 <h2>Request</h2>
 
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 Resident Name
@@ -23,10 +23,10 @@
             <th>
                 Rent End Date
             </th>
-            <th>
+            <th class="w-100px text-center">
                 Accept
             </th>
-            <th>
+            <th class="w-100px text-center">
                 Dismiss
             </th>
         </tr>
@@ -54,10 +54,10 @@
                     @request.Apartment.RentEndDate?.ToShortDateString()
                 </td>
                 <td>
-                    <button class="btn-accept" data-request-id="@request.Id">Accept</button>
+                    <button data-request-id="@request.Id" class="btn btn-success btn-accept">Accept</button>
                 </td>
                 <td>
-                    <button class="btn-dismiss" data-request-id="@request.Id">Dismiss</button>
+                    <button data-request-id="@request.Id" class="btn btn-danger btn-dismiss">Dismiss</button>
                 </td>
 
             </tr>

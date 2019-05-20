@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Apartments_io.Attributes;
 using Apartments_io.Areas.Resident.ViewModels.Notifications;
 
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Apartments_io.Areas.Resident.Controllers
@@ -38,7 +39,9 @@ namespace Apartments_io.Areas.Resident.Controllers
             
             ListViewModel listViewModel = new ListViewModel()
             {
-                Notifications = notificationRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: n => n.Resident.Id == loggedUserId),
+                Notifications = notificationRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE,
+                                                            filter: n => n.Resident.Id == loggedUserId,
+                                                            orderBy: q => q.OrderByDescending(n => n.Id)),
 
                 PaginationModel = Pagination.Pagination.GetBuilder
                                                 .SetRecordsAmountPerPage(ITEM_PER_PAGE_SIZE)

@@ -6,49 +6,46 @@
 
 <h2>Create</h2>
 
-<h4>Apartment</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <img src="~/uploads/files/apartment/noimage.png" width="150" height="100" id="preview-image" />
+<div class="row mb-2">
+    <form asp-action="Create" enctype="multipart/form-data" class="w-100">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <label for="main-photo" class="control-label"></label>
-                <input type="file" name="uploadFile" id="apartment-photo-input" accept="image/*" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" required />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" required></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RentEndDate" class="control-label"></label>
-                <input asp-for="RentEndDate" type="date" class="form-control" required/>
-                <span asp-validation-for="RentEndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" type="number" class="form-control" required/>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
+        <div class="form-group">
+            <img src="~/uploads/files/apartment/noimage.png" width="200" height="150" id="preview-image" />
+
+            <label for="main-photo" class="control-label"></label>
+            <input type="file" name="uploadFile" id="apartment-photo-input" accept="image/*" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control" required></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RentEndDate" class="control-label"></label>
+            <input asp-for="RentEndDate" type="date" class="form-control" required />
+            <span asp-validation-for="RentEndDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" type="number" class="form-control" required />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-success w-100" />
+        </div>
+    </form>
+
+    <a asp-action="Index" class="btn btn-secondary w-100">Back to List</a>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 
 @section Scripts

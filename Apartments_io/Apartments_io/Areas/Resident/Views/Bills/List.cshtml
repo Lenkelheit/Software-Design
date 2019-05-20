@@ -1,32 +1,64 @@
 ﻿@model Apartments_io.Areas.Resident.ViewModels.Bills.ListViewModel
 
-<h2>List</h2>
 
-<h3>Present</h3>
+<div class="current">
+    <h2><u>Present</u></h2>
+    <br>
 
-@foreach (Bill bill in Model.PresentBills)
-{
-    <div class="present-bill">
-        <img src="@bill.Apartment.MainPhoto" width="150" height="100" />
-        <p>@bill.Apartment.Name</p>
-        <p>@bill.Apartment.RentEndDate</p>
-        <button data-id="@bill.Id">pay</button>
-    </div>
-}
-
-<h3>Past</h3>
-@foreach (Bill bill in Model.PastBills)
-{
-<div class="past-bill">
-    <img src="@bill.Apartment.MainPhoto" width="150" height="100" />
-    <p>@bill.Apartment.Name</p>
-    <p>@bill.Apartment.RentEndDate?.ToShortDateString()</p>
-    <button data-id="@bill.Id">pay</button>
-</div>
-}
-
-@section Scripts
+    @foreach (Bill bill in Model.PresentBills)
     {
+        <div class="apartment row present-bill">
+            <div class="apartment_img col-3">
+                <img src="@bill.Apartment.MainPhoto" alt="@bill.Apartment.Name" height="200" width="200" style="border-radius: 50%;">
+            </div>
+            <div class="apartment_info col-9">
+                <p>
+                    @bill.Apartment.Name
+                </p>
+                <p>
+                    @bill.Apartment.RentEndDate
+                </p>
+                <div class="pay_btn col-offset-md-3">
+                    <button data-id="@bill.Id" class="btn btn-info">pay</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+    <br><br><br>
+
+
+<div class="past">
+    <h2><u>Past</u></h2>
+    <br>
+
+    @foreach (Bill bill in Model.PastBills)
+    {
+        <div class="apartment row past-bill">
+            <div class="apartment_img col-3">
+                <img src="@bill.Apartment.MainPhoto" alt="@bill.Apartment.Name" height="200" width="200" style="border-radius: 50%;">
+            </div>
+            <div class="apartment_info col-9">
+                <p>
+                    @bill.Apartment.Name
+                </p>
+                <p>
+                    @bill.Apartment.RentEndDate?.ToShortDateString()
+                </p>
+                <div class="pay_btn col-offset-md-3">
+                    <button data-id="@bill.Id"  class="btn btn-info">pay</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+    @section Scripts
+        {
         <script>
 
             $(".present-bill, .past-bill").each(function () {
@@ -46,4 +78,4 @@
             });
         </script>
 
-}
+    }

@@ -93,7 +93,7 @@ $("#users-list table tr").each(function ()
         })
         .fail(function ()
         {
-                ohSnap('Something went wrong', { color: 'red' });
+            ohSnap('Something went wrong', { color: 'red' });
         });
     });
 

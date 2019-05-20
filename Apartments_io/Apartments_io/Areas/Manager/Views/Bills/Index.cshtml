@@ -3,14 +3,14 @@
 <h2>Bills</h2>
 
 <!--Create-->
-<h2>Create</h2>
-<table>
-    <thead>
+<h3>Create</h3>
+<table class="table">
+    <thead class="thead-dark">
         <tr>
-            <th>Resident</th>
-            <th>Apartment</th>
-            <th>Apartment Img</th>
-            <th>Create</th>
+            <th class="text-center">Resident</th>
+            <th class="text-center">Apartment</th>
+            <th class="text-center">Apartment Img</th>
+            <th class="text-center w-100px">Create</th>
         </tr>
     </thead>
     <tbody>
@@ -25,29 +25,28 @@
             </td>
 
             <td>
-                <select id="apartments"></select>
+                <select id="apartments" class="form-control"></select>
             </td>
 
-            <td>
+            <td class="text-center">
                 <img src="~/uploads/files/apartment/noimage.png" id="apartment-image" width="150" height="100" />
             </td>
             <td>
-                <button id="create-new-bill">Create</button>
+                <button id="create-new-bill" class="btn btn-success">Create</button>
             </td>
         </tr>
     </tbody>
 </table>
 
 <!--Filter-->
-<h2>Filter</h2>
-<p>Rows:</p>
-<p>@Model.TotalRecordsAmount</p>
+<h3>Filter</h3>
+<p class="mb-0">Rows: <span class="text-primary">@Model.TotalRecordsAmount</span></p>
 <form method="get" id="filter-form">
     <div class="form-inline">
         <input type="hidden" name="page" value="1" />
 
-        <p>Resident name</p>
-        <select id="filter-residents" class="form-control" name="filterResidentId">
+        <p class="mb-0 mr-2">Resident name</p>
+        <select id="filter-residents" class="form-control mr-2" name="filterResidentId">
             <option disabled selected hidden value="-1">Select user here</option>
             @foreach (User renter in Model.Renters)
             {
@@ -55,29 +54,29 @@
             }
         </select>
 
-        <p>Bill status</p>
-        <select id="filter-bills" class="form-control" name="filterBillStatus">
+        <p class="mb-0 mlr-2">Bill status</p>
+        <select id="filter-bills" class="form-control ml-2" name="filterBillStatus">
             @foreach (DataAccess.Enums.PaymentStatus status in Enum.GetValues(typeof(DataAccess.Enums.PaymentStatus)))
             {
                 <option value="@(Convert.ToInt32(status))">@status.GetText()</option>
             }
         </select>
-        <a type="button" asp-action="Index">Reset</a>
-        <input type="submit" value="Фільтр" />
+        <a asp-action="Index" class="btn btn-secondary m-2">Reset</a>
+        <input type="submit" value="Filtering" class="btn btn-secondary m-2"/>
     </div>
 </form>
 
 
 <!--List of item-->
 <h2>List</h2>
-<table id="bills-list">
-    <thead>
+<table id="bills-list" class="table">
+    <thead class="thead-dark">
         <tr>
             <th>Resident</th>
-            <th>Apartment img</th>
+            <th class="text-center">Apartment img</th>
             <th>Apartment</th>
             <th>Status</th>
-            <th>Update</th>
+            <th class="text-center w-100px">Update</th>
         </tr>
     </thead>
     <tbody>
@@ -87,7 +86,7 @@
                 <td>
                     @bill.Renter.ToString()
                 </td>
-                <td>
+                <td class="text-center">
                     <img src="@bill.Apartment.MainPhoto" width="150" height="100" />
                 </td>
                 <td>
@@ -98,7 +97,7 @@
                     
                 </td>
                 <td>
-                    <button class="btn-update">Update</button>
+                    <button class="btn btn-success btn-update">Update</button>
                 </td>
             </tr>
         }

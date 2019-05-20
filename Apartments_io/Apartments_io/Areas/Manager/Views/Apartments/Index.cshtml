@@ -1,28 +1,26 @@
 ﻿@model Apartments_io.Areas.Manager.ViewModels.Apartments.IndexViewModel
 
-<h2>Index</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="text-right">
+    <a class="btn btn-info" asp-action="Create">Create New</a>
+</div>
 
 
 <!--FILTERING-->
-<form method="get" id="filter-form">
+<form method="get" id="filter-form" class="m-2">
     <div class="form-inline">
         <input type="hidden" name="page" value="1" />
 
-        <p>Will be free in less than</p>
-        <input type="number" name="daysToFree" value="@ViewData["daysToFree"]" />
-        <p>days</p>
+        <p class="mb-0 mt-0 mr-2">Will be free in less than</p>
+        <input type="number" name="daysToFree" value="@ViewData["daysToFree"]" class="form-control" />
+        <p class="mb-0 mt-0 ml-2">days</pclass="mb-0>
 
-        <input type="submit" value="Фільтр" />
+        <input type="submit" value="Filtering" class="btn btn-secondary"/>
     </div>
 </form>
 
 
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <th>
                 Photo
@@ -39,7 +37,15 @@
             <th>
                 Price
             </th>
-            <th></th>
+            <th class="w-100px text-center">
+                Edit
+            </th>
+            <th class="w-100px text-center">
+                Open
+            </th>
+            <th class="w-100px text-center">
+                Delete
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -59,12 +65,16 @@
                     @apartment.RentEndDate?.ToShortDateString()
                 </td>
                 <td>
-                    @apartment.Price
+                    @apartment.Price $
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@apartment.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@apartment.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@apartment.Id">Delete</a>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@apartment.Id" class="btn btn-success">Edit</a> 
+                </td>
+                <td class="text-center">
+                    <a asp-action="Details" asp-route-id="@apartment.Id" class="btn btn-warning text-white">Details</a> 
+                </td>
+                <td class="text-center">
+                    <a asp-action="Delete" asp-route-id="@apartment.Id" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

@@ -5,16 +5,15 @@
 }
 
 <h2>Details</h2>
+<hr />
 
 <div>
-    <h4>Apartment</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.MainPhoto)
         </dt>
         <dd>
-            <img src="@Model.MainPhoto" width="150" height="100" />
+            <img src="@Model.MainPhoto" width="200" height="150" />
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -44,6 +43,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success w-100 mb-2">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary w-100">Back to List</a>
 </div>

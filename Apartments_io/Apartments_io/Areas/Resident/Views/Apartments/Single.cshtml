@@ -1,51 +1,61 @@
 ﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.SingleViewModel
 
-<h2>Single</h2>
+<div class="row mt-5">
+    <div class="col-6">
+        <img src="@Model.Apartment.MainPhoto" alt="@Model.Apartment.Name" height="450" width="450">
+    </div>
 
-<img src="@Model.Apartment.MainPhoto" width="150" height="100" />
+    <div class="col-6">
+        <h3>@Model.Apartment.Name</h3>
+        <p>
+            @Model.Apartment.Description
+        </p>
+        <br>
+        <h4>Price</h4>
+        <p>@Model.Apartment.Price $</p>
 
-<h3>Name</h3>
-<p>@Model.Apartment.Name</p>
-
-<h3>Description</h3>
-<p>@Model.Apartment.Description</p>
-
-<h3>Price</h3>
-<p>@Model.Apartment.Price</p>
-
-@if (Model.IsRenter)
-{
-    <h2>Rent expire date</h2>
-    <p>@Model.Apartment.RentEndDate?.ToShortDateString()</p>
-}
-else
-{
-    if (Model.HasUserRequest)
-    {
-        <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn-request">Cancel</button>
-    }
-    else
-    {
-        <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn-request">Send request</button>
-    }
-
-    @section Scripts
+        @if (Model.IsRenter)
+        {
+            <h2>Rent expire date</h2>
+            <p>@Model.Apartment.RentEndDate?.ToShortDateString()</p>
+        }
+        else
         {
 
-        <script>
-            $(".btn-request").click(function () {
+            <div class="text-right m-2">
+                @if (Model.HasUserRequest)
+                {
+                    <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn btn-warning btn-request float-right">Cancel</button>
+                }
+                else
+                {
+                    <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn btn-info btn-request float-right">Send request</button>
+                }
 
-                var btn = this;
+            </div>
 
-                var user_id = $(this).data("user-id");
-                var apartment_id = $(this).data("apartment-id");
+            @section Scripts
+                {
+
+                <script>
+                    $(".btn-request").click(function () {
+
+                        var btn = this;
+
+                        var user_id = $(this).data("user-id");
+                        var apartment_id = $(this).data("apartment-id");
 
 
 
-                if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
-                else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
-            });
+                        if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
+                        else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
+                    });
 
-        </script>
-    }
-}
+                </script>
+            }
+        }
+
+
+    </div>
+
+</div>
