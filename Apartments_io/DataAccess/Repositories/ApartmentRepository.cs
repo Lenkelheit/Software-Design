@@ -104,7 +104,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public ISet<int> HasRequests(int userId, IEnumerable<int> apartmentsIds)
+        public virtual ISet<int> HasRequests(int userId, IEnumerable<int> apartmentsIds)
         {
             ContextCheck();
 
@@ -131,7 +131,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public bool HasRequest(int userId, int apartmentId)
+        public virtual bool HasRequest(int userId, int apartmentId)
         {
             ContextCheck();
 
