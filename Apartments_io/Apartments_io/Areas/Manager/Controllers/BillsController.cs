@@ -141,7 +141,11 @@ namespace Apartments_io.Areas.Manager.Controllers
             if (paymentStatus == PaymentStatus.Overdue)
             {
                 // delete all unpaid bills for this apartment
-                billsRepositories.Delete(b => b.Apartment.Id == bill.Apartment.Id && b.Renter.Id == renter.Id && b.PaymentStatus == PaymentStatus.WaitingForPayment);
+                billsRepositories.Delete(b =>
+                    b.Apartment.Id == bill.Apartment.Id &&
+                    b.Renter.Id == renter.Id &&
+                    b.PaymentStatus == PaymentStatus.WaitingForPayment &&
+                    b.Id != bill.Id);
 
                 // delete apartment
                 renter.Apartments = null;
