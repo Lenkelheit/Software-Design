@@ -5,7 +5,7 @@
 {
     <div class="row notification-container @notification.EmergencyLevel.ToCssContainerClass()" data-id="@notification.Id">
         <h4 class="w-100 @notification.EmergencyLevel.ToCssHeaderClass()">@notification.EmergencyLevel</h4>
-        
+
         <p>
             @notification.Description
         </p>
@@ -17,16 +17,6 @@
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Notifications" action-name="List"></pagination-link>
 
 @section Scripts
-    {
-    <script>
-        $(".notification-container").click(function () {
-            var container = this;
-            $.post("/Resident/Notifications/ConfirmNotification",
-                {
-                    notificationId: $(container).data("id")
-                }).done(function () {
-                    $(container).addClass("closed");
-                });
-        });
-    </script>
+{
+    <script src="~/js/areas/resident/notifications/list.js"></script>
 }

@@ -20,7 +20,7 @@
                     <p class="mb-0 mr-2">To</p>
                     <input id="filter-max-price" type="number" name="maxPrice" class="form-control mr-2" value="@ViewData["maxPrice"]" />
 
-                    <input type="submit" value="Filtering" class="btn btn-secondary"/>
+                    <input type="submit" value="Filtering" class="btn btn-secondary" />
                 </div>
             </form>
         </div>
@@ -51,11 +51,11 @@
         <div class="text-right col-sm-2 mt-auto">
             @if (Model.IsUsersRequest.Contains(apartment.Id))
             {
-                <button data-id="@apartment.Id" class="btn btn-warning btn-request float-right">Cancel</button>
+                <button data-apartment-id="@apartment.Id" data-resident-id="@Model.UserId" class="btn btn-warning btn-request float-right">Cancel</button>
             }
             else
             {
-                <button data-id="@apartment.Id" class="btn btn-info btn-request float-right">Send request</button>
+                <button data-apartment-id="@apartment.Id" data-resident-id="@Model.UserId" class="btn btn-info btn-request float-right">Send request</button>
             }
         </div>
     </div>
@@ -65,37 +65,8 @@
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="List"></pagination-link>
 
 @section Scripts
-    {
-
-    <script>
-        // FILTER SUBMIT
-        $("#filter-form").submit(function (event)
-        {
-            var minPrice = $("#filter-min-price").val();
-            var maxPrice = $("#filter-max-price").val();
-
-            if (minPrice > maxPrice)
-            {
-                event.preventDefault();
-                alert("Min price can not be higher than max price");
-            }
-        });
-
-        // SEND REQUEST
-        $(".btn-request").click(function () {
-
-            var btn = this;
-
-            // TODO: maybe rework this
-            var user_id = @Model.UserId;
-            var apartment_id = $(this).data("id");
-
-
-
-            if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).removeClass("btn-info").addClass("btn-warning").text("Cancel"); });
-            else delete_request(user_id, apartment_id).done(function () { $(btn).removeClass("btn-warning").addClass("btn-info").text("Send request"); });
-        });
-
-    </script>
+{
+    <script src="~/js/areas/resident/apartments/list.js"></script>
+    <script src="~/js/areas/resident/create_delete_request.js"></script>
 }
 

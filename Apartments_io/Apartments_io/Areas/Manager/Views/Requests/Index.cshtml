@@ -70,28 +70,6 @@
 
 @section Scripts
 {
-    <script>
-        $(".btn-accept").click(function () {
-            $.post("/manager/Requests/AcceptRequest",
-                {
-                    requestId: $(this).data("request-id")
-                }).done(function () {
-                    location.reload();
-                }).fail(function () {
-                    alert("fail");
-                });
-        });
-
-        $(".btn-dismiss").click(function () {
-            $.post("/manager/Requests/DismissRequest",
-                {
-                    requestId: $(this).data("request-id")
-                }).done(function () {
-                    location.reload();
-                }).fail(function () {
-                    alert("fail");
-                });
-        });
-    </script>
+    <script src="~/js/areas/manager/requests/accept_dismiss_request.js"></script>
 }
 

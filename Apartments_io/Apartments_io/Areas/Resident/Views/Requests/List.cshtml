@@ -10,8 +10,8 @@
                 <img src="@request.Apartment.MainPhoto" alt="@request.Apartment.Name" height="120" width="120" align="left" style="margin: 0px 20px 20px 0px;">
                 <h4>@request.Apartment.Name</h4>
                 <p>@request.Apartment.Price $</p>
-                    
-                <button class="btn btn-warning btn-request" data-user-id="@Model.UserId" data-apartment-id="@request.Apartment.Id">Cancel</button>
+
+                <button class="btn btn-warning btn-request" data-resident-id="@Model.UserId" data-apartment-id="@request.Apartment.Id">Cancel</button>
             </div>
         }
 
@@ -23,18 +23,6 @@
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="List"></pagination-link>
 
 @section Scripts
-    {
-    <script>
-        $(".btn-request").click(function () {
-
-            const btn = this;
-
-            var user_id = $(this).data("user-id");
-            var apartment_id = $(this).data("apartment-id");
-
-
-            if ($(btn).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
-            else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
-        });
-    </script>
+{
+    <script src="~/js/areas/resident/create_delete_request.js"></script>
 }

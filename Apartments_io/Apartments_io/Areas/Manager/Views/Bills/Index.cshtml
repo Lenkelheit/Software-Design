@@ -62,7 +62,7 @@
             }
         </select>
         <a asp-action="Index" class="btn btn-secondary m-2">Reset</a>
-        <input type="submit" value="Filtering" class="btn btn-secondary m-2"/>
+        <input type="submit" value="Filtering" class="btn btn-secondary m-2" />
     </div>
 </form>
 
@@ -94,10 +94,17 @@
                 </td>
                 <td>
                     <payment-status-update-select class="bill-status form-control" selected-status="@bill.PaymentStatus"></payment-status-update-select>
-                    
+
                 </td>
                 <td>
-                    <button class="btn btn-success btn-update">Update</button>
+                    @if (bill.PaymentStatus == PaymentStatus.WaitingForPayment)
+                    {
+                        <button class="btn btn-success btn-update">Update</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-info" disabled>No action</button>
+                    }
                 </td>
             </tr>
         }
@@ -109,119 +116,6 @@
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Bills" action-name="Index"></pagination-link>
 
 @section Scripts
-    {
-    <script>
-        $(document).ready()
-        {
-            load_apartments("#apartments", $("#residents option:selected").val(), function () {
-                load_apartment_image("#apartment-image", $("#apartments option:selected").val());
-            });
-
-        }
-        $("#residents").change(function () {
-            load_apartments("#apartments", $("#residents option:selected").val(), function () {
-                load_apartment_image("#apartment-image", $("#apartments option:selected").val());
-            });
-        });
-        $("#apartments").change(function () {
-            const apartment_id = $(this).children("option:selected").val();
-
-            load_apartment_image("#apartment-image", apartment_id);
-        });
-        function load_apartment_image(image_selector, apartment_id) {
-
-            if (typeof apartment_id === 'undefined') return;
-
-            $.post('/Manager/Apartments/GetApartmentImage/',
-                {
-                    apartmentId: apartment_id
-                }, function (data) {
-                    $(image_selector).attr('src', data)
-                });
-        }
-        function load_apartments(combobox_selector, user_id, callback) {
-            $.post('/Manager/Apartments/GetApartmentsList/',
-                {
-                    userId: user_id,
-                },
-                function (data) {
-
-                    const combobox = $(combobox_selector);
-                    combobox.empty();
-                    for (var i = 0; i < data.length; ++i) {
-                        combobox.append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
-                    }
-
-                    // call callback function
-                    if (typeof callback === 'function') callback();
-                });
-        }
-
-        // CREATE
-        $("#create-new-bill").click(function () {
-
-            // get data
-            var resident_id = $("#residents option:selected").val();
-            var apartment_id = $("#apartments").children("option:selected").val();
-
-            // validate data
-            if (!resident_id)
-            {
-                alert("Select resident");
-                return;
-            }
-            if (!apartment_id)
-            {
-                alert("Select apartment");
-                return;
-            }
-
-            // send data
-            $.post("/Manager/Bills/CreateNewBill/",
-                {
-                    residentId: resident_id,
-                    apartmentId: apartment_id,
-                })
-                .done(function () { location.reload(); })
-                .fail(function () { alert("fail"); });
-        });
-
-        // UPDATE
-        $("#bills-list tr").each(function () {
-            const row = this;
-
-            $(row).find(".btn-update").click(function () {
-
-                // get select value
-                const select_payment_status_value = $(row).find('.bill-status option:selected').val();
-
-                // confirm updating
-                var do_update_bill = true;
-                if (select_payment_status_value == "2")// overdue
-                {
-                    do_update_bill = confirm("In this case, the renter will lose an apartment. Are you sure?");
-                }
-
-                // send update request to the server
-                if (do_update_bill) {
-
-                    $.post("/Manager/Bills/UpdateBill/",
-                        {
-                            billId: $(row).data("id"),
-                            paymentStatus: select_payment_status_value
-
-                        },
-                        function (data) {
-                            
-                            if (data.isRedirect) window.location.href = data.location;
-                        })
-                        
-                        .done(function () { alert("updated") })
-                        .fail(function () { alert("fail") });
-                }
-            });
-        });
-        
-    </script>
-
+{
+    <script src="~/js/areas/manager/bills/bills.js"></script>
 }

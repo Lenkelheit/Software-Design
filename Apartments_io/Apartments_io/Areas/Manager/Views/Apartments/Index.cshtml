@@ -14,6 +14,7 @@
         <input type="number" name="daysToFree" value="@ViewData["daysToFree"]" class="form-control" />
         <p class="mb-0 mt-0 ml-2 mr-2">days</p>
 
+        <a asp-action="Index"class="btn btn-secondary mr-2 ml-2">Reset</a>
         <input type="submit" value="Filtering" class="btn btn-secondary"/>
     </div>
 </form>
@@ -22,7 +23,7 @@
 <table class="table table-hover">
     <thead class="thead-dark">
         <tr>
-            <th>
+            <th class="text-center">
                 Photo
             </th>
             <th>
@@ -52,7 +53,7 @@
         @foreach (Apartment apartment in Model.Apartments)
         {
             <tr>
-                <td>
+                <td class="text-center">
                     <img src="@apartment.MainPhoto" width="150" height="100" />
                 </td>
                 <td>

@@ -10,6 +10,7 @@
     <!--LIBS-->
     <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="~/ico/libs/fontawesome/fontawesome.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/js/libs/ohsnap/index.css" type="text/css" rel="stylesheet" />
 
     <!--CUSTOM-->
     <link href="~/css/Manager/index.css" rel="stylesheet" />
@@ -68,15 +69,16 @@
     <script src="~/js/libs/jquery-3.3.1.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap-file-input.min.js"></script>
+    <script src="~/js/libs/bootbox/bootbox.min.js"></script>
+    <script src="~/js/libs/ohsnap/ohsnap.min.js"></script>
 
     <!--CUSTOM-->
     <script src="~/js/areas/index.js"></script>
     <script>
-        $(document).ready(function ()
-        {
+        $(document).ready(function () {
             // init file input
             bsCustomFileInput.init()
-            
+
         })
     </script>
     @RenderSection("Scripts", required: false)

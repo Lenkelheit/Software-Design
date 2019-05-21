@@ -21,37 +21,21 @@
         }
         else
         {
-
             <div class="text-right m-2">
                 @if (Model.HasUserRequest)
                 {
-                    <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn btn-warning btn-request float-right">Cancel</button>
+                    <button data-apartment-id="@Model.Apartment.Id" data-resident-id="@Model.UserId" class="btn btn-warning btn-request float-right">Cancel</button>
                 }
                 else
                 {
-                    <button data-apartment-id="@Model.Apartment.Id" data-user-id="@Model.UserId" class="btn btn-info btn-request float-right">Send request</button>
+                    <button data-apartment-id="@Model.Apartment.Id" data-resident-id="@Model.UserId" class="btn btn-info btn-request float-right">Send request</button>
                 }
 
             </div>
 
             @section Scripts
-                {
-
-                <script>
-                    $(".btn-request").click(function () {
-
-                        var btn = this;
-
-                        var user_id = $(this).data("user-id");
-                        var apartment_id = $(this).data("apartment-id");
-
-
-
-                        if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
-                        else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
-                    });
-
-                </script>
+            {
+                <script src="~/js/areas/resident/create_delete_request.js"></script>
             }
         }
 

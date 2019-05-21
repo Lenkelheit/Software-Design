@@ -17,7 +17,7 @@
             <div class="text-center mb-2">
                 <img src="~/uploads/files/apartment/noimage.png" width="200" height="150" id="preview-image" />
             </div>
-            
+
             <div class="custom-file">
                 <input type="file" name="uploadFile" id="apartment-photo-input" accept="image/*" class="custom-file-input">
                 <label class="custom-file-label" for="customFile">Choose file</label>
@@ -54,25 +54,6 @@
 
 
 @section Scripts
-    {
-    <script>
-        const default_img_src = $("#preview-image").attr('src');
-
-        document.getElementById("apartment-photo-input").onchange = function () {
-
-            validate_file_extension
-                ({
-                    file_input_id: 'apartment-photo-input',
-                    allowed_extension: ["jpg" , "jpeg" , "png", "gif"]
-                });
-            
-            preview_image
-                ({
-                    file_input_id: 'apartment-photo-input',
-                    image_preview_id: 'preview-image',
-                    default_img_src: default_img_src
-                });
-        };
-
-    </script>
+{
+    <script src="~/js/areas/manager/apartments/image_preview.js"></script>
 }
