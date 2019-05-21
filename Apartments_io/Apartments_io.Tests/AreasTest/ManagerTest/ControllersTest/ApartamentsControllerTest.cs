@@ -9,9 +9,12 @@ using DataAccess.Interfaces;
 using Apartments_io.Areas.Manager.Controllers;
 using Apartments_io.Areas.Manager.ViewModels.Apartments;
 
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
@@ -21,7 +24,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
         [Fact]
         public void Index_ViewResult()
         {
-            // Arange
+            // Arrange
             int? daysToFree = 5;
             IEnumerable<Apartment> apartments = new List<Apartment>()
             {
@@ -30,7 +33,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
             mockApartamentRepository
-                .Setup(ar => ar.Get(It.IsAny<System.Linq.Expressions.Expression<System.Func<Apartment, bool>>>(), null, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(ar => ar.Get(It.IsAny<Expression<Func<Apartment, bool>>>(), null, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(apartments);
           
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -47,52 +50,46 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             // Assert
             Assert.NotNull(result);
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
-            Assert.NotNull(viewResult.Model);// indexViewModel
+            Assert.NotNull(viewResult.Model);
             IndexViewModel indexViewModel = Assert.IsType<IndexViewModel>(viewResult.Model);
             Assert.Equal(apartments, indexViewModel.Apartments);
             Assert.Null(viewResult.ViewName);
         }
+
         [Fact]
         public async void DetailsIdIsNull_NotFoundResult()
         {
-            // Arange
-            int? id = 7;
-            Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
-           
-            Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
-            mockApartamentRepository
-                .Setup(ar => ar.GetAsync(id.Value, It.IsAny<string>()))
-                .Returns(Task.FromResult(apartment));
-
+            // Arrange
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
-            mockIUnitOfWork
-                .Setup(uw => uw.GetRepository<Apartment, ApartmentRepository>())
-                .Returns(mockApartamentRepository.Object);
+
             Mock<IFileService> mockIFileService = new Mock<IFileService>();
 
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
 
             // Act
-            IActionResult result = await controller.Details(id.Value) as NotFoundResult;
+            IActionResult result = await controller.Details(null);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
         }
+
         [Fact]
         public async void DetailsApartamentIsNull_NotFoundResult()
         {
-            // Arange            
+            // Arrange
             Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
             mockApartamentRepository
-                .Setup(ar => ar.GetAsync(apartment.Id, It.IsAny<string>()))
+                .Setup(ar => ar.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(null as Apartment));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
                 .Setup(uw => uw.GetRepository<Apartment, ApartmentRepository>())
                 .Returns(mockApartamentRepository.Object);
+
             Mock<IFileService> mockIFileService = new Mock<IFileService>();
 
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
@@ -104,21 +101,23 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.NotNull(result);
             Assert.IsType<NotFoundResult>(result);
         }
+
         [Fact]
-        public async void DetailsCreate_ViewResult()
+        public async void Details_ViewResult()
         {
-            // Arange            
+            // Arrange
             Apartment apartment = new Apartment { Id = 7 };
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
             mockApartamentRepository
-                .Setup(ar => ar.GetAsync(apartment.Id, It.IsAny<string>()))
+                .Setup(ar => ar.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(apartment));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
                 .Setup(uw => uw.GetRepository<Apartment, ApartmentRepository>())
                 .Returns(mockApartamentRepository.Object);
+
             Mock<IFileService> mockIFileService = new Mock<IFileService>();
 
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
@@ -132,72 +131,103 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.NotNull(viewResult.Model);
             Apartment ap = Assert.IsType<Apartment>(viewResult.Model);
             Assert.Equal(apartment, ap);
+            Assert.Null(viewResult.ViewName);
         }
+
         [Fact]
         public void Create_ViewResult()
         {
-            // Arange
+            // Arrange
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             Mock<IFileService> mockIFileService = new Mock<IFileService>();
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
 
             // Act
-            ViewResult result = controller.Create() as ViewResult;
+            IActionResult result = controller.Create();
 
             // Assert
             Assert.NotNull(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
         }
-        //[Fact]
-        //public async void CreateIndex_RedirectToAction()
-        //{
-        //    // Arange
-        //    Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
-        //    Mock<IFileService> mockIFileService = new Mock<IFileService>();
-        //    ControllerBase controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
 
-        //    // Act
-        //    IActionResult result = await (controller as ApartmentsController)?.Index(It.IsAny<int>());
-
-        //    // Assert
-        //    Assert.NotNull(result);
-        //    RedirectToActionResult redirect = Assert.IsType<RedirectToActionResult>(result);
-        //    Assert.Equal(nameof(Areas.Manager.Controllers.ApartmentsController.Index), redirect.ActionName);
-        //}
         [Fact]
-        public async void EditsIdIsNull_NotFoundResult()
+        public async void CreateModelIsNotValid_ViewResult()
         {
-            // Arange
-            int? id = 7;
-            Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
+            // Arrange
+            Apartment apartment = new Apartment { Id = 1 };
+
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+            controller.ModelState.AddModelError("RentEndDate", "Bad date!");
+
+            // Act
+            IActionResult result = await controller.Create(apartment, null);
+
+            // Assert
+            Assert.NotNull(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            Assert.NotNull(viewResult.Model);
+            Apartment apartmentModel = Assert.IsType<Apartment>(viewResult.Model);
+            Assert.Same(apartment, apartmentModel);
+            Assert.Null(viewResult.ViewName);
+        }
+
+        [Fact]
+        public async void Create_RedirectToAction()
+        {
+            // Arrange
+            Apartment apartment = new Apartment { Id = 1 };
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
-            mockApartamentRepository
-                .Setup(ar => ar.GetAsync(id.Value, It.IsAny<string>()))
-                .Returns(Task.FromResult(apartment));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
                 .Setup(uw => uw.GetRepository<Apartment, ApartmentRepository>())
                 .Returns(mockApartamentRepository.Object);
+
             Mock<IFileService> mockIFileService = new Mock<IFileService>();
 
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
 
             // Act
-            IActionResult result = await controller.Edit(id.Value) as NotFoundResult;
+            IActionResult result = await controller.Create(apartment, null);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(result);
+            RedirectToActionResult redirect = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(ApartmentsController.Index), redirect.ActionName);
+            Assert.Null(redirect.ControllerName);
         }
+
         [Fact]
-        public async void EditApartamentIsNull_NotFoundResult()
+        public async void EditIdIsNull_NotFoundResult()
         {
-            // Arange            
+            // Arrange
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+
+            // Act
+            IActionResult result = await controller.Edit(null);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void EditApartmentIsNull_NotFoundResult()
+        {
+            // Arrange
             Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
             mockApartamentRepository
-                .Setup(ar => ar.GetAsync(apartment.Id, It.IsAny<string>()))
+                .Setup(ar => ar.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(null as Apartment));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
@@ -215,16 +245,16 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.NotNull(result);
             Assert.IsType<NotFoundResult>(result);
         }
+
         [Fact]
-        public async void DeletesIdIsNull_NotFoundResult()
+        public async void Edit_ViewResult()
         {
-            // Arange
-            int? id = 7;
+            // Arrange
             Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
             mockApartamentRepository
-                .Setup(ar => ar.GetAsync(id.Value, It.IsAny<string>()))
+                .Setup(ar => ar.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(apartment));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
@@ -236,20 +266,115 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
 
             // Act
-            IActionResult result = await controller.Delete(id.Value) as NotFoundResult;
+            IActionResult result = await controller.Edit(apartment.Id);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            Assert.NotNull(viewResult.Model);
+            Apartment apartmentModel = Assert.IsType<Apartment>(viewResult.Model);
+            Assert.Same(apartment, apartmentModel);
+            Assert.Null(viewResult.ViewName);
         }
+
         [Fact]
-        public async void DeleteApartamentIsNull_NotFoundResult()
+        public async void EditIdsAreDifferent_NotFoundResult()
         {
-            // Arange            
+            // Arrange
+            int id = 1;
+            Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
+
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+
+            // Act
+            IActionResult result = await controller.Edit(id, apartment, null);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void EditModelIsNotValid_ViewResult()
+        {
+            // Arrange
+            Apartment apartment = new Apartment { Id = 1 };
+
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+            controller.ModelState.AddModelError("RentEndDate", "Bad date!");
+
+            // Act
+            IActionResult result = await controller.Edit(apartment.Id, apartment, null);
+
+            // Assert
+            Assert.NotNull(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            Assert.NotNull(viewResult.Model);
+            Apartment apartmentModel = Assert.IsType<Apartment>(viewResult.Model);
+            Assert.Same(apartment, apartmentModel);
+            Assert.Null(viewResult.ViewName);
+        }
+
+        [Fact]
+        public async void Edit_RedirectToAction()
+        {
+            // Arrange
+            Apartment apartment = new Apartment { Id = 1 };
+
+            Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
+
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+            mockIUnitOfWork
+                .Setup(uw => uw.GetRepository<Apartment, ApartmentRepository>())
+                .Returns(mockApartamentRepository.Object);
+
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+
+            // Act
+            IActionResult result = await controller.Edit(apartment.Id, apartment, null);
+
+            // Assert
+            Assert.NotNull(result);
+            RedirectToActionResult redirect = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(ApartmentsController.Index), redirect.ActionName);
+            Assert.Null(redirect.ControllerName);
+        }
+
+        [Fact]
+        public async void DeleteIdIsNull_NotFoundResult()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+
+            // Act
+            IActionResult result = await controller.Delete(null);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void DeleteApartmentIsNull_NotFoundResult()
+        {
+            // Arrange
             Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
 
             Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
             mockApartamentRepository
-                .Setup(ar => ar.GetAsync(apartment.Id, It.IsAny<string>()))
+                .Setup(ar => ar.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(null as Apartment));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
@@ -267,10 +392,42 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.NotNull(result);
             Assert.IsType<NotFoundResult>(result);
         }
+
+        [Fact]
+        public async void Delete_ViewResult()
+        {
+            // Arrange
+            Apartment apartment = new Apartment { Id = 7, Name = "NewApartament" };
+
+            Mock<ApartmentRepository> mockApartamentRepository = new Mock<ApartmentRepository>();
+            mockApartamentRepository
+                .Setup(ar => ar.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(apartment));
+
+            Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
+            mockIUnitOfWork
+                .Setup(uw => uw.GetRepository<Apartment, ApartmentRepository>())
+                .Returns(mockApartamentRepository.Object);
+            Mock<IFileService> mockIFileService = new Mock<IFileService>();
+
+            ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIFileService.Object);
+
+            // Act
+            IActionResult result = await controller.Delete(apartment.Id);
+
+            // Assert
+            Assert.NotNull(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            Assert.NotNull(viewResult.Model);
+            Apartment apartmentModel = Assert.IsType<Apartment>(viewResult.Model);
+            Assert.Same(apartment, apartmentModel);
+            Assert.Null(viewResult.ViewName);
+        }
+
         [Fact]
         public async void DeleteConfirmed_RedirectToActionResult()
         {
-            // Arange
+            // Arrange
             Apartment apartment = new Apartment
             {
                 Id = 1,
@@ -280,11 +437,12 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
 
             Mock<ApartmentRepository> mockApartmentRepository = new Mock<ApartmentRepository>();
             mockApartmentRepository
-                .Setup(i => i.GetAsync(apartment.Id, string.Empty))
+                .Setup(ap => ap.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(apartment));
+
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             mockUnitOfWork
-                .Setup(i => i.GetRepository<Apartment, ApartmentRepository>())
+                .Setup(u => u.GetRepository<Apartment, ApartmentRepository>())
                 .Returns(mockApartmentRepository.Object);
             Mock<IFileService> mockIIFileService = new Mock<IFileService>();
 
@@ -295,48 +453,63 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
 
             // Assert
             Assert.NotNull(result);
-            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            RedirectToActionResult redirect = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(ApartmentsController.Index), redirect.ActionName);
+            Assert.Null(redirect.ControllerName);
         }
+
         [Fact]
         public void GetApartmentsList_OkObjectResult()
         {
-            // Arange
-            User rentner = new User { Id = 5, FirstName = "Leo" };
-            Apartment apartment = new Apartment { Id = 5, Name = "Avalon", Renter = rentner, Price = 100 };
+            // Arrange
+            int userId = 1;
+            IEnumerable<Apartment> apartments = new List<Apartment>
+            {
+                new Apartment { Id = 5, Name = "Avalon" }
+            };
 
             Mock<ApartmentRepository> mockApartmentRepository = new Mock<ApartmentRepository>();
             mockApartmentRepository
-                .Setup(i => i.Get(rentner.Id, string.Empty))
-                .Returns(apartment);
+                .Setup(ap => ap.Get(It.IsAny<Expression<Func<Apartment, bool>>>(),
+                                    It.IsAny<Func<IQueryable<Apartment>, IOrderedQueryable<Apartment>>>(),
+                                    It.IsAny<string>(), It.IsAny<int>(),
+                                    It.IsAny<int>()))
+                .Returns(apartments);
+
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
-                .Setup(i => i.GetRepository<Apartment, ApartmentRepository>())
+                .Setup(u => u.GetRepository<Apartment, ApartmentRepository>())
                 .Returns(mockApartmentRepository.Object);
             Mock<IFileService> mockIIFileService = new Mock<IFileService>();
 
             ApartmentsController controller = new ApartmentsController(mockIUnitOfWork.Object, mockIIFileService.Object);
 
             // Act
-            IActionResult result = controller.GetApartmentsList(rentner.Id);
+            IActionResult result = controller.GetApartmentsList(userId);
 
             // Assert
             Assert.NotNull(result);
-            OkObjectResult ok = Assert.IsType<OkObjectResult>(result);
-
+            OkObjectResult okObjectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(okObjectResult.Value);
+            // TODO: Check why doesn't work
+            IEnumerable<Apartment> apartmentsModel = Assert.IsAssignableFrom<IEnumerable<Apartment>>(okObjectResult.Value);
+            Assert.Same(apartments, apartmentsModel);
         }
+
         [Fact]
         public void GetApartmentImage_OkObjectResult()
         {
-            // Arange
-            Apartment apartment = new Apartment { Id = 5, Name = "Avalon", Price = 100 };
+            // Arrange
+            Apartment apartment = new Apartment { Id = 5, Name = "Avalon", Price = 100, MainPhoto = "house.jpg" };
 
             Mock<ApartmentRepository> mockApartmentRepository = new Mock<ApartmentRepository>();
             mockApartmentRepository
-                .Setup(i => i.Get(apartment.Id, string.Empty))
-                .Returns(apartment);
+                .Setup(ar => ar.GetImageById(It.IsAny<int>()))
+                .Returns(apartment.MainPhoto);
+
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
-                .Setup(i => i.GetRepository<Apartment, ApartmentRepository>())
+                .Setup(u => u.GetRepository<Apartment, ApartmentRepository>())
                 .Returns(mockApartmentRepository.Object);
             Mock<IFileService> mockIIFileService = new Mock<IFileService>();
 
@@ -347,7 +520,10 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<OkObjectResult>(result);
+            OkObjectResult okObjectResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(okObjectResult.Value);
+            string mainPhotoModel = Assert.IsType<string>(okObjectResult.Value);
+            Assert.Same(apartment.MainPhoto, mainPhotoModel);
         }
     }
 }

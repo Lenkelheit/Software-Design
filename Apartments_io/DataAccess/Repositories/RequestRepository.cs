@@ -29,7 +29,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public Request GetByValues(int userId, int apartmentId)
+        public virtual Request GetByValues(int userId, int apartmentId)
         {
             ContextCheck();
 
