@@ -19,15 +19,15 @@
             {
                 <tr data-user-id="@residet.Id">
                     <td>
-                        <input value="@residet.FirstName" class="form-control" type="text" name="FirstName" />
+                        @residet.FirstName
                     </td>
                     <td>
-                        <input value="@residet.LastName" class="form-control" type="text" name="LastName" />
+                        @residet.LastName
                     </td>
                     <td>
                         <select class="form-control" id="UserManager" name="UserManager">
 
-                            <option value="" selected disabled hidden>Choose manager here</option>
+                            <option value="-1" selected disabled hidden>Choose manager here</option>
 
                             @foreach (User manager in Model.Managers)
                             {

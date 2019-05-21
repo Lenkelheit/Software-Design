@@ -66,6 +66,7 @@ namespace DataAccess.Repositories
             // [resident id, [payment status, amount]]
             IDictionary<int, Dictionary<Enums.PaymentStatus, int>> residentPaymentStatus = 
                 (from bill in dbContext.Set<Bill>()
+                where bill.Apartment != null && bill.Renter != null
                 group bill by bill.Renter.Id into billGroup
                 select new
                 {

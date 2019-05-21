@@ -12,7 +12,7 @@
         </div>
         <div>
             <form method="get" id="filter-form">
-                <div class="form-inline">
+                <div class="form-inline apartment-filter">
                     <input type="hidden" name="page" value="1" />
                     <p class="mb-0 mr-2">From</p>
                     <input id="filter-min-price" type="number" name="minPrice" class="form-control mr-2" value="@ViewData["minPrice"]" />
@@ -69,11 +69,13 @@
 
     <script>
         // FILTER SUBMIT
-        $("#filter-form").submit(function (event) {
+        $("#filter-form").submit(function (event)
+        {
             var minPrice = $("#filter-min-price").val();
             var maxPrice = $("#filter-max-price").val();
 
-            if (minPrice > maxPrice) {
+            if (minPrice > maxPrice)
+            {
                 event.preventDefault();
                 alert("Min price can not be higher than max price");
             }
@@ -90,8 +92,8 @@
 
 
 
-            if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).text("Cancel"); });
-            else delete_request(user_id, apartment_id).done(function () { $(btn).text("Send request"); });
+            if ($(this).text() == "Send request") create_request(user_id, apartment_id).done(function () { $(btn).removeClass("btn-info").addClass("btn-warning").text("Cancel"); });
+            else delete_request(user_id, apartment_id).done(function () { $(btn).removeClass("btn-warning").addClass("btn-info").text("Send request"); });
         });
 
     </script>

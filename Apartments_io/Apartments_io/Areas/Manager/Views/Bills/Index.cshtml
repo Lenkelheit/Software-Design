@@ -69,7 +69,7 @@
 
 <!--List of item-->
 <h2>List</h2>
-<table id="bills-list" class="table">
+<table id="bills-list" class="table table-hover">
     <thead class="thead-dark">
         <tr>
             <th>Resident</th>
@@ -160,10 +160,27 @@
         // CREATE
         $("#create-new-bill").click(function () {
 
+            // get data
+            var resident_id = $("#residents option:selected").val();
+            var apartment_id = $("#apartments").children("option:selected").val();
+
+            // validate data
+            if (!resident_id)
+            {
+                alert("Select resident");
+                return;
+            }
+            if (!apartment_id)
+            {
+                alert("Select apartment");
+                return;
+            }
+
+            // send data
             $.post("/Manager/Bills/CreateNewBill/",
                 {
-                    residentId: $("#residents option:selected").val(),
-                    apartmentId: $("#apartments").children("option:selected").val(),
+                    residentId: resident_id,
+                    apartmentId: apartment_id,
                 })
                 .done(function () { location.reload(); })
                 .fail(function () { alert("fail"); });
