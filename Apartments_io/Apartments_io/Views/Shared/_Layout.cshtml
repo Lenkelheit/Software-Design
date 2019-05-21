@@ -1,26 +1,32 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <title>@ViewData["Title"]</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Apartments_io</title>
 
+    <!--LINK-->
+    <!--LIBS-->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/js/libs/ohsnap/index.css" rel="stylesheet" type="text/css">
+    <link href="~/ico/libs/fontawesome/fontawesome.min.css" rel="stylesheet" type="text/css" />
+
+    <!--CUSTOM-->
+    <link href="~/css/Home/index.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <nav>
-    </nav>
+    <!--NOTIFICATION-->
+    <div id="ohsnap"></div>
 
+    <!--BODY-->
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2019 - Apartments_io</p>
-        </footer>
     </div>
 
     <!--SCRIPTS-->
     <!--LIBS-->
     <script src="~/js/libs/jquery-3.3.1.min.js"></script>
+    <script src="~/js/libs/ohsnap/ohsnap.min.js"></script>
     <!--CUStOM-->
     <script src="~/js/areas/index.js"></script>
     @RenderSection("Scripts", required: false)

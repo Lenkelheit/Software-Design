@@ -58,9 +58,19 @@ namespace Pagination
         /// </param>
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "div";
+            // if only one page..
+            if (PaginationModel.TotalPagesAmount <= 1)
+            {
+                // .. do not show pagination at all
+                output.SuppressOutput();
+            }
+            else
+            {
+                // .. build pagination
+                output.TagName = "div";
 
-            output.Content.SetHtmlContent(PaginationModel.Build(GetUrlInfo()));
+                output.Content.SetHtmlContent(PaginationModel.Build(GetUrlInfo()));
+            }
         }
         private DataTransferObject.UrlInfo GetUrlInfo()
         {

@@ -45,6 +45,10 @@ namespace Pagination
 
         // PROPERTIES
         /// <summary>
+        /// Gets total pages amount
+        /// </summary>
+        public int TotalPagesAmount => totalPageAmount;
+        /// <summary>
         /// Determines if there is previous page
         /// </summary>
         public bool HasPreviousPage => currentPage > 1;
