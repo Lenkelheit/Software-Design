@@ -42,7 +42,10 @@
                     @request.Resident.LastName
                 </td>
                 <td>
-                    @request.PercentagePayedProperly %
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: @request.PercentagePayedProperly%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">@request.PercentagePayedProperly %</div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: @(100 - request.PercentagePayedProperly)%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                 </td>
                 <td>
                     <img src="@request.Apartment.MainPhoto" width="150" height="100" />

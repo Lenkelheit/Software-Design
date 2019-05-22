@@ -30,7 +30,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public IEnumerable<Bill> GetPastBills(int userId, PaymentStatus paymentStatus = PaymentStatus.WaitingForPayment)
+        public virtual IEnumerable<Bill> GetPastBills(int userId, PaymentStatus paymentStatus = PaymentStatus.WaitingForPayment)
         {
             ContextCheck();
 
@@ -55,7 +55,7 @@ namespace DataAccess.Repositories
         /// Throws when context for this repository is not set<para/>
         /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
         /// </exception>
-        public IEnumerable<Bill> GetPresentBills(int userId, PaymentStatus paymentStatus = PaymentStatus.WaitingForPayment)
+        public virtual IEnumerable<Bill> GetPresentBills(int userId, PaymentStatus paymentStatus = PaymentStatus.WaitingForPayment)
         {
             ContextCheck();
 
