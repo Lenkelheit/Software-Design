@@ -88,7 +88,7 @@ namespace Apartments_io.Areas.Resident.Controllers
 
         public IActionResult MyRent(int page = 1)
         {
-            int ITEM_PER_PAGE_SIZE = 5;
+            int ITEM_PER_PAGE_SIZE = 6;
 
             int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
             

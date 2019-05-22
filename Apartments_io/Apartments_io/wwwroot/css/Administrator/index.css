@@ -1,18 +1,19 @@
-﻿body {
-    margin: 3px;
-    background-color: antiquewhite;
+﻿body
+{
+    font-family: "Bitstream Vera Serif Bold", serif;
+    margin: 0;
 }
 
-.container {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    max-width: 1500px;
+.navbar
+{
+    font-family: sans-serif;
+    margin-bottom: 0;
+    border-radius: 0;
 }
 
-.header {
-    color: firebrick;
+.header
+{
+    background-color: #f2f2f2;
     font-family: sans-serif;
     font-size: 200%;
     text-align: center;
@@ -20,17 +21,27 @@
     border-bottom: 3px solid black;
 }
 
-.content {
-    display: grid;
-    grid-gap: 5px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+.container
+{
+    font-family: sans-serif;
 }
 
-.footer {
-    color: firebrick;
+.content
+{
+    min-height: 800px;
+}
+
+table
+{
+    border: 1px solid #212529;
+}
+
+.footer
+{
+    background-color: #f2f2f2;
     font-family: sans-serif;
     font-size: 100%;
     text-align: center;
     border-top: 3px solid black;
+    padding: 25px;
 }

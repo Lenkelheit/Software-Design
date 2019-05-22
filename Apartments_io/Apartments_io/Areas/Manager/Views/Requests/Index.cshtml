@@ -2,8 +2,8 @@
 
 <h2>Request</h2>
 
-<table class="table">
-    <thead>
+<table class="table table-hover">
+    <thead class="thead-dark">
         <tr>
             <th>
                 Resident Name
@@ -23,10 +23,10 @@
             <th>
                 Rent End Date
             </th>
-            <th>
+            <th class="w-100px text-center">
                 Accept
             </th>
-            <th>
+            <th class="w-100px text-center">
                 Dismiss
             </th>
         </tr>
@@ -57,10 +57,10 @@
                     @request.Apartment.RentEndDate?.ToShortDateString()
                 </td>
                 <td>
-                    <button class="btn-accept" data-request-id="@request.Id">Accept</button>
+                    <button data-request-id="@request.Id" class="btn btn-success btn-accept">Accept</button>
                 </td>
                 <td>
-                    <button class="btn-dismiss" data-request-id="@request.Id">Dismiss</button>
+                    <button data-request-id="@request.Id" class="btn btn-danger btn-dismiss">Dismiss</button>
                 </td>
 
             </tr>
@@ -73,28 +73,6 @@
 
 @section Scripts
 {
-    <script>
-        $(".btn-accept").click(function () {
-            $.post("/manager/Requests/AcceptRequest",
-                {
-                    requestId: $(this).data("request-id")
-                }).done(function () {
-                    location.reload();
-                }).fail(function () {
-                    alert("fail");
-                });
-        });
-
-        $(".btn-dismiss").click(function () {
-            $.post("/manager/Requests/DismissRequest",
-                {
-                    requestId: $(this).data("request-id")
-                }).done(function () {
-                    location.reload();
-                }).fail(function () {
-                    alert("fail");
-                });
-        });
-    </script>
+    <script src="~/js/areas/manager/requests/accept_dismiss_request.js"></script>
 }
 

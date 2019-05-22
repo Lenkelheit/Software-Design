@@ -6,71 +6,55 @@
 
 <h2>Edit</h2>
 
-<h4>Apartment</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <img src="@Model.MainPhoto" width="150" height="100" />
-                <img src="~/uploads/files/apartment/noimage.png" width="150" height="100" id="preview-image" />
+<div class="row mb-2">
+    <form asp-action="Edit" enctype="multipart/form-data" class="w-100">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
 
-                <label for="main-photo" class="control-label"></label>
-                <input type="file" name="uploadFile" id="apartment-photo-input" accept="image/*"/>
+            <label for="main-photo" class="control-label">Image</label>
+            <div class="text-center mb-2">
+                <img src="@Model.MainPhoto" width="200" height="150" class="mr-2 mb-2" />
+                <img src="~/uploads/files/apartment/noimage.png" width="200" height="150" id="preview-image" class="mb-2" />
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" required/>
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+
+            <div class="custom-file">
+                <input type="file" name="uploadFile" id="apartment-photo-input" accept="image/*" class="custom-file-input">
+                <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" required></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RentEndDate" class="control-label"></label>
-                <input asp-for="RentEndDate" type="date" class="form-control" required/>
-                <span asp-validation-for="RentEndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input value="@Model.Price.ToString( "0.##" )" name="@nameof(Model.Price)" step="any" type="number" class="form-control" required/>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control" required></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RentEndDate" class="control-label"></label>
+            <input asp-for="RentEndDate" type="date" class="form-control" required />
+            <span asp-validation-for="RentEndDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input value="@Model.Price.ToString( "0.##" )" name="@nameof(Model.Price)" step="any" type="number" class="form-control" required />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-success w-100" />
+        </div>
+    </form>
+
+    <a asp-action="Index" class="btn btn-secondary w-100">Back to List</a>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts
-    {
-    <script>
-        const default_img_src = $("#preview-image").attr('src');
-
-        document.getElementById("apartment-photo-input").onchange = function () {
-
-            validate_file_extension
-                ({
-                    file_input_id: 'apartment-photo-input',
-                    allowed_extension: ["jpg", "jpeg", "png", "gif"]
-                });
-
-            preview_image
-                ({
-                    file_input_id: 'apartment-photo-input',
-                    image_preview_id: 'preview-image',
-                    default_img_src: default_img_src
-                });
-        };
-
-    </script>
+{
+    <script src="~/js/areas/manager/apartments/image_preview.js"></script>
 }

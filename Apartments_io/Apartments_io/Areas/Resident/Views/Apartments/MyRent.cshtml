@@ -1,16 +1,29 @@
 ﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.ListViewModel
 
+<div class="mb-5">
+    @for (int i = 0; i < 2; ++i)
+    {
+        <div class="card-deck mb-2">
 
-@foreach (Apartment apartment in Model.Apartments)
-{
-    <div>
-        <img src="@apartment.MainPhoto" width="150" height="100" />
-        <p>@apartment.Name</p>
-        <p>@apartment.RentEndDate?.ToShortDateString()</p>
+            @foreach (Apartment apartment in Model.Apartments.Skip(i * 3).Take(3))
+            {
+                <div class="card">
 
-        <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id" >Open</a>
-    </div>
-}
+                    <img src="@apartment.MainPhoto" alt="@apartment.Name" class="card-img-top" />
+                    <div class="card-body">
+                        <h5 class="card-title">@apartment.Name</h5>
+                        <p class="card-text">@apartment.RentEndDate?.ToShortDateString()</p>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-info w-100" asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">Open</a>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+</div>
+
 
 <!--PAGINATION-->
 <pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="MyRent"></pagination-link>

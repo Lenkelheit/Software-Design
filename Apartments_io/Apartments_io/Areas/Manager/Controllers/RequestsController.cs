@@ -68,6 +68,14 @@ namespace Apartments_io.Areas.Manager.Controllers
             // delete request, and all requests for this apartment
             requestRepository.Delete(r => r.Apartment.Id == request.Apartment.Id);
 
+            // create notification for user
+            await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(new Notification()
+            {
+                Resident = request.Resident,
+                EmergencyLevel = DataAccess.Enums.EmergencyLevel.Success,
+                Description = "Your request has been accepted"
+            });
+
             // save changes
             await unitOfWork.SaveAsync();
 
@@ -78,7 +86,22 @@ namespace Apartments_io.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> DismissRequest(int requestId)
         {
-            requestRepository.Delete(requestId);
+            // get request
+            Request request = await requestRepository.GetAsync(requestId, nameof(DataAccess.Entities.Request.Resident));
+            if (request == null) return BadRequest("No request found");
+            
+            // delete request
+            requestRepository.Delete(request);
+
+            // create notification for user
+            await unitOfWork.GetRepository<Notification, GenericRepository<Notification>>().InsertAsync(new Notification()
+            {
+                Resident = requestRepository.Get(requestId).Resident,
+                EmergencyLevel = DataAccess.Enums.EmergencyLevel.Warning,
+                Description = "Your request has been dismissed"
+            });
+
+            // save changes
             await unitOfWork.SaveAsync();
 
             return Ok();

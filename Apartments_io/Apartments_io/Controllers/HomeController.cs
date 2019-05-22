@@ -26,6 +26,7 @@ namespace Apartments_io.Controllers
         // CONSTRUCTORS
         public HomeController(IUnitOfWork unitOfWork)
         {
+            this.ViewData["Title"] = "Apartments.io";
             this.unitOfWork = unitOfWork;
             this.userRepository = unitOfWork.GetRepository<User, UserRepository>();
         }
