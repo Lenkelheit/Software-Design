@@ -96,7 +96,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.Equal("No request found", badRequestObjectResult.Value.ToString());
         }
 
-        [Fact(Skip = "Need check")]
+        [Fact]
         public async void AcceptRequest_OkResult()
         {
             // Arrange
@@ -106,18 +106,28 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
                 new Request { Id = 5, Apartment = new Apartment { Renter = new User { Id = 1 } } }
             };
 
-            Mock<RequestRepository> mockRequestRepository = new Mock<RequestRepository>();
+            Mock<RequestRepository> mockRequestRepository = new Mock<RequestRepository>(MockBehavior.Loose);
             mockRequestRepository
                 .Setup(rr => rr.Get(It.IsAny<Expression<Func<Request, bool>>>(),
-                                    It.IsAny<Func<IQueryable<Request>, IOrderedQueryable<Request>>>(),
-                                    It.IsAny<string>(), It.IsAny<int>(),
-                                    It.IsAny<int>()))
+                                    null,
+                                    It.IsAny<string>(),
+                                    null, null))
                 .Returns(requests);
+            mockRequestRepository
+                .Setup(rr => rr.Delete(It.IsAny<Expression<Func<Request, bool>>>()));
+
+            Mock<GenericRepository<Notification>> mockNotificationRepository = new Mock<GenericRepository<Notification>>();
+            mockNotificationRepository
+                .Setup(n => n.InsertAsync(It.IsAny<Notification>()))
+                .Returns(System.Threading.Tasks.Task.FromResult(null as Notification));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
                 .Setup(u => u.GetRepository<Request, RequestRepository>())
                 .Returns(mockRequestRepository.Object);
+            mockIUnitOfWork
+                .Setup(u => u.GetRepository<Notification, GenericRepository<Notification>>())
+                .Returns(mockNotificationRepository.Object);
 
             RequestsController controller = new RequestsController(mockIUnitOfWork.Object);
 
@@ -126,7 +136,6 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
 
             //Asesert
             Assert.NotNull(result);
-            // TODO: Check why doesn't work
             Assert.IsType<OkResult>(result);
         }
 
@@ -137,11 +146,25 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Request request = new Request { Id = 5 };
 
             Mock<RequestRepository> mockRequestRepository = new Mock<RequestRepository>();
+            mockRequestRepository
+                .Setup(rr => rr.GetAsync(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(System.Threading.Tasks.Task.FromResult(request));
+            mockRequestRepository
+                .Setup(rr => rr.Get(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(request);
+
+            Mock<GenericRepository<Notification>> mockNotificationRepository = new Mock<GenericRepository<Notification>>();
+            mockNotificationRepository
+                .Setup(n => n.InsertAsync(It.IsAny<Notification>()))
+                .Returns(System.Threading.Tasks.Task.FromResult(null as Notification));
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
             mockIUnitOfWork
                 .Setup(u => u.GetRepository<Request, RequestRepository>())
                 .Returns(mockRequestRepository.Object);
+            mockIUnitOfWork
+                .Setup(u => u.GetRepository<Notification, GenericRepository<Notification>>())
+                .Returns(mockNotificationRepository.Object);
 
             RequestsController controller = new RequestsController(mockIUnitOfWork.Object);
 

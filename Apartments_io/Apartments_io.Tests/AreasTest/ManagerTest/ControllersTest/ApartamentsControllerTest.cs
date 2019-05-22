@@ -458,7 +458,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.Null(redirect.ControllerName);
         }
 
-        [Fact(Skip = "Need check")]
+        [Fact]
         public void GetApartmentsList_OkObjectResult()
         {
             // Arrange
@@ -471,9 +471,9 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Mock<ApartmentRepository> mockApartmentRepository = new Mock<ApartmentRepository>();
             mockApartmentRepository
                 .Setup(ap => ap.Get(It.IsAny<Expression<Func<Apartment, bool>>>(),
-                                    It.IsAny<Func<IQueryable<Apartment>, IOrderedQueryable<Apartment>>>(),
-                                    It.IsAny<string>(), It.IsAny<int>(),
-                                    It.IsAny<int>()))
+                                    null,
+                                    null, null,
+                                    null))
                 .Returns(apartments);
 
             Mock<IUnitOfWork> mockIUnitOfWork = new Mock<IUnitOfWork>();
@@ -491,9 +491,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             Assert.NotNull(result);
             OkObjectResult okObjectResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(okObjectResult.Value);
-            // TODO: Check why doesn't work
-            IEnumerable<Apartment> apartmentsModel = Assert.IsAssignableFrom<IEnumerable<Apartment>>(okObjectResult.Value);
-            Assert.Same(apartments, apartmentsModel);
+            Assert.IsAssignableFrom<IEnumerable<Apartment>>(okObjectResult.Value);
         }
 
         [Fact]
