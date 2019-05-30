@@ -101,7 +101,7 @@
                 <td class="text-center">
                     @if (bill.PaymentStatus == PaymentStatus.WaitingForPayment)
                     {
-                        <input type="date" class="form-control bill-date" value="@bill.EndDate.ToString("yyyy-MM-dd")"/>
+                        <input type="date" class="form-control bill-date" value="@bill.EndDate.ToString("yyyy-MM-dd")" required/>
                     }
                     else
                     {

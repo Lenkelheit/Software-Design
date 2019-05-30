@@ -20,6 +20,7 @@ namespace Apartments_io.Areas.Manager.Controllers
     {
         // CONST
         readonly int ITEM_PER_PAGE_SIZE = 10;
+        readonly int APARTMENT_RENT_PERIOD_IN_YEAR = 1;
 
         // FIELDS
         IUnitOfWork unitOfWork;
@@ -64,6 +65,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
             // accept request
             request.Apartment.Renter = request.Resident;
+            request.Apartment.RentEndDate = System.DateTime.Now.AddYears(APARTMENT_RENT_PERIOD_IN_YEAR);
 
             // delete request, and all requests for this apartment
             requestRepository.Delete(r => r.Apartment.Id == request.Apartment.Id);
