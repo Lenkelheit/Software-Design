@@ -45,7 +45,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             ApartmentsController controller = new ApartmentsController(mockUnitOfWork.Object, mockIFileService.Object);
 
             // Act
-            IActionResult result = controller.Index(daysToFree);
+            IActionResult result = controller.Index(daysToFree, isFree: null);
 
             // Assert
             Assert.NotNull(result);

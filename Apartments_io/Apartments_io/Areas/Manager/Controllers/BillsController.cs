@@ -89,7 +89,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         // ajax
         [HttpPost]
-        public async System.Threading.Tasks.Task<IActionResult> CreateNewBill(int residentId, int apartmentId)
+        public async System.Threading.Tasks.Task<IActionResult> CreateNewBill(int residentId, int apartmentId, System.DateTime billDate)
         {
             // get renter
             User renter = await unitOfWork.GetRepository<User, UserRepository>().GetAsync(residentId);
@@ -99,7 +99,8 @@ namespace Apartments_io.Areas.Manager.Controllers
             {
                 Apartment = await unitOfWork.GetRepository<Apartment, ApartmentRepository>().GetAsync(apartmentId),
                 Renter = renter,
-                PaymentStatus = PaymentStatus.WaitingForPayment
+                PaymentStatus = PaymentStatus.WaitingForPayment,
+                EndDate = billDate
             };
 
             // create notifications

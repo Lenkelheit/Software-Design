@@ -36,7 +36,7 @@ namespace DataAccess.Repositories
 
             return dbSet
                 .Include(nameof(Bill.Apartment))
-                .Where(b => b.Renter.Id == userId && b.PaymentStatus == paymentStatus && b.Apartment.RentEndDate < System.DateTime.Now);
+                .Where(b => b.Renter.Id == userId && b.PaymentStatus == paymentStatus && b.EndDate < System.DateTime.Now);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace DataAccess.Repositories
 
             return dbSet
                 .Include(nameof(Bill.Apartment))
-                .Where(b => b.Renter.Id == userId && b.PaymentStatus == paymentStatus && b.Apartment.RentEndDate >= System.DateTime.Now);
+                .Where(b => b.Renter.Id == userId && b.PaymentStatus == paymentStatus && b.EndDate >= System.DateTime.Now);
         }
     }
 }

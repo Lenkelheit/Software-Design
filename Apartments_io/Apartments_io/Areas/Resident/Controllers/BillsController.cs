@@ -63,7 +63,7 @@ namespace Apartments_io.Areas.Resident.Controllers
         [NonAction]
         private bool IsPaidInTime(Bill bill)
         {
-            return bill.Apartment.RentEndDate >= System.DateTime.Now;
+            return bill.EndDate >= System.DateTime.Now;
         }
     }
 }

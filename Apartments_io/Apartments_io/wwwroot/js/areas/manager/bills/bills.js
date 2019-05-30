@@ -84,6 +84,8 @@ $("#create-new-bill").click(function ()
     // get data
     var resident_id = $("#residents option:selected").val();
     var apartment_id = $("#apartments").children("option:selected").val();
+    var bill_date = $("#bill-date").val();
+    
 
     // validate data
     if (!resident_id)
@@ -96,12 +98,24 @@ $("#create-new-bill").click(function ()
         ohSnap("Select apartment", { color: 'red' });
         return;
     }
+    if (!bill_date)
+    {
+        ohSnap("Wrong date format", { color: 'red' })
+        return;
+    }
+    if (new Date(bill_date) < new Date(Date.now()))
+    {
+        ohSnap("You can not create bill earlier than today", { color: 'red' })
+        return;
+    }
+    
 
     // send data
     $.post("/Manager/Bills/CreateNewBill/",
         {
             residentId: resident_id,
             apartmentId: apartment_id,
+            billDate: bill_date
         })
         .done(function () { location.reload(); })
         .fail(function () { ohSnap("Fail to create new bill", { color: 'red' }); });
@@ -136,6 +150,19 @@ $("#bills-list tr").each(function ()
         // get select value
         const bill_id = $(row).data("id");
         const select_payment_status_value = $(row).find('.bill-status option:selected').val();
+        const bill_date = $(row).find(".bill-date").val();
+
+        // validate date
+        if (!bill_date)
+        {
+            ohSnap("Wrong date format", { color: 'red' })
+            return;
+        }
+        if (new Date(bill_date) < new Date(Date.now()))
+        {
+            ohSnap("You can not create bill earlier than today", { color: 'red' })
+            return;
+        }
 
         // confirm updating for overdue
         if (select_payment_status_value == "2")

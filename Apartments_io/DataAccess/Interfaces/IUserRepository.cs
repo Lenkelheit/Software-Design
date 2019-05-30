@@ -58,5 +58,15 @@
         /// True if user is last in his role, otherwise — falses
         /// </returns>
         bool IsLastIn(Enums.Role role);
+        /// <summary>
+        /// Gets bill statistic for users of current manager
+        /// </summary>
+        /// <param name="managerId">
+        /// Manager's id
+        /// </param>
+        /// <returns>
+        /// Collection of users bills statistic
+        /// </returns>
+        System.Collections.Generic.IEnumerable<Wrappers.UserStatisticWrapper> GetUserStatistics(int managerId);
     }
 }

@@ -10,6 +10,10 @@
         /// </summary>
         public Enums.PaymentStatus PaymentStatus { get; set; }
         /// <summary>
+        /// Gets or sets date to paid bill properly
+        /// </summary>
+        public System.DateTime EndDate { get; set; }
+        /// <summary>
         /// A resident, that paid for apartment
         /// </summary>
         public virtual User Renter { get; set; }

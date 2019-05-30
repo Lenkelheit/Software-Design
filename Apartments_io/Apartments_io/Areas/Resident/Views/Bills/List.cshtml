@@ -12,11 +12,11 @@
                 <img src="@bill.Apartment.MainPhoto" alt="@bill.Apartment.Name" height="200" width="200" style="border-radius: 50%;">
             </div>
             <div class="apartment_info col-9">
-                <p>
+                <h4>
                     @bill.Apartment.Name
-                </p>
+                </h4>
                 <p>
-                    @bill.Apartment.RentEndDate
+                    @bill.EndDate.ToShortDateString()
                 </p>
                 <div class="pay_btn col-offset-md-3">
                     <button data-id="@bill.Id" class="btn btn-info">pay</button>
@@ -42,11 +42,11 @@
                 <img src="@bill.Apartment.MainPhoto" alt="@bill.Apartment.Name" height="200" width="200" style="border-radius: 50%;">
             </div>
             <div class="apartment_info col-9">
-                <p>
+                <h4>
                     @bill.Apartment.Name
-                </p>
+                </h4>
                 <p>
-                    @bill.Apartment.RentEndDate?.ToShortDateString()
+                    @bill.EndDate.ToShortDateString()
                 </p>
                 <div class="pay_btn col-offset-md-3">
                     <button data-id="@bill.Id" class="btn btn-info">pay</button>
