@@ -124,12 +124,13 @@ $("#create-new-bill").click(function ()
 // UPDATE
 
 // update bill
-function update_bill(bill_id, select_payment_status_value)
+function update_bill(bill_id, select_payment_status_value, bill_date)
 {
     $.post("/Manager/Bills/UpdateBill/",
         {
             billId: bill_id,
-            paymentStatus: select_payment_status_value
+            paymentStatus: select_payment_status_value,
+            billDate: bill_date
         },
         function (data)
         {
@@ -187,14 +188,14 @@ $("#bills-list tr").each(function ()
                     callback: function (result)
                     {
                         // send update request to the server
-                        if (result) update_bill(bill_id, select_payment_status_value);
+                        if (result) update_bill(bill_id, select_payment_status_value, bill_date);
                     }
                 });
         }
         else // just send
         {
             // send update request to the server
-            update_bill(bill_id, select_payment_status_value);
+            update_bill(bill_id, select_payment_status_value, bill_date);
         }
         
     });

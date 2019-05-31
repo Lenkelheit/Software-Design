@@ -37,6 +37,11 @@
         @if (Model.Renter != null)
         {
             <div class="form-group">
+                <label class="control-label">Renter</label>
+                <input type="text" class="form-control" value="@Model.Renter?.ToString()" readonly />
+            </div>
+
+            <div class="form-group">
                 <label class="control-label">Rent end date</label>
                 <input asp-for="RentEndDate" type="date" class="form-control" required />
                 <span asp-validation-for="RentEndDate" class="text-danger"></span>
