@@ -161,7 +161,7 @@ $("#bills-list tr").each(function ()
         }
         if (new Date(bill_date) < new Date(Date.now()))
         {
-            ohSnap("You can not create bill earlier than today", { color: 'red' })
+            ohSnap("You can not set bill's end date earlier than today", { color: 'red' })
             return;
         }
 

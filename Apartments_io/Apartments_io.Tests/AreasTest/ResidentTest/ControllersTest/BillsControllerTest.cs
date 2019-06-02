@@ -28,11 +28,13 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             int userId = 1;
             IEnumerable<Bill> presentBills = new List<Bill>
             {
-                new Bill { Id = 1 }, new Bill { Id = 2 }
+                new Bill { Id = 1 },
+                new Bill { Id = 2 }
             };
             IEnumerable<Bill> pastBills = new List<Bill>
             {
-                new Bill { Id = 3 }, new Bill { Id = 4 }
+                new Bill { Id = 3 },
+                new Bill { Id = 4 }
             };
 
             Mock<BillRepository> mockBillRepository = new Mock<BillRepository>();

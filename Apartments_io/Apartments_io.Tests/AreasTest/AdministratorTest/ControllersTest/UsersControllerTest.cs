@@ -25,7 +25,8 @@ namespace Apartments_io.Tests.AreasTest.AdministratorTest.ControllersTest
             int page = 1, itemPerPageSize = 10;
             IEnumerable<User> users = new List<User>
             {
-                new User { FirstName = "John", Role = DataAccess.Enums.Role.Manager }, new User { FirstName = "Alan", Role = DataAccess.Enums.Role.Resident }
+                new User { FirstName = "John", Role = DataAccess.Enums.Role.Manager },
+                new User { FirstName = "Alan", Role = DataAccess.Enums.Role.Resident }
             };
 
             Mock<UserRepository> mockUserRepository = new Mock<UserRepository>();
@@ -60,11 +61,13 @@ namespace Apartments_io.Tests.AreasTest.AdministratorTest.ControllersTest
             // Arrange
             IEnumerable<User> residents = new List<User>
             {
-                new User { FirstName = "Alan", Role = DataAccess.Enums.Role.Resident }, new User { FirstName = "Eduard", Role = DataAccess.Enums.Role.Resident }
+                new User { FirstName = "Alan", Role = DataAccess.Enums.Role.Resident },
+                new User { FirstName = "Eduard", Role = DataAccess.Enums.Role.Resident }
             };
             IEnumerable<User> managers = new List<User>
             {
-                new User { FirstName = "John", Role = DataAccess.Enums.Role.Manager }, new User { FirstName = "Ann", Role = DataAccess.Enums.Role.Manager }
+                new User { FirstName = "John", Role = DataAccess.Enums.Role.Manager },
+                new User { FirstName = "Ann", Role = DataAccess.Enums.Role.Manager }
             };
 
             Mock<UserRepository> mockUserRepository = new Mock<UserRepository>();

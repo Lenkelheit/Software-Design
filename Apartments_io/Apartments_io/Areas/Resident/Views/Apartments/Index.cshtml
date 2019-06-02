@@ -17,6 +17,7 @@
                 Eleifend mi in nulla posuere sollicitudin. Eros in cursus turpis massa. Ac auctor augue mauris augue
                 neque gravida in.
             </p>
+
             <p>
                 Cursus turpis massa tincidunt dui ut ornare lectus sit. Ut tellus elementum sagittis vitae et.
                 Lectus sit amet est placerat in egestas erat imperdiet.
@@ -35,7 +36,6 @@
                 Vulputate enim nulla aliquet porttitor lacus luctus accumsan tortor posuere. Ut lectus arcu bibendum
                 at varius vel.
             </p>
-            <br>
         </div>
 
     </div>
@@ -48,11 +48,11 @@
     <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">
         <div class="row mt-2 mb-2">
 
-            <div class="col-md-5">
+            <div class="col-lg-3">
                 <img src="@apartment.MainPhoto" height="200" width="200">
             </div>
 
-            <div class="col-md-7">
+            <div class="col-md-9">
                 <h3>@apartment.Name</h3>
                 <p>
                     @apartment.Description
@@ -68,6 +68,7 @@
     <h2>Reviews</h2>
 
     <div class="row">
+
         <div class="col-md-6">
             <img src="~/images/resident/review/apartment_1.jpg" alt="A photo of an reviewed apartment" class="review-img img-thumbnail" align="left" />
             <p>
@@ -90,6 +91,7 @@
 
 
     <div class="row">
+
         <div class="col-md-6">
             <img src="~/images/resident/review/apartment_3.jpg" alt="A photo of an reviewed apartment" class="review-img img-thumbnail" align="left">
             <p>

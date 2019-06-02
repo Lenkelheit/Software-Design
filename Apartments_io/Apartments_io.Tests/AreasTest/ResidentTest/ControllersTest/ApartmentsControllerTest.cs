@@ -29,7 +29,8 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             // Arrange
             IEnumerable<Apartment> apartments = new List<Apartment>
             {
-                new Apartment { Id = 1 }, new Apartment { Id = 2 }
+                new Apartment { Id = 1 },
+                new Apartment { Id = 2 }
             };
 
             Mock<ApartmentRepository> mockApartmentRepository = new Mock<ApartmentRepository>();
@@ -63,7 +64,8 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             int userId = 1;
             IEnumerable<Apartment> apartments = new List<Apartment>
             {
-                new Apartment { Id = 1 }, new Apartment { Id = 2 }
+                new Apartment { Id = 1 },
+                new Apartment { Id = 2 }
             };
 
             ISet<int> apartmentsIds = apartments.Select(a => a.Id).ToHashSet();
@@ -117,7 +119,8 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             int userId = 1;
             IEnumerable<Apartment> apartments = new List<Apartment>
             {
-                new Apartment { Id = 1 }, new Apartment { Id = 2 }
+                new Apartment { Id = 1 },
+                new Apartment { Id = 2 }
             };
 
             Mock<ApartmentRepository> mockApartmentRepository = new Mock<ApartmentRepository>();

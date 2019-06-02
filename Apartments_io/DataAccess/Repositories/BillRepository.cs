@@ -36,6 +36,7 @@ namespace DataAccess.Repositories
 
             return dbSet
                 .Include(nameof(Bill.Apartment))
+                .OrderBy(b => b.EndDate)
                 .Where(b => b.Renter.Id == userId && b.PaymentStatus == paymentStatus && b.EndDate < System.DateTime.Now);
         }
 
@@ -61,6 +62,7 @@ namespace DataAccess.Repositories
 
             return dbSet
                 .Include(nameof(Bill.Apartment))
+                .OrderBy(b => b.EndDate)
                 .Where(b => b.Renter.Id == userId && b.PaymentStatus == paymentStatus && b.EndDate >= System.DateTime.Now);
         }
     }
