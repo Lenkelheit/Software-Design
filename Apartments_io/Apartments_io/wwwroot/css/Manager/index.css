@@ -59,3 +59,54 @@ textarea
     padding: 25px;
 }
 
+/*apartment list*/
+.free-apartment-text
+{
+    font-weight: bold;
+    color: forestgreen;
+}
+
+/*bills select*/
+.paid
+{
+    background-color: #55efc4 !important;
+    color: black;
+}
+.paid-with-delay
+{
+    background-color: #ffeaa7 !important;
+    color: black;
+}
+.overdue
+{
+    background-color: #ff7675 !important;
+    color: black;
+}
+
+/*statistic*/
+.square
+{
+    background:red;
+    width: 25px;
+    height: 25px;
+}
+.bg-waiting-for-payment
+{
+    background-color: #bdc3c7 !important;
+    color: black;
+}
+.bg-paid
+{    
+    background-color: #27ae60 !important;
+    color: #f2f2f2;
+}
+.bg-paid-with-delay
+{
+    background-color: #f39c12 !important;
+    color: #f2f2f2;
+}
+.bg-overdue
+{
+    background-color: #e74c3c !important;
+    color: #f2f2f2;
+}

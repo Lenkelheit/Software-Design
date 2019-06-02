@@ -38,30 +38,31 @@ namespace Apartments_io.Areas.Manager.Controllers
         // ACTIONS
         // GET: Manager/Apartments
         #region Index
-        public IActionResult Index(int? daysToFree, int page = 1)
+        public IActionResult Index(int? daysToFree, bool? isFree, int page = 1)
         {
             ViewData["Title"] = "Apartments";
             
             // count apartment
-            int totalAmount = apartmentsRepository.Count(BuildFilter(daysToFree));
+            int totalAmount = apartmentsRepository.Count(BuildFilter(daysToFree, isFree));
             
             // save previous filter inputs value
             ViewData[nameof(daysToFree)] = daysToFree ?? 90;
 
             IndexViewModel indexViewModel = new IndexViewModel
             {
-                Apartments = apartmentsRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: BuildFilter(daysToFree), includeProperties: nameof(Apartment.Renter)),
-                PaginationModel = BuildPagination(ITEM_PER_PAGE_SIZE, page, totalAmount,  daysToFree),
+                Apartments = apartmentsRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: BuildFilter(daysToFree, isFree), includeProperties: nameof(Apartment.Renter)),
+                PaginationModel = BuildPagination(ITEM_PER_PAGE_SIZE, page, totalAmount,  daysToFree, isFree),
             };
             return View(indexViewModel);
         }
 
-        private System.Linq.Expressions.Expression<System.Func<Apartment, bool>> BuildFilter(int? daysToFree)
+        private System.Linq.Expressions.Expression<System.Func<Apartment, bool>> BuildFilter(int? daysToFree, bool? isFree)
         {
             if (daysToFree.HasValue) return a => a.Renter != null && (a.RentEndDate.Value - System.DateTime.Now).Days <= daysToFree;
+            if (isFree.HasValue) return a => a.Renter == null;
             else return a => true;
         }
-        private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? daysToFree)
+        private Pagination.Pagination BuildPagination(int maxItems, int currentPage, int totalAmount, int? daysToFree, bool? isFree)
         {
             Pagination.Pagination.PaginationFluentBuilder paginationBuilder =
                                             Pagination.Pagination.GetBuilder
@@ -71,6 +72,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
             // ! adds url fragments 
             if (daysToFree.HasValue) paginationBuilder.AddFragment(nameof(daysToFree), daysToFree.Value);
+            if (isFree.HasValue)     paginationBuilder.AddFragment(nameof(isFree), isFree.Value);
 
             return paginationBuilder.Build();
         }
@@ -81,7 +83,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         {
             if (id == null) return NotFound();
 
-            Apartment apartment = await apartmentsRepository.GetAsync(id.Value);
+            Apartment apartment = await apartmentsRepository.GetAsync(id.Value, includeProperties: nameof(Apartment.Renter));
             if (apartment == null) return NotFound();
 
             return View(apartment);
@@ -96,7 +98,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         // POST: Manager/Apartments/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,RentEndDate,Price,Id")] Apartment apartment, IFormFile uploadFile)
+        public async Task<IActionResult> Create([Bind("Name,Description,Price,Id")] Apartment apartment, IFormFile uploadFile)
         {
             if (ModelState.IsValid)
             {
@@ -118,7 +120,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         {
             if (id == null) return NotFound();
 
-            Apartment apartment = await apartmentsRepository.GetAsync(id.Value);
+            Apartment apartment = await apartmentsRepository.GetAsync(id.Value, includeProperties: nameof(Apartment.Renter));
             if (apartment == null) return NotFound();
 
             return View(apartment);

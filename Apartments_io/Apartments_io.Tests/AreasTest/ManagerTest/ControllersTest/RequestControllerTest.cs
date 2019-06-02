@@ -54,10 +54,10 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
                 HttpContext = new DefaultHttpContext() { User = mockManager.Object }
             };
 
-            // //Act
+            // Act
             IActionResult result = controller.Index();
 
-            //Assert
+            // Assert
             Assert.NotNull(result);
             ViewResult viewResult = Assert.IsType<ViewResult>(result);
             Assert.NotNull(viewResult.Model);
@@ -134,7 +134,7 @@ namespace Apartments_io.Tests.AreasTest.ManagerTest.ControllersTest
             // Act
             IActionResult result = await controller.AcceptRequest(requestId);
 
-            //Asesert
+            // Assert
             Assert.NotNull(result);
             Assert.IsType<OkResult>(result);
         }

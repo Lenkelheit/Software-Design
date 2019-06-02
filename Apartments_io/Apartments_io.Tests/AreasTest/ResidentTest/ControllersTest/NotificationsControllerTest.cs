@@ -30,7 +30,8 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             int userId = 1;
             IEnumerable<Notification> notifications = new List<Notification>
             {
-                new Notification { Id = 1 }, new Notification { Id = 2 }
+                new Notification { Id = 1 },
+                new Notification { Id = 2 }
             };
 
             Mock<GenericRepository<Notification>> mockNotificationRepository = new Mock<GenericRepository<Notification>>();

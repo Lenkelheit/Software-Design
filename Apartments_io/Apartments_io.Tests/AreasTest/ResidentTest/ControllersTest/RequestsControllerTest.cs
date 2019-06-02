@@ -30,7 +30,8 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             int userId = 1;
             IEnumerable<Request> requests = new List<Request>
             {
-                new Request { Id = 1 }, new Request { Id = 2 }
+                new Request { Id = 1 },
+                new Request { Id = 2 }
             };
 
             Mock<RequestRepository> mockRequestRepository = new Mock<RequestRepository>();

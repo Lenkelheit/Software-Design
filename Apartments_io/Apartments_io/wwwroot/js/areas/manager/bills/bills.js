@@ -84,6 +84,8 @@ $("#create-new-bill").click(function ()
     // get data
     var resident_id = $("#residents option:selected").val();
     var apartment_id = $("#apartments").children("option:selected").val();
+    var bill_date = $("#bill-date").val();
+    
 
     // validate data
     if (!resident_id)
@@ -96,12 +98,24 @@ $("#create-new-bill").click(function ()
         ohSnap("Select apartment", { color: 'red' });
         return;
     }
+    if (!bill_date)
+    {
+        ohSnap("Wrong date format", { color: 'red' })
+        return;
+    }
+    if (new Date(bill_date) < new Date(Date.now()))
+    {
+        ohSnap("You can not create bill earlier than today", { color: 'red' })
+        return;
+    }
+    
 
     // send data
     $.post("/Manager/Bills/CreateNewBill/",
         {
             residentId: resident_id,
             apartmentId: apartment_id,
+            billDate: bill_date
         })
         .done(function () { location.reload(); })
         .fail(function () { ohSnap("Fail to create new bill", { color: 'red' }); });
@@ -110,12 +124,13 @@ $("#create-new-bill").click(function ()
 // UPDATE
 
 // update bill
-function update_bill(bill_id, select_payment_status_value)
+function update_bill(bill_id, select_payment_status_value, bill_date)
 {
     $.post("/Manager/Bills/UpdateBill/",
         {
             billId: bill_id,
-            paymentStatus: select_payment_status_value
+            paymentStatus: select_payment_status_value,
+            billDate: bill_date
         },
         function (data)
         {
@@ -136,6 +151,19 @@ $("#bills-list tr").each(function ()
         // get select value
         const bill_id = $(row).data("id");
         const select_payment_status_value = $(row).find('.bill-status option:selected').val();
+        const bill_date = $(row).find(".bill-date").val();
+
+        // validate date
+        if (!bill_date)
+        {
+            ohSnap("Wrong date format", { color: 'red' })
+            return;
+        }
+        if (new Date(bill_date) < new Date(Date.now()))
+        {
+            ohSnap("You can not set bill's end date earlier than today", { color: 'red' })
+            return;
+        }
 
         // confirm updating for overdue
         if (select_payment_status_value == "2")
@@ -160,14 +188,14 @@ $("#bills-list tr").each(function ()
                     callback: function (result)
                     {
                         // send update request to the server
-                        if (result) update_bill(bill_id, select_payment_status_value);
+                        if (result) update_bill(bill_id, select_payment_status_value, bill_date);
                     }
                 });
         }
         else // just send
         {
             // send update request to the server
-            update_bill(bill_id, select_payment_status_value);
+            update_bill(bill_id, select_payment_status_value, bill_date);
         }
         
     });

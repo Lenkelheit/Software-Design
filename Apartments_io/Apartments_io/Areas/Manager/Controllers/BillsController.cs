@@ -89,7 +89,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         // ajax
         [HttpPost]
-        public async System.Threading.Tasks.Task<IActionResult> CreateNewBill(int residentId, int apartmentId)
+        public async System.Threading.Tasks.Task<IActionResult> CreateNewBill(int residentId, int apartmentId, System.DateTime billDate)
         {
             // get renter
             User renter = await unitOfWork.GetRepository<User, UserRepository>().GetAsync(residentId);
@@ -99,7 +99,8 @@ namespace Apartments_io.Areas.Manager.Controllers
             {
                 Apartment = await unitOfWork.GetRepository<Apartment, ApartmentRepository>().GetAsync(apartmentId),
                 Renter = renter,
-                PaymentStatus = PaymentStatus.WaitingForPayment
+                PaymentStatus = PaymentStatus.WaitingForPayment,
+                EndDate = billDate
             };
 
             // create notifications
@@ -120,7 +121,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
         // ajax
         [HttpPost]
-        public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, PaymentStatus paymentStatus)
+        public async System.Threading.Tasks.Task<IActionResult> UpdateBill(int billId, PaymentStatus paymentStatus, System.DateTime billDate)
         {
             // get bill
             Bill bill = await billsRepositories.GetAsync(billId, string.Join(',', nameof(Bill.Renter), nameof(Bill.Apartment)));
@@ -131,6 +132,7 @@ namespace Apartments_io.Areas.Manager.Controllers
 
             // update bill
             bill.PaymentStatus = paymentStatus;
+            bill.EndDate = billDate;
             unitOfWork.Update(bill);
 
             // create notification
@@ -179,13 +181,14 @@ namespace Apartments_io.Areas.Manager.Controllers
                     EmergencyLevel = EmergencyLevel.Danger,
                     Description = "You have forgotten to pay. You lose an apartment"
                 };
-
-                default: return new Notification()
+                case PaymentStatus.WaitingForPayment: return new Notification()
                 {
                     Resident = resident,
                     EmergencyLevel = EmergencyLevel.Warning,
-                    Description = "Your bill has new status " + paymentStatus
+                    Description = "Your bill has been updated"
                 };
+
+                default: throw new System.ArgumentException("Wrong enum type");
             }
         }
     }

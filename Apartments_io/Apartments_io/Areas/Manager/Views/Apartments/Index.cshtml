@@ -6,7 +6,7 @@
 
 
 <!--FILTERING-->
-<form method="get" id="filter-form" class="m-2">
+<form method="get" id="filter-form" class="mb-2 mt-2">
     <div class="form-inline">
         <input type="hidden" name="page" value="1" />
 
@@ -14,8 +14,11 @@
         <input type="number" name="daysToFree" value="@ViewData["daysToFree"]" class="form-control" />
         <p class="mb-0 mt-0 ml-2 mr-2">days</p>
 
-        <a asp-action="Index"class="btn btn-secondary mr-2 ml-2">Reset</a>
-        <input type="submit" value="Filtering" class="btn btn-secondary"/>
+        <input type="submit" value="Filtering" class="btn btn-secondary" />
+        <div class="ml-auto">
+            <a asp-route-isfree="true" class="btn btn-secondary ml-2">Shows free only</a>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Shows all</a>
+        </div>
     </div>
 </form>
 
@@ -29,13 +32,10 @@
             <th>
                 Name
             </th>
-            <th>
+            <th class="text-center">
                 Renter
             </th>
-            <th>
-                Rent end date
-            </th>
-            <th>
+            <th class="text-center">
                 Price
             </th>
             <th class="w-100px text-center">
@@ -59,13 +59,19 @@
                 <td>
                     @apartment.Name
                 </td>
-                <td>
-                    @( apartment.Renter != null ? apartment.Renter.ToString() : "free" )
+                <td class="text-center">
+                    @if (apartment.Renter != null)
+                    {
+                        <p>@apartment.Renter.ToString()</p>
+                        <hr />
+                        <p>@apartment.RentEndDate?.ToShortDateString()</p>
+                    }
+                    else
+                    {
+                        <span class="free-apartment-text">free</span>
+                    }
                 </td>
-                <td>
-                    @apartment.RentEndDate?.ToShortDateString()
-                </td>
-                <td>
+                <td class="text-center">
                     @apartment.Price $
                 </td>
                 <td class="text-center">

@@ -24,6 +24,11 @@ namespace DataAccess.Configuration
             builder.HasOne(b => b.Apartment)
                     .WithMany(a => a.Bills)
                     .OnDelete(DeleteBehavior.Cascade);
+
+            // date
+            builder.Property(b => b.EndDate)
+                    .IsRequired()
+                    .HasColumnType("date");
         }
     }
 }

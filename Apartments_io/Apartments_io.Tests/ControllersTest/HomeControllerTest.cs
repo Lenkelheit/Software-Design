@@ -3,22 +3,23 @@
 using Core.Extensions;
 
 using DataAccess.Entities;
-using DataAccess.Repositories;
 using DataAccess.Interfaces;
+using DataAccess.Repositories;
 
+using Apartments_io.Models;
 using Apartments_io.Controllers;
 using Apartments_io.ViewModels.Home;
-using Apartments_io.Models;
 
 using Moq;
 
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Apartments_io.Tests.ControllersTest
 {

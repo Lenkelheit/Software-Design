@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 using DataAccess.Enums;
 using DataAccess.Entities;
+using DataAccess.Wrappers;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
 {
@@ -139,6 +142,69 @@ namespace DataAccess.Repositories
             ContextCheck();
 
             return dbSet.Count(u => u.Role == role) == 1;
+        }
+
+        /// <summary>
+        /// Gets bill statistic for users of current manager
+        /// </summary>
+        /// <param name="managerId">
+        /// Manager's id
+        /// </param>
+        /// <returns>
+        /// Collection of users bills statistic
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public IEnumerable<UserStatisticWrapper> GetUserStatistics(int managerId)
+        {
+            ContextCheck();
+
+            IQueryable<User> users = dbSet.Include(nameof(User.Bills)).Where(u => u.Manager.Id == managerId);
+
+            return users.AsEnumerable().Select(user =>
+            {
+                int waitingForPaymentBills  = user.Bills.Count(b => b.PaymentStatus == PaymentStatus.WaitingForPayment);
+                int paidBills               = user.Bills.Count(b => b.PaymentStatus == PaymentStatus.Paid);
+                int paidWithDelayBills      = user.Bills.Count(b => b.PaymentStatus == PaymentStatus.PaidWithDelay);
+                int overdueBills            = user.Bills.Count(b => b.PaymentStatus == PaymentStatus.Overdue);
+
+                int total = user.Bills.Count();
+
+                UserStatisticWrapper userStatisticWrapper = new UserStatisticWrapper
+                {
+                    User = user,
+                    WaitingForPaymentBills = new Structs.ValuePercentage
+                    {
+                        Value = waitingForPaymentBills,
+                        Percentage = Percentage(total, waitingForPaymentBills)
+                    },
+                    PaidBills = new Structs.ValuePercentage
+                    {
+                        Value = paidBills,
+                        Percentage = Percentage(total, paidBills)
+                    },
+                    PaidWithDelayBills = new Structs.ValuePercentage
+                    {
+                        Value = paidWithDelayBills,
+                        Percentage = Percentage(total, paidWithDelayBills)
+                    },
+                    OverdueBills = new Structs.ValuePercentage
+                    {
+                        Value = overdueBills,
+                        Percentage = Percentage(total, overdueBills)
+                    }
+                };
+
+                return userStatisticWrapper;
+            });
+        }
+
+        private int Percentage(float total, float current)
+        {
+            if (total == 0) return 100;
+            return (int)System.Math.Round(current / total * 100);
         }
     }
 }

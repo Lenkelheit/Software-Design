@@ -4,7 +4,10 @@ using DataAccess.Enums;
 
 using Apartments_io.Areas.Manager.Models;
 
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+
+using System.Text.Encodings.Web;
 
 namespace Apartments_io.Areas.Manager.TagHelpers
 {
@@ -21,6 +24,9 @@ namespace Apartments_io.Areas.Manager.TagHelpers
             {
                 output.Attributes.Add("disabled", "disabled");
             }
+
+            // add classes for select
+            output.AddClass(SelectedStatus.ToCssClass(), HtmlEncoder.Default);
 
             // add option
             foreach (PaymentStatus status in Enum.GetValues(typeof(PaymentStatus)))

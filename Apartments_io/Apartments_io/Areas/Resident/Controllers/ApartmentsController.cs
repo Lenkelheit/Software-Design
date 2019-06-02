@@ -50,8 +50,8 @@ namespace Apartments_io.Areas.Resident.Controllers
                 apartmentRepository.Get(page: page, amount: ITEM_PER_PAGE_SIZE, filter: BuildFilter(minPrice, maxPrice));
 
             // save previous filter inputs value
-            ViewData[nameof(minPrice)] = minPrice ?? 0;
-            ViewData[nameof(maxPrice)] = maxPrice ?? 0;
+            ViewData[nameof(minPrice)] = minPrice ?? 100;
+            ViewData[nameof(maxPrice)] = maxPrice ?? 1000;
 
             ListViewModel listViewModel = new ListViewModel()
             {

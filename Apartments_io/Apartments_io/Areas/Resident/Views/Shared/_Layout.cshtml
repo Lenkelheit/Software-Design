@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!--LINK-->
+    <link rel="icon" type="image/x-icon" href="~/images/ico/main.ico" />
     <!--LIBS-->
     <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="~/ico/libs/fontawesome/fontawesome.min.css" type="text/css" rel="stylesheet" />
@@ -20,24 +21,24 @@
     <!--NOTIFICATION-->
     <div id="ohsnap"></div>
 
-    <!--NAVIFATION-->
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <!--NAVIGATION-->
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!--left-->
         <a class="navbar-brand" asp-controller="Apartments" asp-action="Index">The Architects</a>
         <ul class="navbar-nav">
-            <li class="nav-item">
+            <li class="nav-item" is-active-route asp-controller="Apartments" asp-action="Index">
                 <a class="nav-link" asp-controller="Apartments" asp-action="Index">Home</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" is-active-route asp-controller="Apartments" asp-action="List">
                 <a class="nav-link" asp-controller="Apartments" asp-action="List">Apartments</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" is-active-route asp-controller="Apartments" asp-action="MyRent">
                 <a class="nav-link" asp-controller="Apartments" asp-action="MyRent">My rent</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" is-active-route asp-controller="Requests" asp-action="List">
                 <a class="nav-link" asp-controller="Requests" asp-action="List">Requests</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" is-active-route asp-controller="Bills" asp-action="List">
                 <a class="nav-link" asp-controller="Bills" asp-action="List">Bills (@await Component.InvokeAsync("BillsCount"))</a>
             </li>
         </ul>
