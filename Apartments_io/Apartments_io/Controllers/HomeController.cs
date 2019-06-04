@@ -7,9 +7,9 @@ using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
 
 using System.Diagnostics;
 using System.Security.Claims;
@@ -56,6 +56,13 @@ namespace Apartments_io.Controllers
                         areaName: nameof(Areas.Resident),
                         actionName: nameof(Areas.Resident.Controllers.ApartmentsController.Index),
                         controllerName: nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"));
+                }
+                else if (User.IsInRole(nameof(DataAccess.Enums.Role.Deactivated)))
+                {
+                    return this.RedirectToAction(
+                        areaName: nameof(Areas.Resident),
+                        actionName: nameof(Areas.Resident.Controllers.SiteController.Deactivated),
+                        controllerName: nameof(Areas.Resident.Controllers.SiteController).Remove("Controller"));
                 }
             }
             return View();

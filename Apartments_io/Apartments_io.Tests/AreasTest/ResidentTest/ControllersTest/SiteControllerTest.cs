@@ -84,5 +84,24 @@ namespace Apartments_io.Tests.AreasTest.ResidentTest.ControllersTest
             Assert.Equal("Lorem ipsum", templateViewModel.Text);
             Assert.Equal("Template", viewResult.ViewName);
         }
+
+        [Fact]
+        public void Deactivated_ViewResult()
+        {
+            // Arrange
+            SiteController controller = new SiteController();
+
+            // Act
+            IActionResult result = controller.Deactivated();
+
+            // Assert
+            Assert.NotNull(result);
+            ViewResult viewResult = Assert.IsType<ViewResult>(result);
+            Assert.NotNull(viewResult.Model);
+            TemplateViewModel templateViewModel = Assert.IsType<TemplateViewModel>(viewResult.Model);
+            Assert.Equal("Deactivated", templateViewModel.Header);
+            Assert.Equal("Your account has been disabled. Please, contact us for further information.", templateViewModel.Text);
+            Assert.Equal("Template", viewResult.ViewName);
+        }
     }
 }

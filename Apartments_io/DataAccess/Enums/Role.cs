@@ -16,6 +16,10 @@
         /// <summary>
         /// An administrator role
         /// </summary>
-        Administrator
+        Administrator,
+        /// <summary>
+        /// A deactivated user
+        /// </summary>
+        Deactivated,
     }
 }

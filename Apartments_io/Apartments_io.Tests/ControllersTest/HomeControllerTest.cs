@@ -131,6 +131,33 @@ namespace Apartments_io.Tests.ControllersTest
         }
 
         [Fact]
+        public void IndexIsUserDeactivated_RedirectToActionResult()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
+            HomeController controller = new HomeController(mockUnitOfWork.Object);
+
+            Mock<ClaimsPrincipal> userMock = new Mock<ClaimsPrincipal>();
+            userMock.SetupGet(p => p.Identity.IsAuthenticated).Returns(true);
+            userMock.Setup(p => p.IsInRole(nameof(DataAccess.Enums.Role.Deactivated))).Returns(true);
+
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext() { User = userMock.Object }
+            };
+
+            // Act
+            IActionResult result = controller.Index();
+
+            // Assert
+            Assert.NotNull(result);
+            RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(Areas.Resident.Controllers.SiteController.Deactivated), redirectToActionResult.ActionName);
+            Assert.Equal(nameof(Areas.Resident.Controllers.SiteController).Remove("Controller"), redirectToActionResult.ControllerName);
+            Assert.Equal(nameof(Areas.Resident), redirectToActionResult.RouteValues["Area"]);
+        }
+
+        [Fact]
         public async void LoginModelIsNotValid_ViewResult()
         {
             // Arrange

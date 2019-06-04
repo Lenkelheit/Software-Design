@@ -73,7 +73,7 @@
 
             @foreach (User user in Model.Users)
             {
-                <tr data-user-id="@user.Id">
+                <tr data-user-id="@user.Id" data-manager-id="@user.ManagerId">
                     <td>
                         <input value="@user.FirstName" class="form-control" type="text" name="FirstName" />
                     </td>

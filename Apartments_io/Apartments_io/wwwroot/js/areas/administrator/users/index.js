@@ -57,6 +57,23 @@ $("#create-user").click(function ()
     });
 });
 
+function update_user_on_server(user)
+{
+    $.post('/Administrator/Users/Update/',
+    {
+        user: user
+    })
+    .done(function ()
+    {
+        ohSnap('Successfully updated', { color: 'green' });
+    })
+    .fail(function (response)
+    {
+        if (response.responseText && response.status == 400) ohSnap(response.responseText, { color: 'red' });
+        else                                                 ohSnap('Something went wrong', { color: 'red' });
+    });
+}
+
 // UPDATE AND DELETE
 $("#users-list table tr").each(function ()
 {
@@ -73,7 +90,8 @@ $("#users-list table tr").each(function ()
         user.Email = $(row).find('[name="Email"]').val().trim();
         user.Password = $(row).find('[name="Password"]').val().trim();
         user.Role = $(row).find('[name="Role"]').children("option:selected").val();
-
+        user.ManagerId = $(row).data('manager-id');
+        
         // validate
         var validdation_result = validate_user(user);
         if (!validdation_result.isValid)
@@ -83,18 +101,43 @@ $("#users-list table tr").each(function ()
         }
 
         // send to server
-        $.post('/Administrator/Users/Update/',
+        if (user.Role === 'Deactivated')
         {
-            user: user
-        })
-        .done(function ()
+            bootbox.confirm(
+                {
+                    message: "Deactivated users lose all its data. Are you sure?",
+                    buttons:
+                    {
+                        confirm:
+                        {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel:
+                        {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+
+                    callback: function (result)
+                    {
+                        if (result)
+                        {
+                            // send to server
+                            update_user_on_server(user);
+                        }
+                    }
+
+                });
+        }
+        else
         {
-            ohSnap('Successfully updated', { color: 'green' });
-        })
-        .fail(function ()
-        {
-            ohSnap('Something went wrong', { color: 'red' });
-        });
+            // send to server
+            update_user_on_server(user);
+        }
+        
+       
     });
 
     // DELETE

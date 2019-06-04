@@ -6,7 +6,7 @@ using Apartments_io.Areas.Resident.ViewModels.Site;
 namespace Apartments_io.Areas.Resident.Controllers
 {
     [Area("Resident")]
-    [Roles(nameof(DataAccess.Enums.Role.Resident))]
+    [Roles(nameof(DataAccess.Enums.Role.Resident), nameof(DataAccess.Enums.Role.Deactivated))]
     public class SiteController : Controller
     {
         // ACTIONS
@@ -41,6 +41,16 @@ namespace Apartments_io.Areas.Resident.Controllers
             {
                 Header = "Contact",
                 Text = "Lorem ipsum"
+            });
+        }
+
+        [Roles(nameof(DataAccess.Enums.Role.Deactivated))]
+        public IActionResult Deactivated()
+        {
+            return View("Template", new TemplateViewModel()
+            {
+                Header = "Deactivated",
+                Text = "Your account has been disabled. Please, contact us for further information."
             });
         }
     }
