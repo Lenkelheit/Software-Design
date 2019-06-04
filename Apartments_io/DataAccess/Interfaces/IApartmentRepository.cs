@@ -66,5 +66,18 @@ namespace DataAccess.Interfaces
         /// True if user has sent request for current apartment, otherwise — false
         /// </returns>
         bool HasRequest(int userId, int apartmentId);
+        /// <summary>
+        /// Gets ids of apartments for current user that will expire in current period
+        /// </summary>
+        /// <param name="renterId">
+        /// Renter's id
+        /// </param>
+        /// <param name="daysToExpire">
+        /// Expire period for apartments
+        /// </param>
+        /// <returns>
+        /// List with ids of apartments that will expire in current period
+        /// </returns>
+        IEnumerable<int> ExpiredApartment(int renterId, int daysToExpire);
     }
 }

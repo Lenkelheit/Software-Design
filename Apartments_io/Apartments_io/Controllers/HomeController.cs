@@ -54,7 +54,7 @@ namespace Apartments_io.Controllers
                 {
                     return this.RedirectToAction(
                         areaName: nameof(Areas.Resident),
-                        actionName: nameof(Areas.Resident.Controllers.ApartmentsController.Index),
+                        actionName: nameof(Areas.Resident.Controllers.ApartmentsController.CheckApartmentState),
                         controllerName: nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"));
                 }
                 else if (User.IsInRole(nameof(DataAccess.Enums.Role.Deactivated)))

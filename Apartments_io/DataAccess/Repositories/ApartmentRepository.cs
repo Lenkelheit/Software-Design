@@ -139,5 +139,31 @@ namespace DataAccess.Repositories
                     
                     
         }
+        /// <summary>
+        /// Gets ids of apartments for current user that will expire in current period
+        /// </summary>
+        /// <param name="renterId">
+        /// Renter's id
+        /// </param>
+        /// <param name="daysToExpire">
+        /// Expire period for apartments
+        /// </param>
+        /// <returns>
+        /// List with ids of apartments that will expire in current period
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">
+        /// Throws when context for this repository is not set<para/>
+        /// Try to call <see cref="!:SetDbContext(Microsoft.EntityFrameworkCore.Internal.IDbContextDependencies)"/> method
+        /// </exception>
+        public virtual IEnumerable<int> ExpiredApartment(int renterId, int daysToExpire)
+        {
+            ContextCheck();
+
+            return dbSet
+                .Where(a => a.Renter.Id == renterId)
+                .Where(a => a.HasUserBeenNotified == null || a.HasUserBeenNotified == false)
+                .Where(a => (a.RentEndDate.Value - System.DateTime.Now).Days <= daysToExpire)
+                .Select(a => a.Id);
+        }
     }
 }

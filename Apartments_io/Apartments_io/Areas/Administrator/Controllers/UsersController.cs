@@ -103,6 +103,7 @@ namespace Apartments_io.Areas.Administrator.Controllers
                 {
                     apartment.RentEndDate = null;
                     apartment.Renter = null;
+                    apartment.HasUserBeenNotified = null;
                 }
 
                 unitOfWork.GetRepository<Bill, BillRepository>()

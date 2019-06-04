@@ -125,7 +125,7 @@ namespace Apartments_io.Tests.ControllersTest
             // Assert
             Assert.NotNull(result);
             RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal(nameof(Areas.Resident.Controllers.ApartmentsController.Index), redirectToActionResult.ActionName);
+            Assert.Equal(nameof(Areas.Resident.Controllers.ApartmentsController.CheckApartmentState), redirectToActionResult.ActionName);
             Assert.Equal(nameof(Areas.Resident.Controllers.ApartmentsController).Remove("Controller"), redirectToActionResult.ControllerName);
             Assert.Equal(nameof(Areas.Resident), redirectToActionResult.RouteValues[$"{nameof(Areas).Remove("s")}"]);
         }
