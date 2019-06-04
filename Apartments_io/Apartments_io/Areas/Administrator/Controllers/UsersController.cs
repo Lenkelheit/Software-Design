@@ -78,11 +78,59 @@ namespace Apartments_io.Areas.Administrator.Controllers
         // ajax
         [HttpPost]
         public async Task<IActionResult> Update(User user)
-        {            
-            unitOfWork.Update(user);
+        {
+            if (!ModelState.IsValid) return BadRequest("Model is not valid");
+
+            // get user from DB
+            User userDb = await userRepository.GetAsync(user.Id, nameof(DataAccess.Entities.User.Apartments));
+            
+            if ((userDb.Role == Role.Administrator || userDb.Role == Role.Manager) && userRepository.IsLastIn(userDb.Role))
+            {
+                return BadRequest($"You can not update role of last {user.Role}");
+            }
+            if (userDb.Role == Role.Manager && userRepository.DoesManagerHasAnyResident(userDb))
+            {
+                return BadRequest("You can not update role of manager with renters");
+            }
+
+            // update user
+            MapUser(user, userDb);
+            
+            // deactivated users lose all data
+            if (user.Role == Role.Deactivated)
+            {
+                foreach (Apartment apartment in userDb.Apartments)
+                {
+                    apartment.RentEndDate = null;
+                    apartment.Renter = null;
+                    apartment.HasUserBeenNotified = null;
+                }
+
+                unitOfWork.GetRepository<Bill, BillRepository>()
+                    .Delete(b => b.PaymentStatus == PaymentStatus.WaitingForPayment && b.Renter.Id == user.Id);
+
+                unitOfWork.GetRepository<Request, RequestRepository>()
+                    .Delete(r => r.Resident.Id == user.Id);
+
+                unitOfWork.GetRepository<Notification, NotificationRepository>()
+                    .Delete(n => n.Resident.Id == user.Id);
+
+                userDb.ManagerId = null;
+            }
+
+            // update user
+            unitOfWork.Update(userDb);
             await unitOfWork.SaveAsync();
 
             return Ok();
+        }
+        private void MapUser(User userUpdateData, User userFromDb)
+        {
+            userFromDb.FirstName = userUpdateData.FirstName;
+            userFromDb.LastName = userUpdateData.LastName;
+            userFromDb.Password = userUpdateData.Password;
+            userFromDb.Email = userUpdateData.Email;
+            userFromDb.Role = userUpdateData.Role;
         }
         // ajax
         [HttpPost]

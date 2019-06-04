@@ -157,10 +157,14 @@ namespace Apartments_io.Tests.AreasTest.AdministratorTest.ControllersTest
         public async void Update_OkResult()
         {
             // Arrange
-            User user = new User { Email = "first@gmail.com" };
+            User user = new User { Id = 1, Email = "first@gmail.com" };
 
             Mock<UserRepository> mockUserRepository = new Mock<UserRepository>();
 
+            mockUserRepository
+                .Setup(ur => ur.GetAsync(user.Id, It.IsAny<string>()))
+                .Returns(Task.FromResult(user));
+            
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             mockUnitOfWork
                 .Setup(u => u.GetRepository<User, UserRepository>())

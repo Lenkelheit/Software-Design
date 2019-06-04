@@ -104,6 +104,7 @@ namespace DataAccess.Repositories
 
             return dbSet.Count(predicate);
         }
+
         /// <summary>
         /// Deletes object by id
         /// </summary>
@@ -173,6 +174,7 @@ namespace DataAccess.Repositories
             if (predicate != null) dbSet.RemoveRange(dbSet.Where(predicate));
             else                   dbSet.RemoveRange(dbSet);
         }
+
         /// <summary>
         /// Gets data from data base
         /// </summary>
@@ -255,7 +257,6 @@ namespace DataAccess.Repositories
 
             return query.First(e => e.Id == id);
         }
-
         /// <summary>
         /// Gets entity by id
         /// </summary>
@@ -286,6 +287,7 @@ namespace DataAccess.Repositories
 
             return query.FirstOrDefaultAsync(e => e.Id == id);
         }
+
         /// <summary>
         /// Inserts data in data base
         /// </summary>
@@ -321,13 +323,13 @@ namespace DataAccess.Repositories
             await dbSet.AddAsync(entity);
             return entity;
         }
+
         /// <summary>
         /// Checks if context is set and throws exception otherwise
         /// </summary>
-        protected void ContextCheck()
+        protected virtual void ContextCheck()
         {
             if (dbSet == null) throw new NullReferenceException($"Data context is not setted. Please call {nameof(SetDbContext)}");
         }
-
     }
 }

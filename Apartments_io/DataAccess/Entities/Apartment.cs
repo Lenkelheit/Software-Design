@@ -32,6 +32,10 @@ namespace DataAccess.Entities
         /// </summary>
         public virtual User Renter { get; set; }
         /// <summary>
+        /// Determines if user has get notification about his apartment expiration date
+        /// </summary>
+        public bool? HasUserBeenNotified { get; set; }
+        /// <summary>
         /// A list of requests for current apartment
         /// </summary>
         public virtual ICollection<Request> Requests { get; set; } = new List<Request>();

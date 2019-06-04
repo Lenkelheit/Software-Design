@@ -85,7 +85,34 @@ namespace Apartments_io.Areas.Resident.Controllers
             return paginationBuilder.Build();
         }
         #endregion
+        public async System.Threading.Tasks.Task<IActionResult> CheckApartmentState()
+        {
+            int loggedUserId = this.GetClaim<int>(nameof(DataAccess.Entities.User.Id));
 
+            User resident = await unitOfWork.GetRepository<User, UserRepository>().GetAsync(loggedUserId);
+
+            foreach (int apartmentId in apartmentRepository.ExpiredApartment(loggedUserId, daysToExpire: 90))
+            {
+                // update apartment
+                Apartment apartment = await apartmentRepository.GetAsync(apartmentId);
+                apartment.HasUserBeenNotified = true;
+
+                unitOfWork.Update(apartment);
+
+                // create notification
+                await unitOfWork.GetRepository<Notification, NotificationRepository>()
+                        .InsertAsync(new Notification()
+                        {
+                            EmergencyLevel = DataAccess.Enums.EmergencyLevel.Danger,
+                            Resident = resident,
+                            Description = "Your rent will expire soon"                            
+                        });
+            }
+
+            await unitOfWork.SaveAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
         public IActionResult MyRent(int page = 1)
         {
             int ITEM_PER_PAGE_SIZE = 6;
