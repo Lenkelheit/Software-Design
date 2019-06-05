@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--LINK-->
+    <link rel="icon" type="image/x-icon" href="~/images/ico/main.ico" />
+    <!--LIBS-->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/js/libs/ohsnap/index.css" rel="stylesheet" type="text/css">
+    <link href="~/ico/libs/fontawesome/fontawesome.min.css" rel="stylesheet" type="text/css" />
+
+    <!--CUSTOM-->
+    <link href="~/css/Home/index.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <!--NOTIFICATION-->
+    <div id="ohsnap"></div>
+
+    <!--BODY-->
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <!--SCRIPTS-->
+    <!--LIBS-->
+    <script src="~/js/libs/jquery-3.3.1.min.js"></script>
+    <script src="~/js/libs/ohsnap/ohsnap.min.js"></script>
+    <!--CUStOM-->
+    <script src="~/js/areas/index.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

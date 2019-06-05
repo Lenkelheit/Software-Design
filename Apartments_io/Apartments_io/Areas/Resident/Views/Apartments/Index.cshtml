@@ -1,0 +1,115 @@
+﻿@model System.Collections.Generic.IEnumerable<Apartment>
+
+<!--HEADING-->
+<div class="container mt-2">
+
+    <!--LOGO-->
+    <h2>Apartment.io</h2>
+    <div class="row">
+        <div class="col-lg-6">
+            <img src="~/images/resident/index/logo.jpg" height="450" width="450" class="logo-img">
+        </div>
+
+        <div class="col-lg-6">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                et dolore magna aliqua.
+                Eleifend mi in nulla posuere sollicitudin. Eros in cursus turpis massa. Ac auctor augue mauris augue
+                neque gravida in.
+            </p>
+
+            <p>
+                Cursus turpis massa tincidunt dui ut ornare lectus sit. Ut tellus elementum sagittis vitae et.
+                Lectus sit amet est placerat in egestas erat imperdiet.
+                Dolor magna eget est lorem ipsum dolor sit. Felis bibendum ut tristique et egestas quis. Quis
+                commodo odio aenean sed adipiscing diam donec.
+                Odio pellentesque diam volutpat commodo sed. Urna nunc id cursus metus aliquam. Odio facilisis
+                mauris sit amet massa vitae tortor condimentum lacinia.
+            </p>
+
+            <p>
+                Quam quisque id diam vel quam elementum pulvinar. Feugiat vivamus at augue eget arcu dictum varius
+                duis.
+                Rutrum tellus pellentesque eu tincidunt tortor aliquam nulla. Ridiculus mus mauris vitae ultricies.
+                Fermentum dui faucibus in ornare quam viverra.
+                Lectus magna fringilla urna porttitor rhoncus. Consequat interdum varius sit amet mattis vulputate.
+                Vulputate enim nulla aliquet porttitor lacus luctus accumsan tortor posuere. Ut lectus arcu bibendum
+                at varius vel.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!--APARTMENTS-->
+    <h2>Our services</h2>
+    @foreach (Apartment apartment in Model)
+    {
+    <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">
+        <div class="row mt-2 mb-2">
+
+            <div class="col-lg-3">
+                <img src="@apartment.MainPhoto" height="200" width="200">
+            </div>
+
+            <div class="col-md-9">
+                <h3>@apartment.Name</h3>
+                <p>
+                    @apartment.Description
+                </p>
+            </div>
+
+        </div>
+    </a>
+    }
+
+
+    <!--REVIEWS-->
+    <h2>Reviews</h2>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <img src="~/images/resident/review/apartment_1.jpg" alt="A photo of an reviewed apartment" class="review-img img-thumbnail" align="left" />
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                et dolore magna aliqua.
+                Ut consequat semper viverra nam libero justo laoreet sit. Nibh nisl condimentum id venenatis a.
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <img src="~/images/resident/review/apartment_2.jpg" alt="A photo of an reviewed apartment" class="review-img img-thumbnail" align="left"/>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                et dolore magna aliqua.
+                Ut consequat semper viverra nam libero justo laoreet sit. Nibh nisl condimentum id venenatis a.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <img src="~/images/resident/review/apartment_3.jpg" alt="A photo of an reviewed apartment" class="review-img img-thumbnail" align="left">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                et dolore magna aliqua.
+                Ut consequat semper viverra nam libero justo laoreet sit. Nibh nisl condimentum id venenatis a.
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <img src="~/images/resident/review/apartment_4.jpg" alt="A photo of an reviewed apartment" class="review-img img-thumbnail" align="left">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                et dolore magna aliqua.
+                Ut consequat semper viverra nam libero justo laoreet sit. Nibh nisl condimentum id venenatis a.
+            </p>
+        </div>
+
+    </div>
+
+</div>

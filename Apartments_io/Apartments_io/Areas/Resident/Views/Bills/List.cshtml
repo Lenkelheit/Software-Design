@@ -1,0 +1,63 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Bills.ListViewModel
+
+
+<div class="current">
+    <h2><u>Present</u></h2>
+    <br>
+
+    @foreach (Bill bill in Model.PresentBills)
+    {
+        <div class="apartment row mt-2 mb-2 present-bill">
+            <div class="apartment_img col-md-3">
+                <img src="@bill.Apartment.MainPhoto" alt="@bill.Apartment.Name" height="200" width="200" style="border-radius: 50%;">
+            </div>
+            <div class="apartment_info col-9">
+                <h4>
+                    @bill.Apartment.Name
+                </h4>
+                <p>
+                    Bill expire date <span class="text-success font-weight-bold">@bill.EndDate.ToShortDateString()</span>
+                </p>
+                <div class="pay_btn col-offset-md-lg-3">
+                    <button data-id="@bill.Id" class="btn btn-info">pay</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+<br><br><br>
+
+
+<div class="past">
+    <h2><u>Past</u></h2>
+    <br>
+
+    @foreach (Bill bill in Model.PastBills)
+    {
+        <div class="apartment row mt-2 mb-2 past-bill">
+            <div class="apartment_img col-md-3">
+                <img src="@bill.Apartment.MainPhoto" alt="@bill.Apartment.Name" height="200" width="200" style="border-radius: 50%;">
+            </div>
+            <div class="apartment_info col-lg-9">
+                <h4>
+                    @bill.Apartment.Name
+                </h4>
+                <p>
+                    Bill expire date <span class="text-danger font-weight-bold">@bill.EndDate.ToShortDateString()</span>
+                </p>
+                <div class="pay_btn col-offset-md-3">
+                    <button data-id="@bill.Id" class="btn btn-info">pay</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section Scripts
+{
+    <script src="~/js/areas/resident/bills/list.js"></script>
+}

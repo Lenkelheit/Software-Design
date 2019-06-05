@@ -1,0 +1,55 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.SingleViewModel
+@{
+    bool isRentExpireSoon = (Model.Apartment.RentEndDate - DateTime.Now)?.Days <= 90; 
+    string textStyle = isRentExpireSoon ? "text-warning" : "text-info";
+}
+
+<div class="row mt-5">
+    <div class="col-lg-6">
+        <img src="@Model.Apartment.MainPhoto" alt="@Model.Apartment.Name" class="img-thumbnail" height="450" width="450">
+    </div>
+
+    <div class="col-lg-6">
+        <h3>@Model.Apartment.Name</h3>
+        <p>
+            @Model.Apartment.Description
+        </p>
+        <br>
+        <h4>Price</h4>
+        <p>@Model.Apartment.Price $</p>
+
+        @if (Model.IsRenter)
+        {
+            <h2>Rent expire date</h2>
+            <p class="@textStyle font-weight-bold">@Model.Apartment.RentEndDate?.ToShortDateString()</p>
+
+            @*if (isRentExpireSoon)
+            {
+                // better do this with POST, ajax and swoth Jquery animation
+                <a class="btn btn-info" asp-controller="Apartments" asp-action="ContinueRent" asp-route-apartmentId="@Model.Apartment.Id">Continue rent</a>
+            }*@
+        }
+        else
+        {
+            <div class="text-right m-2">
+                @if (Model.HasUserRequest)
+                {
+                    <button data-apartment-id="@Model.Apartment.Id" data-resident-id="@Model.UserId" class="btn btn-warning btn-request float-right">Cancel</button>
+                }
+                else
+                {
+                    <button data-apartment-id="@Model.Apartment.Id" data-resident-id="@Model.UserId" class="btn btn-info btn-request float-right">Send request</button>
+                }
+
+            </div>
+
+            @section Scripts
+                {
+                <script src="~/js/areas/resident/create_delete_request.js"></script>
+            }
+        }
+
+
+    </div>
+
+</div>

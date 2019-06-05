@@ -1,0 +1,170 @@
+﻿body
+{
+    font-family: sans-serif;
+    margin: 0;
+}
+
+a,
+a:hover,
+a:focus
+{
+    color: black;
+    text-decoration: none;
+}
+.navbar
+{
+    font-family: sans-serif;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+.apartment-filter
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 620px;
+    margin-bottom: 30px;
+}
+@media (max-width: 800px)
+{
+    .apartment-filter
+    {
+        width: 100%;
+    }
+}
+
+.header
+{
+    background-color: #f2f2f2;
+    font-family: sans-serif;
+    font-size: 200%;
+    text-align: center;
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+}
+
+table
+{
+    border: 1px solid #212529;
+}
+
+table td
+{
+    vertical-align: middle !important;
+}
+.w-100px
+{
+    width: 100px !important;
+}
+
+.container
+{
+    font-family: sans-serif;
+}
+
+.content
+{
+    min-height: 750px;
+}
+textarea
+{
+    min-height: 50px;
+    max-height: 300px;
+}
+.review-img
+{
+    height: 150px;
+    width: 150px;
+    margin: 0px 20px 20px 0px;
+}
+.logo-img
+{
+    border-radius: 5px;
+}
+/*FOOTER*/
+.footer {
+    background-color: #f2f2f2;
+    font-family: sans-serif;
+    font-size: 100%;
+    text-align: center;
+    border-top: 3px solid black;
+    padding: 25px;
+}
+.footer a
+{
+    color: #337ab7;
+}
+
+.footer a:hover
+{
+    color: #007bff;
+}
+
+
+.fab
+{
+    color: black;
+    font-size: 20px !important;
+    padding: 15px;
+}
+
+.fab:hover
+{
+    color: #8585ad;
+    text-decoration: none;
+}
+
+/*NOTIFICATION*/
+.notification-btn:hover
+{
+    background-color: gray !important;
+    cursor: pointer;
+}
+.notification-container
+{
+    margin: 20px;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    padding: 1em;
+    border-radius: 4px;
+}
+.notification-container:hover
+{
+    cursor: pointer;
+}
+.closed
+{
+    opacity: 0.5;
+}
+.notification-danger
+{
+    background-color: #ffdddd;
+}
+.notification-info
+{
+    background-color: #e7f3fe;
+}
+.notification-success
+{
+    background-color: #ddffdd;
+}
+.notification-warning
+{
+    background-color: #ffffcc;
+}
+.header-danger
+{
+    color: #f44336;
+}
+.header-info
+{
+    color: #2196F3;
+}
+.header-success
+{
+    color: #4CAF50;
+}
+.header-warning
+{
+    color: #FFA500;
+}

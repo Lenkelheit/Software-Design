@@ -1,0 +1,72 @@
+﻿@model Apartments_io.Areas.Manager.ViewModels.Requests.IndexViewModel
+
+<h2>Request</h2>
+
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Resident Name
+            </th>
+            <th>
+                Resident Surname
+            </th>
+            <th>
+                Resident Bill Status
+            </th>
+            <th>
+                Apartment Image
+            </th>
+            <th>
+                Apartment Name
+            </th>
+            <th class="w-100px text-center">
+                Accept
+            </th>
+            <th class="w-100px text-center">
+                Dismiss
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Request request in Model.Requests)
+        {
+            <tr>
+                <td>
+                    @request.Resident.FirstName
+                </td>
+                <td>
+                    @request.Resident.LastName
+                </td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: @request.PercentagePayedProperly%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">@request.PercentagePayedProperly %</div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: @(100 - request.PercentagePayedProperly)%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </td>
+                <td>
+                    <img src="@request.Apartment.MainPhoto" width="150" height="100" />
+                </td>
+                <td>
+                    @request.Apartment.Name
+                </td>
+                <td>
+                    <button data-request-id="@request.Id" class="btn btn-success btn-accept">Accept</button>
+                </td>
+                <td>
+                    <button data-request-id="@request.Id" class="btn btn-danger btn-dismiss">Dismiss</button>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="Index"></pagination-link>
+
+@section Scripts
+{
+    <script src="~/js/areas/manager/requests/accept_dismiss_request.js"></script>
+}
+

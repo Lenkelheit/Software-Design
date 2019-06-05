@@ -1,0 +1,57 @@
+﻿@model DataAccess.Entities.Apartment
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Photo
+        </dt>
+        <dd>
+            <img src="@Model.MainPhoto" class="img-thumbnail" alt="Apartment image" width="200" height="150" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        @if (Model.Renter != null)
+        {
+            <dt>
+                Renter
+            </dt>
+            <dd>
+                @Model.Renter.ToString()
+            </dd>
+
+            <dt>
+                Rent end date
+            </dt>
+            <dd>
+                @Model.RentEndDate?.ToShortDateString()
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price) $
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success w-100 mb-2">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary w-100">Back to List</a>
+</div>

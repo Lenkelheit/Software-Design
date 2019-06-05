@@ -1,0 +1,93 @@
+﻿@model Apartments_io.Areas.Manager.ViewModels.Apartments.IndexViewModel
+
+<div class="text-right">
+    <a class="btn btn-info" asp-action="Create">Create New</a>
+</div>
+
+
+<!--FILTERING-->
+<form method="get" id="filter-form" class="mb-2 mt-2">
+    <div class="form-inline">
+        <input type="hidden" name="page" value="1" />
+
+        <p class="mb-0 mt-0 mr-2">Will be free in less than</p>
+        <input type="number" name="daysToFree" value="@ViewData["daysToFree"]" class="form-control" />
+        <p class="mb-0 mt-0 ml-2 mr-2">days</p>
+
+        <input type="submit" value="Filtering" class="btn btn-secondary" />
+        <div class="ml-auto">
+            <a asp-route-isfree="true" class="btn btn-secondary ml-2">Shows free only</a>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Shows all</a>
+        </div>
+    </div>
+</form>
+
+
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center">
+                Photo
+            </th>
+            <th>
+                Name
+            </th>
+            <th class="text-center">
+                Renter
+            </th>
+            <th class="text-center">
+                Price
+            </th>
+            <th class="w-100px text-center">
+                Edit
+            </th>
+            <th class="w-100px text-center">
+                Open
+            </th>
+            <th class="w-100px text-center">
+                Delete
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Apartment apartment in Model.Apartments)
+        {
+            <tr>
+                <td class="text-center">
+                    <img src="@apartment.MainPhoto" width="150" height="100" />
+                </td>
+                <td>
+                    @apartment.Name
+                </td>
+                <td class="text-center">
+                    @if (apartment.Renter != null)
+                    {
+                        <p>@apartment.Renter.ToString()</p>
+                        <hr />
+                        <p>@apartment.RentEndDate?.ToShortDateString()</p>
+                    }
+                    else
+                    {
+                        <span class="free-apartment-text">free</span>
+                    }
+                </td>
+                <td class="text-center">
+                    @apartment.Price $
+                </td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@apartment.Id" class="btn btn-success">Edit</a> 
+                </td>
+                <td class="text-center">
+                    <a asp-action="Details" asp-route-id="@apartment.Id" class="btn btn-warning text-white">Details</a> 
+                </td>
+                <td class="text-center">
+                    <a asp-action="Delete" asp-route-id="@apartment.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="Index"></pagination-link>

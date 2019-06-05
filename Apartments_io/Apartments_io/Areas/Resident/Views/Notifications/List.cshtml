@@ -1,0 +1,22 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Notifications.ListViewModel
+<h2>Notifications</h2>
+
+@foreach (Notification notification in Model.Notifications)
+{
+    <div class="row notification-container @notification.EmergencyLevel.ToCssContainerClass()" data-id="@notification.Id">
+        <h4 class="w-100 @notification.EmergencyLevel.ToCssHeaderClass()">@notification.EmergencyLevel</h4>
+
+        <p>
+            @notification.Description
+        </p>
+    </div>
+}
+
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Notifications" action-name="List"></pagination-link>
+
+@section Scripts
+{
+    <script src="~/js/areas/resident/notifications/list.js"></script>
+}

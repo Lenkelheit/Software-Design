@@ -1,0 +1,72 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.ListViewModel
+<!--FILTERING-->
+
+
+
+<div class="m-3">
+    <div class="col-am-12">
+        <div class="choose">
+            <center>
+                <h3>Choose your apartment:</h3>
+            </center>
+        </div>
+        <div>
+            <form method="get" id="filter-form">
+                <div class="form-inline apartment-filter">
+                    <input type="hidden" name="page" value="1" />
+                    <p class="mb-0 mr-2">From</p>
+                    <input id="filter-min-price" type="number" name="minPrice" class="form-control mr-2" value="@ViewData["minPrice"]" />
+
+                    <p class="mb-0 mr-2">To</p>
+                    <input id="filter-max-price" type="number" name="maxPrice" class="form-control mr-2" value="@ViewData["maxPrice"]" />
+
+                    <input type="submit" value="Filtering" class="btn btn-secondary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!--LIST-->
+@foreach (Apartment apartment in Model.Apartments)
+{
+    <div class="row mt-3 mb-3">
+        <a asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id" class="col-sm-10">
+            <div class="row">
+                <div class="col-md-3">
+
+                    <img src="@apartment.MainPhoto"
+                         alt="@apartment.Name" height="150" width="150" style="border-radius: 50%;">
+                </div>
+                <div class="col-sm-9">
+                    <h5>@apartment.Name</h5>
+                    <p>@apartment.Description</p>
+                    <p><b>Price:</b> @apartment.Price$</p>
+                </div>
+            </div>
+        </a>
+
+        <div class="text-right col-sm-2 mt-auto">
+            @if (Model.IsUsersRequest.Contains(apartment.Id))
+            {
+                <button data-apartment-id="@apartment.Id" data-resident-id="@Model.UserId" class="btn btn-warning btn-request float-right">Cancel</button>
+            }
+            else
+            {
+                <button data-apartment-id="@apartment.Id" data-resident-id="@Model.UserId" class="btn btn-info btn-request float-right">Send request</button>
+            }
+        </div>
+    </div>
+}
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Apartments" action-name="List"></pagination-link>
+
+@section Scripts
+{
+    <script src="~/js/areas/resident/apartments/list.js"></script>
+    <script src="~/js/areas/resident/create_delete_request.js"></script>
+}
+

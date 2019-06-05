@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--LINK-->
+    <link rel="icon" type="image/x-icon" href="~/images/ico/main.ico" />
+    <!--LIBS-->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/js/libs/ohsnap/index.css" rel="stylesheet" type="text/css">
+    <link href="~/ico/libs/fontawesome/fontawesome.min.css" rel="stylesheet" type="text/css" />
+
+    <!--CUSTOM-->
+    <link href="~/css/Administrator/index.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <!--NOTIFICATION-->
+    <div id="ohsnap"></div>
+
+    <!--NAVIGATION-->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <!--left-->
+        <a class="navbar-brand" asp-controller="Users" asp-action="Index">The Architects</a>
+        <ul class="navbar-nav">
+            <li class="nav-item" is-active-route asp-controller="Users" asp-action="Index">
+                <a class="nav-link" asp-controller="Users" asp-action="Index">Users</a>
+            </li>
+            <li class="nav-item" is-active-route asp-controller="Users" asp-action="Managers">
+                <a class="nav-link" asp-controller="Users" asp-action="Managers">Managers</a>
+            </li>
+        </ul>
+
+        <!--right-->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Logout" asp-area="">Log out</a>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div class="container-fluid pl-0 pr-0">
+        <!--HEADER-->
+        <div class="header">
+            Administrator Panel
+        </div>
+
+
+        <!--CONTENT-->
+        <div class="content container">
+            @RenderBody()
+        </div>
+
+
+        <!--FOOTER-->
+        <div class="footer">
+            ©Copyright The Architects
+        </div>
+    </div>
+
+    <!--SCRIPTS-->
+    <!--LIBS-->
+    <script src="~/js/libs/jquery-3.3.1.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/libs/ohsnap/ohsnap.min.js"></script>
+    <script src="~/js/libs/bootbox/bootbox.min.js"></script>
+
+    <!--CUSTOM-->
+    <script src="~/js/areas/index.js"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#uploaded files
+/Apartments_io/Apartments_io/wwwroot/uploads/files/apartment
+!/Apartments_io/Apartments_io/wwwroot/uploads/files/apartment/noimage.png
+
 # User-specific files
 *.suo
 *.user

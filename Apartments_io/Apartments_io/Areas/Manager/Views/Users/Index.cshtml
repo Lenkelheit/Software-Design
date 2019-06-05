@@ -1,0 +1,65 @@
+﻿@model Apartments_io.Areas.Manager.ViewModels.Users.IndexViewModel
+
+<h2>Users statistic</h2>
+
+<!--Legend-->
+<div class="row">
+    <div class="col-sm-6 col-md-3">
+        <div class="square float-left bg-waiting-for-payment"></div>
+        <p class="float-left ml-2">- waiting for payment</p>
+    </div>
+    <div class="col-sm-6  col-md-3">
+        <div class="square float-left bg-paid"></div>
+        <p class="float-left ml-2">- paid properly</p>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="square float-left bg-paid-with-delay"></div>
+        <p class="float-left ml-2">- paid with delay</p>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="square float-left bg-overdue"></div>
+        <p class="float-left ml-2">- overdue</p>
+    </div>
+</div>
+
+<!--Statistic-->
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Resident Name
+            </th>
+            <th>
+                Resident Surname
+            </th>
+            <th>
+                Resident Bill Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (UserStatisticWrapper userStatistic in Model.UsersStatistic)
+        {
+            <tr>
+                <td>
+                    @userStatistic.User.FirstName
+                </td>
+                <td>
+                    @userStatistic.User.LastName
+                </td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar bg-waiting-for-payment" role="progressbar" style="width: @userStatistic.WaitingForPaymentBills.Percentage%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">@userStatistic.WaitingForPaymentBills.Value</div>
+                        <div class="progress-bar bg-paid" role="progressbar" style="width: @userStatistic.PaidBills.Percentage%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">@userStatistic.PaidBills.Value</div>
+                        <div class="progress-bar bg-paid-with-delay" role="progressbar" style="width: @userStatistic.PaidWithDelayBills.Percentage%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">@userStatistic.PaidWithDelayBills.Value</div>
+                        <div class="progress-bar bg-overdue" role="progressbar" style="width: @userStatistic.OverdueBills.Percentage%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">@userStatistic.OverdueBills.Value</div>
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Users" action-name="Index"></pagination-link>

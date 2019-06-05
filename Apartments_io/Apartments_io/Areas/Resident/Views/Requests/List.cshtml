@@ -1,0 +1,28 @@
+﻿@model Apartments_io.Areas.Resident.ViewModels.Requests.ListViewModel
+
+@for (int i = 0; i < 3; ++i)
+{
+    <div class="row">
+
+        @foreach (Request request in Model.Requests.Skip(i * 2).Take(2))
+        {
+            <div class="col-6">
+                <img src="@request.Apartment.MainPhoto" alt="@request.Apartment.Name" height="120" width="120" align="left" style="margin: 0px 20px 20px 0px;">
+                <h4>@request.Apartment.Name</h4>
+                <p>@request.Apartment.Price $</p>
+
+                <button class="btn btn-warning btn-request" data-resident-id="@Model.UserId" data-apartment-id="@request.Apartment.Id">Cancel</button>
+            </div>
+        }
+
+    </div>
+}
+
+
+<!--PAGINATION-->
+<pagination-link pagination-model="Model.PaginationModel" controller-name="Requests" action-name="List"></pagination-link>
+
+@section Scripts
+{
+    <script src="~/js/areas/resident/create_delete_request.js"></script>
+}
