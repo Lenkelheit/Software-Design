@@ -92,7 +92,7 @@ namespace Apartments_io.Areas.Manager.Controllers
         public async System.Threading.Tasks.Task<IActionResult> CreateNewBill(int residentId, int apartmentId, System.DateTime billDate)
         {
             // get renter
-            User renter = await unitOfWork.GetRepository<User, UserRepository>().GetAsync(residentId);
+            User renter = await userRepository.GetAsync(residentId);
 
             // create bill
             Bill bill = new Bill
