@@ -151,6 +151,23 @@ namespace Apartments_io.Areas.Resident.Controllers
             };
 
             return View(singleViewModel);
-        }             
+        }
+
+        public async System.Threading.Tasks.Task<IActionResult> ContinueRent(int? apartmentId)
+        {
+            if (apartmentId == null) return NotFound();
+
+            // get apartment
+            Apartment apartment = await apartmentRepository.GetAsync(apartmentId.Value);
+            if (apartment == null) return NotFound();
+
+            // update rent date
+            apartment.RentEndDate = System.DateTime.Now.AddYears(1);
+
+            unitOfWork.Update(apartment);
+            await unitOfWork.SaveAsync();
+
+            return RedirectToAction(nameof(Single), new { apartmentId });
+        }
     }
 }

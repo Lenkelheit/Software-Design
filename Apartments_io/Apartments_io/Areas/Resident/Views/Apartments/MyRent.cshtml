@@ -12,7 +12,19 @@
                     <img src="@apartment.MainPhoto" alt="@apartment.Name" class="card-img-top" />
                     <div class="card-body">
                         <h5 class="card-title">@apartment.Name</h5>
-                        <p class="card-text">Rent expire date: <span class="text-info font-weight-bold">@apartment.RentEndDate?.ToShortDateString()</span></p>
+                        
+                        <p class="card-text">
+                            Rent expire date:
+                            @if ((apartment.RentEndDate - DateTime.Now)?.Days <= 90)
+                            {
+                                <span class="text-warning font-weight-bold">@apartment.RentEndDate?.ToShortDateString()</span>
+                            }
+                            else
+                            {
+                                <span class="text-info font-weight-bold">@apartment.RentEndDate?.ToShortDateString()</span>
+                            }
+                        </p>
+
                     </div>
                     <div class="card-footer">
                         <a class="btn btn-info w-100" asp-controller="Apartments" asp-action="Single" asp-route-apartmentId="@apartment.Id">Open</a>

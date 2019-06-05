@@ -1,4 +1,8 @@
 ﻿@model Apartments_io.Areas.Resident.ViewModels.Apartments.SingleViewModel
+@{
+    bool isRentExpireSoon = (Model.Apartment.RentEndDate - DateTime.Now)?.Days <= 90; 
+    string textStyle = isRentExpireSoon ? "text-warning" : "text-info";
+}
 
 <div class="row mt-5">
     <div class="col-lg-6">
@@ -17,7 +21,13 @@
         @if (Model.IsRenter)
         {
             <h2>Rent expire date</h2>
-            <p>@Model.Apartment.RentEndDate?.ToShortDateString()</p>
+            <p class="@textStyle font-weight-bold">@Model.Apartment.RentEndDate?.ToShortDateString()</p>
+
+            @*if (isRentExpireSoon)
+            {
+                // better do this with POST, ajax and swoth Jquery animation
+                <a class="btn btn-info" asp-controller="Apartments" asp-action="ContinueRent" asp-route-apartmentId="@Model.Apartment.Id">Continue rent</a>
+            }*@
         }
         else
         {
@@ -34,7 +44,7 @@
             </div>
 
             @section Scripts
-            {
+                {
                 <script src="~/js/areas/resident/create_delete_request.js"></script>
             }
         }

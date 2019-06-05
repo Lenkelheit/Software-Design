@@ -78,6 +78,34 @@ namespace Apartments_io.Areas.Manager.Controllers
         }
         #endregion
 
+        // GET: Manager/Apartments/CheckApartmentState
+        public async Task<IActionResult> CheckApartmentState()
+        {
+            foreach (Apartment apartment in apartmentsRepository
+                            .Get(filter: a => a.Renter != null && (a.RentEndDate.Value - System.DateTime.Now).Days <= 0,
+                                 includeProperties: nameof(Apartment.Renter)))
+            {
+                // notification
+                await unitOfWork.GetRepository<Notification, NotificationRepository>()
+                    .InsertAsync(new Notification()
+                    {
+                        EmergencyLevel = DataAccess.Enums.EmergencyLevel.Danger,
+                        Description = "Your rent has been expired",
+                        Resident = apartment.Renter
+                    });
+
+                // lose apartment
+                apartment.Renter = null;
+                apartment.RentEndDate = null;
+                apartment.HasUserBeenNotified = null;
+
+                unitOfWork.Update(apartment);                
+            }
+
+            await unitOfWork.SaveAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
         // GET: Manager/Apartments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
